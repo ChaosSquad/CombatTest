@@ -1,0 +1,17 @@
+main: net.jandie1505.combattest.CombatTest
+name: CombatTest
+version: 1.0
+commands:
+  combattest:
+    description: CombatTest command
+    usage: /combattest
+permissions:
+  combattest.admin:
+    default: op
+    description: admin permission
+  combattest.*:
+    default: op
+    children:
+      - combattest.admin
+author: jandie1505
+api-version: 1.13

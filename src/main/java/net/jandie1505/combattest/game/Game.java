@@ -87,6 +87,8 @@ public class Game implements GamePart {
                 }
 
                 if (playerData.getRespawntimer() > 0) {
+                    player.sendTitle("§cDEAD", "§7Respawn in " + playerData.getRespawntimer() + " seconds", 0, 20, 0);
+                    player.sendMessage("§7You will respawn in " + playerData.getRespawntimer() + " seconds");
                     playerData.setRespawntimer(playerData.getRespawntimer() - 1);
                 } else {
                     this.respawnPlayer(player);

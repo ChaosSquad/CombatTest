@@ -18,18 +18,26 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).isEnableBorder() && ((Game) this.plugin.getGame()).isPlayerIngame(event.getPlayer()) && !this.plugin.isPlayerBypassing(event.getPlayer().getUniqueId())) {
+        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).isPlayerIngame(event.getPlayer()) && !this.plugin.isPlayerBypassing(event.getPlayer().getUniqueId())) {
 
-            if (!((Game) this.plugin.getGame()).isInBorders(event.getTo())) {
+            if (((Game) this.plugin.getGame()).isEnableBorder() && ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).isAlive()) {
 
-                if (((Game) this.plugin.getGame()).isInBorders(event.getFrom())) {
-                    event.setCancelled(true);
-                    event.getPlayer().sendMessage("§cYou cannot leave the game area");
-                } else {
-                    event.setCancelled(true);
-                    ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).setAlive(false);
-                    event.getPlayer().sendMessage("§cYou have been killed for leaving the game area");
+                if (!((Game) this.plugin.getGame()).isInBorders(event.getTo())) {
+
+                    if (((Game) this.plugin.getGame()).isInBorders(event.getFrom())) {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage("§cYou cannot leave the game area");
+                    } else {
+                        event.setCancelled(true);
+                        ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).setAlive(false);
+                        event.getPlayer().sendMessage("§cYou have been killed for leaving the game area");
+                    }
+
                 }
+
+            } else if (!((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).isAlive()) {
+
+                event.setCancelled(true);
 
             }
 

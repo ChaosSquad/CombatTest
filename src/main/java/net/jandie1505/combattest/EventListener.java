@@ -2,12 +2,14 @@ package net.jandie1505.combattest;
 
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.game.Lobby;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class EventListener implements Listener {
     private final CombatTest plugin;
@@ -41,6 +43,30 @@ public class EventListener implements Listener {
 
             }
 
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
+
+            ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId()).setAlive(false);
+            event.getEntity().setGameMode(GameMode.SPECTATOR);
+            event.getDrops().clear();
+
+            if (!((Game) this.plugin.getGame()).getWorld().getGameRuleValue("doImmediateRespawn").equalsIgnoreCase("true")) {
+                this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+                    event.getEntity().spigot().respawn();
+                }, 2);
+            }
+
+        }
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
+            event.setRespawnLocation(event.getPlayer().getLocation());
         }
     }
 

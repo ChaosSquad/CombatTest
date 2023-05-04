@@ -253,6 +253,10 @@ public class Game implements GamePart {
         return this.enableBorder;
     }
 
+    public World getWorld() {
+        return this.world;
+    }
+
     @Override
     public GamePart getNextStatus() {
         return new Endlobby(this.plugin);

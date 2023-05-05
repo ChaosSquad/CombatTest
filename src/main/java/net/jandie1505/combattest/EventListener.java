@@ -1,6 +1,6 @@
 package net.jandie1505.combattest;
 
-import net.jandie1505.combattest.game.Equipment;
+import net.jandie1505.combattest.game.ItemStorage;
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.game.Lobby;
 import net.jandie1505.combattest.game.PlayerMenu;
@@ -90,18 +90,44 @@ public class EventListener implements Listener {
             return;
         }
 
-        if (event.getClickedInventory().getHolder() instanceof PlayerMenu) {
+        if (event.getClickedInventory() != null && event.getClickedInventory().getHolder() instanceof PlayerMenu) {
 
             event.setCancelled(true);
 
-            if (!(this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()))) {
-                return;
-            }
+            if (this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getCurrentItem() != null) {
 
-            if (event.getCurrentItem().isSimilar(Equipment.getMeleeButton())) {
+                PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId());
 
-                ((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId()).setPage(1);
-                event.getWhoClicked().openInventory(((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId()).getInventory());
+                if (menu.getPage() == 0) {
+
+                    if (event.getCurrentItem().isSimilar(ItemStorage.getMeleeButton())) {
+
+                        menu.setPage(1);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
+                    }
+
+                } else if (menu.getPage() == 1) {
+
+                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
+
+                        menu.setPage(0);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
+                    } else {
+
+                        Integer itemId = ItemStorage.getMeleeReverse(event.getCurrentItem());
+
+                        if (itemId != null) {
+
+                            ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId()).setMeleeEquipment(itemId);
+                            event.getWhoClicked().openInventory(menu.getInventory());
+
+                        }
+
+                    }
+
+                }
 
             }
 

@@ -35,9 +35,9 @@ public class PlayerMenu implements InventoryHolder {
 
         Inventory inventory = Bukkit.createInventory(this, 27, "§aMain Menu");
 
-        inventory.setItem(12, Equipment.getMeleeButton());
-        inventory.setItem(13, Equipment.getRangedButton());
-        inventory.setItem(14, Equipment.getArmorButton());
+        inventory.setItem(12, ItemStorage.getMeleeButton());
+        inventory.setItem(13, ItemStorage.getRangedButton());
+        inventory.setItem(14, ItemStorage.getArmorButton());
 
         return inventory;
 
@@ -59,15 +59,17 @@ public class PlayerMenu implements InventoryHolder {
             // Is melee item in final level (no more upgrades)
             if ((playerData.getMeleeEquipment() % 10) >= 3) {
 
-                inventory.setItem(13, Equipment.getMelee(playerData.getMeleeEquipment()));
+                inventory.setItem(0, ItemStorage.getBackButton());
+
+                inventory.setItem(13, ItemStorage.getMelee(playerData.getMeleeEquipment()));
 
             } else {
 
-                inventory.setItem(17, Equipment.getBackButton());
+                inventory.setItem(0, ItemStorage.getBackButton());
 
-                inventory.setItem(22, Equipment.getMelee(playerData.getMeleeEquipment()));
+                inventory.setItem(22, ItemStorage.getMelee(playerData.getMeleeEquipment()));
 
-                inventory.setItem(4, Equipment.getMelee(playerData.getMeleeEquipment() + 1));
+                inventory.setItem(22, ItemStorage.getMelee(playerData.getMeleeEquipment() + 1));
 
             }
 
@@ -77,33 +79,33 @@ public class PlayerMenu implements InventoryHolder {
             // If not, is item ready for specialisation
             if (playerData.getMeleeEquipment() == 0) {
 
-                inventory.setItem(17, Equipment.getBackButton());
+                inventory.setItem(0, ItemStorage.getBackButton());
 
-                inventory.setItem(22, Equipment.getMelee(0));
+                inventory.setItem(4, ItemStorage.getMelee(0));
 
-                inventory.setItem(3, Equipment.getMelee(100));
-                inventory.setItem(4, Equipment.getMelee(200));
-                inventory.setItem(5, Equipment.getMelee(300));
+                inventory.setItem(21, ItemStorage.getMelee(100));
+                inventory.setItem(22, ItemStorage.getMelee(200));
+                inventory.setItem(23, ItemStorage.getMelee(300));
 
             } else if ((playerData.getMeleeEquipment() % 10) >= 2) {
 
-                inventory.setItem(17, Equipment.getBackButton());
+                inventory.setItem(0, ItemStorage.getBackButton());
 
                 switch (playerData.getMeleeEquipment()) {
                     case 102:
-                        inventory.setItem(22, Equipment.getMelee(102));
-                        inventory.setItem(3, Equipment.getMelee(1100));
-                        inventory.setItem(5, Equipment.getMelee(1200));
+                        inventory.setItem(4, ItemStorage.getMelee(102));
+                        inventory.setItem(21, ItemStorage.getMelee(1100));
+                        inventory.setItem(23, ItemStorage.getMelee(1200));
                         break;
                     case 202:
-                        inventory.setItem(22, Equipment.getMelee(202));
-                        inventory.setItem(3, Equipment.getMelee(1300));
-                        inventory.setItem(5, Equipment.getMelee(1400));
+                        inventory.setItem(4, ItemStorage.getMelee(202));
+                        inventory.setItem(21, ItemStorage.getMelee(1300));
+                        inventory.setItem(23, ItemStorage.getMelee(1400));
                         break;
                     case 302:
-                        inventory.setItem(22, Equipment.getMelee(302));
-                        inventory.setItem(3, Equipment.getMelee(1500));
-                        inventory.setItem(5, Equipment.getMelee(1600));
+                        inventory.setItem(4, ItemStorage.getMelee(302));
+                        inventory.setItem(21, ItemStorage.getMelee(1500));
+                        inventory.setItem(23, ItemStorage.getMelee(1600));
                         break;
                     default:
                         break;
@@ -111,11 +113,11 @@ public class PlayerMenu implements InventoryHolder {
 
             } else {
 
-                inventory.setItem(17, Equipment.getBackButton());
+                inventory.setItem(0, ItemStorage.getBackButton());
 
-                inventory.setItem(22, Equipment.getMelee(playerData.getMeleeEquipment()));
+                inventory.setItem(4, ItemStorage.getMelee(playerData.getMeleeEquipment()));
 
-                inventory.setItem(4, Equipment.getMelee(playerData.getMeleeEquipment() + 1));
+                inventory.setItem(22, ItemStorage.getMelee(playerData.getMeleeEquipment() + 1));
 
             }
 

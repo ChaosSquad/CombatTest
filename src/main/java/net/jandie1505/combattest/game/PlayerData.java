@@ -1,21 +1,33 @@
 package net.jandie1505.combattest.game;
 
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
+
 public class PlayerData {
-    private int equipment;
+    private final UUID playerId;
+    private int meleeEquipment;
+    private int rangedEquipment;
+    private int armorEquipment;
     private boolean alive;
     private int respawntimer;
 
-    public PlayerData() {
-        this.equipment = 0;
+    public PlayerData(UUID playerId) {
+        this.playerId = playerId;
+        this.meleeEquipment = 0;
         this.alive = false;
     }
 
-    public int getEquipment() {
-        return equipment;
+    public UUID getPlayerId() {
+        return this.playerId;
     }
 
-    public void setEquipment(int equipment) {
-        this.equipment = equipment;
+    public int getMeleeEquipment() {
+        return meleeEquipment;
+    }
+
+    public void setMeleeEquipment(int meleeEquipment) {
+        this.meleeEquipment = meleeEquipment;
     }
 
     public boolean isAlive() {

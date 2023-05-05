@@ -4,6 +4,7 @@ import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.game.GamePart;
 import net.jandie1505.combattest.game.Lobby;
+import net.jandie1505.combattest.game.PlayerData;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -48,6 +49,18 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 break;
             case "bypass":
                 this.bypassSubcommand(sender, args);
+                break;
+            case "getmelee":
+                this.getMelee(sender, args);
+                break;
+            case "setmelee":
+                this.setMelee(sender, args);
+                break;
+            case "openinv":
+                if (this.plugin.getGame() instanceof Game) {
+                    ((Game) this.plugin.getGame()).getPlayerMenu(((Player) sender).getUniqueId()).setPage(0);
+                    ((Player) sender).openInventory(((Game) this.plugin.getGame()).getPlayerMenu(((Player) sender).getUniqueId()).getInventory());
+                }
                 break;
             default:
                 sender.sendMessage("§cUnknown command");
@@ -306,6 +319,93 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             }
 
         }
+
+    }
+
+    public void getMelee(CommandSender sender, String[] args) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (args.length != 2) {
+            sender.sendMessage("§cUsage: /combattest getmelee <player>");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        Player player = this.plugin.getPlayerFromString(args[1]);
+
+        if (player == null) {
+            sender.sendMessage("§cPlayer is offline");
+            return;
+        }
+
+        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(player.getUniqueId());
+
+        if (playerData == null) {
+            sender.sendMessage("§cPlayer not ingame");
+            return;
+        }
+
+        sender.sendMessage("§7Players melee score: " + playerData.getMeleeEquipment());
+
+    }
+
+    public void setMelee(CommandSender sender, String[] args) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (args.length != 3) {
+            sender.sendMessage("§cUsage: /combattest setmelee <player> <score>");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        Player player = this.plugin.getPlayerFromString(args[1]);
+
+        if (player == null) {
+            sender.sendMessage("§cPlayer is offline");
+            return;
+        }
+
+        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(player.getUniqueId());
+
+        if (playerData == null) {
+            sender.sendMessage("§cPlayer not ingame");
+            return;
+        }
+
+        int meleescore;
+
+        try {
+
+            meleescore = Integer.parseInt(args[2]);
+
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage("§cPlease specify a valid int value");
+            return;
+        }
+
+        if (!((meleescore == 0) || (meleescore >= 100 && meleescore <= 102) || (meleescore >= 200 && meleescore <= 202) || (meleescore >= 1100 && meleescore <= 1103) || (meleescore >= 1200 && meleescore <= 1203) || (meleescore >= 1300 && meleescore <= 1303) || (meleescore >= 1400 && meleescore <= 1403) || (meleescore >= 1500 && meleescore <= 1503) || (meleescore >= 1600 && meleescore <= 1603))) {
+            sender.sendMessage("§cInvalid melee score");
+            return;
+        }
+
+        playerData.setMeleeEquipment(meleescore);
+        sender.sendMessage("§aMelee score set");
 
     }
 

@@ -1,17 +1,20 @@
 package net.jandie1505.combattest;
 
+import net.jandie1505.combattest.game.Equipment;
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.game.Lobby;
+import net.jandie1505.combattest.game.PlayerMenu;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class EventListener implements Listener {
     private final CombatTest plugin;
@@ -84,6 +87,25 @@ public class EventListener implements Listener {
                 event.setCancelled(true);
             }
 
+            return;
+        }
+
+        if (event.getClickedInventory().getHolder() instanceof PlayerMenu) {
+
+            event.setCancelled(true);
+
+            if (!(this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()))) {
+                return;
+            }
+
+            if (event.getCurrentItem().isSimilar(Equipment.getMeleeButton())) {
+
+                ((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId()).setPage(1);
+                event.getWhoClicked().openInventory(((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId()).getInventory());
+
+            }
+
+            return;
         }
     }
 

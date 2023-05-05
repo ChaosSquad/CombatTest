@@ -7,8 +7,11 @@ import net.jandie1505.combattest.game.GamePart;
 import net.jandie1505.combattest.game.GameStatus;
 import net.jandie1505.combattest.game.Lobby;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -122,5 +125,28 @@ public class CombatTest extends JavaPlugin {
 
     public boolean isSingleServer() {
         return this.singleServer;
+    }
+
+    public static ItemStack buildInventoryButton(Material material, String name, List<String> lore, int id) {
+
+        ItemStack item = new ItemStack(material);
+
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
+
+        if (name != null) {
+            meta.setDisplayName(name);
+        }
+
+        if (lore == null) {
+            lore = new ArrayList<>();
+        }
+
+        lore.add(String.valueOf(id));
+
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 }

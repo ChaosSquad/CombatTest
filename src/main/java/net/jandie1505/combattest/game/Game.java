@@ -18,6 +18,7 @@ public class Game implements GamePart {
     private List<Spawnpoint> spawnpoints;
     private boolean enableBorder;
     private int[] border;
+    private Map<UUID, PlayerMenu> playerMenus;
 
     public Game(CombatTest plugin, int time, World world, List<UUID> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border) {
         this.plugin = plugin;
@@ -38,7 +39,7 @@ public class Game implements GamePart {
                 continue;
             }
 
-            this.players.put(playerId, new PlayerData());
+            this.players.put(playerId, new PlayerData(playerId));
         }
 
         this.spawnpoints = Collections.synchronizedList(new ArrayList<>());
@@ -49,6 +50,8 @@ public class Game implements GamePart {
         if (enableBorder && border.length < 6) {
             this.killswitch = true;
         }
+
+        this.playerMenus = Collections.synchronizedMap(new HashMap<>());
     }
 
     @Override
@@ -70,7 +73,7 @@ public class Game implements GamePart {
 
         // PLAYER MANAGEMENT
 
-        for (UUID playerId : this.players.keySet()) {
+        for (UUID playerId : this.getPlayerMap().keySet()) {
             Player player = this.plugin.getServer().getPlayer(playerId);
 
             if (player == null) {
@@ -103,6 +106,26 @@ public class Game implements GamePart {
                 if (playerData.getRespawntimer() < 5) {
                     playerData.setRespawntimer(5);
                 }
+
+            }
+
+            if (!this.playerMenus.containsKey(playerId)) {
+
+                this.playerMenus.put(playerId, new PlayerMenu(this, playerId));
+
+            }
+
+        }
+
+        // HANDLE MENUS
+
+        for (UUID playerId : this.getPlayerMenus().keySet()) {
+
+            Player player = this.plugin.getServer().getPlayer(playerId);
+
+            if (player == null || !this.players.containsKey(playerId)) {
+
+                this.playerMenus.remove(playerId);
 
             }
 
@@ -143,7 +166,7 @@ public class Game implements GamePart {
             return false;
         }
 
-        this.players.put(player.getUniqueId(), new PlayerData());
+        this.players.put(player.getUniqueId(), new PlayerData(player.getUniqueId()));
         return true;
     }
 
@@ -255,6 +278,14 @@ public class Game implements GamePart {
 
     public World getWorld() {
         return this.world;
+    }
+
+    private Map<UUID, PlayerMenu> getPlayerMenus() {
+        return Map.copyOf(this.playerMenus);
+    }
+
+    public PlayerMenu getPlayerMenu(UUID playerId) {
+        return this.getPlayerMenus().get(playerId);
     }
 
     @Override

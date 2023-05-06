@@ -65,6 +65,12 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "setmelee":
                 this.setScoreSubcommand(sender, args, 1);
                 break;
+            case "getranged":
+                this.getScoreSubcommand(sender, args, 2);
+                break;
+            case "setranged":
+                this.setScoreSubcommand(sender, args, 2);
+                break;
             case "menu":
                 this.menuSubcommand(sender);
                 break;

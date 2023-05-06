@@ -26,6 +26,8 @@ public class PlayerMenu implements InventoryHolder {
                 return this.getMainMenu();
             case 1:
                 return this.getMeleeMenu();
+            case 2:
+                return this.getRangedMenu();
             default:
                 return Bukkit.createInventory(this, 27, "§aPlayer Menu");
         }
@@ -120,6 +122,81 @@ public class PlayerMenu implements InventoryHolder {
                 inventory.setItem(4, ItemStorage.getMelee(playerData.getMeleeEquipment()));
 
                 inventory.setItem(22, ItemStorage.getMelee(playerData.getMeleeEquipment() + 1));
+
+            }
+
+        }
+
+        return inventory;
+    }
+
+    private Inventory getRangedMenu() {
+        Inventory inventory = Bukkit.createInventory(this, 27, "§aRanged Weapons");
+
+        PlayerData playerData = this.game.getPlayerMap().get(playerId);
+
+        if (playerData == null) {
+            return Bukkit.createInventory(this, 27, "§aRanged Weapons");
+        }
+
+        inventory.setItem(0, ItemStorage.getBackButton());
+        inventory.setItem(8, ItemStorage.getDisplayItem("§a§lPoints: §r§a" + playerData.getPoints(), Material.EMERALD));
+
+        // Is item specialized
+        if (playerData.getRangedEquipment() >= 1000) {
+
+            // Is Ranged item in final level (no more upgrades)
+            if ((playerData.getRangedEquipment() % 10) >= 2) {
+
+                inventory.setItem(13, ItemStorage.getRanged(playerData.getRangedEquipment()));
+
+            } else {
+
+                inventory.setItem(22, ItemStorage.getRanged(playerData.getRangedEquipment()));
+
+                inventory.setItem(22, ItemStorage.getRanged(playerData.getRangedEquipment() + 1));
+
+            }
+
+        } else {
+
+            // Is no item set (or default item set) (= Ranged level 0)
+            // If not, is item ready for specialisation
+            if (playerData.getRangedEquipment() == 0) {
+
+                inventory.setItem(4, ItemStorage.getRanged(0));
+
+                inventory.setItem(21, ItemStorage.getRanged(100));
+                inventory.setItem(22, ItemStorage.getRanged(200));
+                inventory.setItem(23, ItemStorage.getRanged(300));
+
+            } else if ((playerData.getRangedEquipment() % 10) >= 1) {
+
+                switch (playerData.getRangedEquipment()) {
+                    case 101:
+                        inventory.setItem(4, ItemStorage.getRanged(101));
+                        inventory.setItem(21, ItemStorage.getRanged(1100));
+                        inventory.setItem(23, ItemStorage.getRanged(1200));
+                        break;
+                    case 201:
+                        inventory.setItem(4, ItemStorage.getRanged(201));
+                        inventory.setItem(21, ItemStorage.getRanged(1300));
+                        inventory.setItem(23, ItemStorage.getRanged(1400));
+                        break;
+                    case 301:
+                        inventory.setItem(4, ItemStorage.getRanged(301));
+                        inventory.setItem(21, ItemStorage.getRanged(1500));
+                        inventory.setItem(23, ItemStorage.getRanged(1600));
+                        break;
+                    default:
+                        break;
+                }
+
+            } else {
+
+                inventory.setItem(4, ItemStorage.getRanged(playerData.getRangedEquipment()));
+
+                inventory.setItem(22, ItemStorage.getRanged(playerData.getRangedEquipment() + 1));
 
             }
 

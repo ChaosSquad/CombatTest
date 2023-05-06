@@ -164,8 +164,13 @@ public class Game implements GamePart {
             for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
 
                 Integer meleeId = ItemStorage.getMeleeReverse(item);
+                Integer rangedId = ItemStorage.getRangedReverse(item);
 
                 if (meleeId != null && meleeId != playerData.getMeleeEquipment()) {
+                    player.getInventory().remove(item);
+                }
+
+                if (rangedId != null && rangedId != playerData.getRangedEquipment()) {
                     player.getInventory().remove(item);
                 }
 
@@ -173,8 +178,16 @@ public class Game implements GamePart {
 
             // Give owned Equipment
 
-            if (!player.getInventory().contains(ItemStorage.getMelee(playerData.getMeleeEquipment())) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(ItemStorage.getMelee(playerData.getMeleeEquipment())))) {
-                player.getInventory().addItem(ItemStorage.getMelee(playerData.getMeleeEquipment()));
+            ItemStack meleeItem = ItemStorage.getMelee(playerData.getMeleeEquipment());
+
+            if (meleeItem != null && !player.getInventory().contains(meleeItem) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(meleeItem))) {
+                player.getInventory().addItem(meleeItem);
+            }
+
+            ItemStack rangedItem = ItemStorage.getRanged(playerData.getRangedEquipment());
+
+            if (rangedItem != null && !player.getInventory().contains(rangedItem) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(rangedItem))) {
+                player.getInventory().addItem(rangedItem);
             }
 
             // Saturation

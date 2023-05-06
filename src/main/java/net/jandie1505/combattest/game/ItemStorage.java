@@ -24,6 +24,7 @@ import java.util.Map;
 
 public class ItemStorage {
     private static final Map<Integer, ItemStack> MELEE_ITEMS;
+    private static final Map<Integer, ItemStack> RANGED_ITEMS;
 
     static {
 
@@ -250,6 +251,415 @@ public class ItemStorage {
 
         MELEE_ITEMS = Map.copyOf(meleeItemsInit);
 
+        // RANGED ITEMS
+
+        Map<Integer, ItemStack> rangedItemsInit = new HashMap<>();
+
+        {
+            ItemStack item = new ItemStack(Material.BOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
+
+            meta.setDisplayName("Default Bow");
+            meta.setLore(List.of("100"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(100, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.BOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
+
+            meta.setDisplayName("Default Bow +");
+            meta.setLore(List.of("101"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(101, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.BOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
+
+            meta.setDisplayName("Powerful Bow");
+            meta.setLore(List.of("1100"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1100, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.BOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
+
+            meta.setDisplayName("Powerful Bow +");
+            meta.setLore(List.of("1101"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1101, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.BOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
+
+            meta.setDisplayName("Most Powerful Bow");
+            meta.setLore(List.of("1102"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1102, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.BOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
+
+            meta.setDisplayName("Misc Bow");
+            meta.setLore(List.of("1200"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1200, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.BOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
+
+            meta.setDisplayName("Misc Bow +");
+            meta.setLore(List.of("1201"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
+            meta.addEnchant(Enchantment.ARROW_FIRE, 1, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1201, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.BOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
+
+            meta.setDisplayName("Misc Bow ++");
+            meta.setLore(List.of("1202"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
+            meta.addEnchant(Enchantment.ARROW_FIRE, 1, false);
+            meta.addEnchant(Enchantment.ARROW_INFINITE, 1, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1202, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.CROSSBOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
+
+            meta.setDisplayName("Default Crossbow");
+            meta.setLore(List.of("200"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(200, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.CROSSBOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
+
+            meta.setDisplayName("Default Crossbow +");
+            meta.setLore(List.of("201"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(201, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.CROSSBOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
+
+            meta.setDisplayName("Multishot Crossbow");
+            meta.setLore(List.of("1300"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
+            meta.addEnchant(Enchantment.MULTISHOT, 1, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1300, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.CROSSBOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
+
+            meta.setDisplayName("Rocket Launcher Crossbow");
+            meta.setLore(List.of("Ammunition: Rockets", "1301"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1301, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.CROSSBOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
+
+            meta.setDisplayName("Rocket Launcher Crossbow +");
+            meta.setLore(List.of("Ammunition: Rockets", "1302"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
+            meta.addEnchant(Enchantment.MULTISHOT, 1, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1302, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.CROSSBOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
+
+            meta.setDisplayName("Piercing Crossbow");
+            meta.setLore(List.of("1400"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
+            meta.addEnchant(Enchantment.PIERCING, 2, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1400, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.CROSSBOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
+
+            meta.setDisplayName("Piercing Crossbow +");
+            meta.setLore(List.of("1401"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
+            meta.addEnchant(Enchantment.PIERCING, 3, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1401, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.CROSSBOW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
+
+            meta.setDisplayName("Piercing Crossbow ++");
+            meta.setLore(List.of("1402"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
+            meta.addEnchant(Enchantment.PIERCING, 4, false);
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1402, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TRIDENT);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
+
+            meta.setDisplayName("Trident");
+            meta.setLore(List.of("Melee damage disabled", "300"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.LOYALTY, 1, false);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(300, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TRIDENT);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
+
+            meta.setDisplayName("Trident +");
+            meta.setLore(List.of("Melee damage disabled", "301"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.LOYALTY, 2, false);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(301, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TRIDENT);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
+
+            meta.setDisplayName("Riptide Trident");
+            meta.setLore(List.of("Melee damage disabled", "1500"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.LOYALTY, 2, false);
+            meta.addEnchant(Enchantment.RIPTIDE, 2, false);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1500, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TRIDENT);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
+
+            meta.setDisplayName("Riptide Trident +");
+            meta.setLore(List.of("Melee damage disabled", "1501"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.LOYALTY, 2, false);
+            meta.addEnchant(Enchantment.RIPTIDE, 3, false);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1501, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TRIDENT);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
+
+            meta.setDisplayName("Riptide Trident ++");
+            meta.setLore(List.of("Melee damage disabled", "1502"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.LOYALTY, 2, false);
+            meta.addEnchant(Enchantment.RIPTIDE, 4, false);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1502, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TRIDENT);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
+
+            meta.setDisplayName("Extra-loyal Trident");
+            meta.setLore(List.of("Melee damage disabled", "1600"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.LOYALTY, 3, false);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1600, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TRIDENT);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
+
+            meta.setDisplayName("Lightning Trident");
+            meta.setLore(List.of("Melee damage disabled", "1601"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.LOYALTY, 3, false);
+            meta.addEnchant(Enchantment.CHANNELING, 1, false);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1601, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TRIDENT);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
+
+            meta.setDisplayName("Weather-manipulating Trident");
+            meta.setLore(List.of("Melee damage disabled", "1602"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.LOYALTY, 3, false);
+            meta.addEnchant(Enchantment.CHANNELING, 1, false);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+
+            item.setItemMeta(meta);
+
+            rangedItemsInit.put(1602, item);
+        }
+
+        RANGED_ITEMS = Map.copyOf(rangedItemsInit);
+
     }
 
     public static ItemStack getBackButton() {
@@ -331,6 +741,65 @@ public class ItemStorage {
 
             // Is melee item in final level (no more upgrades)
             if ((id % 10) >= 3) {
+
+                return 10000;
+
+            } else if ((id % 10) == 0) {
+
+                return 10000;
+
+            } else {
+
+                return 5000;
+
+            }
+
+        } else {
+
+            // Is no item set (or default item set) (= melee level 0)
+            // If not, is item ready for specialisation
+            if (id == 0) {
+
+                return 0;
+
+            } else if ((id % 10) == 0) {
+
+                return 5000;
+
+            } else {
+
+                return 2500;
+
+            }
+
+        }
+
+    }
+
+    public static ItemStack getRanged(int id) {
+        return RANGED_ITEMS.get(id);
+    }
+
+    public static Integer getRangedReverse(ItemStack item) {
+
+        for (Integer id : Map.copyOf(RANGED_ITEMS).keySet()) {
+            ItemStack itemStack = RANGED_ITEMS.get(id);
+
+            if (itemStack.isSimilar(item)) {
+                return id;
+            }
+        }
+
+        return null;
+    }
+
+    public static int getRangedPrice(int id) {
+
+        // Is item specialized
+        if (id >= 1000) {
+
+            // Is melee item in final level (no more upgrades)
+            if ((id % 10) >= 2) {
 
                 return 10000;
 

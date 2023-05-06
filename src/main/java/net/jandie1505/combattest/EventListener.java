@@ -128,6 +128,11 @@ public class EventListener implements Listener {
                         menu.setPage(1);
                         event.getWhoClicked().openInventory(menu.getInventory());
 
+                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getRangedButton())) {
+
+                        menu.setPage(2);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
                     }
 
                 } else if (menu.getPage() == 1) {
@@ -167,6 +172,43 @@ public class EventListener implements Listener {
 
                     }
 
+                } else if (menu.getPage() == 2) {
+
+                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
+
+                        menu.setPage(0);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
+                    } else {
+
+                        Integer itemId = ItemStorage.getRangedReverse(event.getCurrentItem());
+                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                        if (itemId != null && itemId > playerData.getRangedEquipment()) {
+
+                            if (playerData.getPoints() >= ItemStorage.getRangedPrice(itemId)) {
+
+                                playerData.setRangedEquipment(itemId);
+                                playerData.setPoints(playerData.getPoints() - ItemStorage.getRangedPrice(itemId));
+                                event.getWhoClicked().closeInventory();
+                                event.getWhoClicked().sendMessage("§aItem successfully upgraded");
+
+                            } else {
+
+                                event.getWhoClicked().closeInventory();
+                                event.getWhoClicked().sendMessage("§cYou don't have enough points to upgrade (Price: " + ItemStorage.getRangedPrice(itemId) + ")");
+
+                            }
+
+                        } else {
+
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§cYou cannot upgrade to an item which is the same or below the item you already have");
+
+                        }
+
+                    }
+
                 }
 
             }
@@ -185,6 +227,10 @@ public class EventListener implements Listener {
             }
 
             if (ItemStorage.getMeleeReverse(event.getItemDrop().getItemStack()) != null) {
+                event.setCancelled(true);
+            }
+
+            if (ItemStorage.getRangedReverse(event.getItemDrop().getItemStack()) != null) {
                 event.setCancelled(true);
             }
 

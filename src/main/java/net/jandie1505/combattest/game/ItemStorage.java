@@ -7,6 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Marker;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -255,7 +258,22 @@ public class ItemStorage {
 
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BARRIER);
 
-        meta.setDisplayName("BACK");
+        meta.setDisplayName("§c§lBACK");
+
+        item.setItemMeta(meta);
+
+        return item;
+
+    }
+
+    public static ItemStack getDisplayItem(String text, Material material) {
+
+        ItemStack item = new ItemStack(material);
+
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
+
+        meta.setDisplayName(text);
+        meta.addItemFlags(ItemFlag.values());
 
         item.setItemMeta(meta);
 

@@ -21,7 +21,13 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
         if (args.length < 1) {
-            sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass");
+
+            if (this.hasPermissionAdmin(sender)) {
+                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/menu/points/leave");
+            } else {
+                sender.sendMessage("§7Usage: /combattest menu/points/leave");
+            }
+
             return true;
         }
 
@@ -520,6 +526,37 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
-        return List.of();
+
+        List<String> tabComplete = new ArrayList<>();
+
+        if (args.length == 1) {
+
+            if (hasPermissionAdmin(sender)) {
+
+                tabComplete.add("stop");
+                tabComplete.add("start");
+                tabComplete.add("status");
+                tabComplete.add("addplayer");
+                tabComplete.add("removeplayer");
+                tabComplete.add("getplayers");
+                tabComplete.add("bypass");
+                tabComplete.add("getpoints");
+                tabComplete.add("setpoints");
+                tabComplete.add("getmelee");
+                tabComplete.add("setmelee");
+                tabComplete.add("getranged");
+                tabComplete.add("setranged");
+                tabComplete.add("getarmor");
+                tabComplete.add("setarmor");
+
+            }
+
+            tabComplete.add("menu");
+            tabComplete.add("points");
+            tabComplete.add("leave");
+
+        }
+
+        return List.copyOf(tabComplete);
     }
 }

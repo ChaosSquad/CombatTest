@@ -62,6 +62,12 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "menu":
                 this.menuSubcommand(sender);
                 break;
+            case "points":
+                this.pointsSubcommand(sender);
+                break;
+            case "leave":
+                this.leaveSubcommand(sender);
+                break;
             default:
                 sender.sendMessage("§cUnknown command");
                 break;
@@ -460,6 +466,51 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
         menu.setPage(0);
         ((Player) sender).openInventory(menu.getInventory());
+
+    }
+
+    public void pointsSubcommand(CommandSender sender) {
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("§cThis command can only be executed by a player");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(((Player) sender).getUniqueId());
+
+        if (playerData == null) {
+            sender.sendMessage("§cYou are not ingame");
+            return;
+        }
+
+        sender.sendMessage("§7Your points: " + playerData.getPoints());
+
+    }
+
+    public void leaveSubcommand(CommandSender sender) {
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("§cThis command can only be executed by a player");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        if (!((Game) this.plugin.getGame()).getPlayerMap().containsKey(((Player) sender).getUniqueId())) {
+            sender.sendMessage("§cYou are not ingame");
+            return;
+        }
+
+        ((Game) this.plugin.getGame()).getPlayerMap().remove(((Player) sender).getUniqueId());
+        sender.sendMessage("§aYou successfully left the game");
 
     }
 

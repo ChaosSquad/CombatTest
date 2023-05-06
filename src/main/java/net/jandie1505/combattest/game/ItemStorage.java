@@ -260,6 +260,20 @@ public class ItemStorage {
 
     }
 
+    public static ItemStack getPlayerMenuButton() {
+
+        ItemStack item = new ItemStack(Material.CHEST);
+
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CHEST);
+
+        meta.setDisplayName("§a§lOpen Player Menu §r§a(right click)");
+
+        item.setItemMeta(meta);
+
+        return item;
+
+    }
+
     public static ItemStack getMeleeButton() {
         return CombatTest.buildInventoryButton(Material.NETHERITE_SWORD, "Melee Weapons", null, 0);
     }

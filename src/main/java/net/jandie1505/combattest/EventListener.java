@@ -8,13 +8,21 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.potion.PotionEffect;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class EventListener implements Listener {
     private final CombatTest plugin;
@@ -81,6 +89,21 @@ public class EventListener implements Listener {
 
             if (event.getSlot() == 8) {
                 event.setCancelled(true);
+
+                if ((event.getAction() == InventoryAction.PICKUP_ALL || event.getAction() == InventoryAction.PICKUP_HALF || event.getAction() == InventoryAction.PICKUP_ONE) && event.getCurrentItem() != null && event.getCurrentItem().isSimilar(ItemStorage.getPlayerMenuButton())) {
+
+                    PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId());
+
+                    menu.setPage(0);
+                    event.getWhoClicked().openInventory(menu.getInventory());
+
+                    if (event.getWhoClicked().getItemOnCursor() != null && event.getWhoClicked().getItemOnCursor().isSimilar(ItemStorage.getPlayerMenuButton())) {
+
+                        event.getWhoClicked().getInventory().remove(ItemStorage.getPlayerMenuButton());
+
+                    }
+
+                }
             }
 
             if (event.getHotbarButton() == 8) {
@@ -137,6 +160,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
+
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 
             if (event.getPlayer().getInventory().getHeldItemSlot() == 8) {
@@ -144,6 +168,30 @@ public class EventListener implements Listener {
             }
 
         }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+
+        if (this.plugin.getGame() instanceof  Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
+
+            if (event.getItem() != null && event.getItem().isSimilar(ItemStorage.getPlayerMenuButton())) {
+
+                event.setCancelled(true);
+
+                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+
+                    PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(event.getPlayer().getUniqueId());
+
+                    menu.setPage(0);
+                    event.getPlayer().openInventory(menu.getInventory());
+
+                }
+
+            }
+
+        }
+
     }
 
     @EventHandler

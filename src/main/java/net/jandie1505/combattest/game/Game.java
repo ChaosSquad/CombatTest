@@ -115,6 +115,13 @@ public class Game implements GamePart {
 
             }
 
+            if (!ItemStorage.getPlayerMenuButton().isSimilar(player.getInventory().getItem(8))) {
+
+                player.getInventory().remove(ItemStorage.getPlayerMenuButton());
+                player.getInventory().setItem(8, ItemStorage.getPlayerMenuButton());
+
+            }
+
         }
 
         // HANDLE MENUS

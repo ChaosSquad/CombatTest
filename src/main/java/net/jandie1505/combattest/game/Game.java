@@ -1,6 +1,9 @@
 package net.jandie1505.combattest.game;
 
 import net.jandie1505.combattest.CombatTest;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -9,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.*;
 
 import java.util.*;
 
@@ -191,6 +195,31 @@ public class Game implements GamePart {
                 playerData.setRegenerationCooldown(playerData.getRegenerationCooldown() + 1);
             }
 
+            // Actionbar
+
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a" + playerData.getKills() + " kills §8§l|§r§c " + playerData.getDeaths() + " deaths §8§l|§r§6 Points: " + playerData.getPoints() + " §8§l|§r§6 " + this.time + "s"));
+
+            // Scoreboard
+
+            if (this.plugin.isSingleServer()) {
+
+                Scoreboard scoreboard = this.plugin.getServer().getScoreboardManager().getNewScoreboard();
+                Objective objective = scoreboard.registerNewObjective("player", Criteria.DUMMY, "");
+                objective.setDisplayName("§6§lCOMBAT TEST");
+                objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+                objective.getScore("§§§").setScore(6);
+                objective.getScore("Kills: §a" + playerData.getKills()).setScore(5);
+                objective.getScore("Deaths: §a" + playerData.getDeaths()).setScore(4);
+                objective.getScore("Points: §a" + playerData.getPoints()).setScore(3);
+                objective.getScore("§§").setScore(2);
+                objective.getScore("Time: §a" + this.time + "s").setScore(1);
+                objective.getScore("§").setScore(0);
+
+                player.setScoreboard(scoreboard);
+
+            }
+
         }
 
         // HANDLE MENUS
@@ -223,6 +252,10 @@ public class Game implements GamePart {
 
                 if (player.getGameMode() != GameMode.SPECTATOR && !this.plugin.isPlayerBypassing(player.getUniqueId())) {
                     player.setGameMode(GameMode.SPECTATOR);
+                }
+
+                if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
+                    player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
                 }
 
             }

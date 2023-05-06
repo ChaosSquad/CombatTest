@@ -1,9 +1,13 @@
 package net.jandie1505.combattest.game;
 
 import net.jandie1505.combattest.CombatTest;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -72,6 +76,47 @@ public class Lobby implements GamePart {
             if ((player.getGameMode() != GameMode.ADVENTURE) && !this.plugin.isPlayerBypassing(playerId)) {
                 player.setGameMode(GameMode.ADVENTURE);
             }
+
+            if (this.players.size() >= 2) {
+
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§aStarting in " + this.time + "s §8§l|§r§a Players: " + this.players.size() + " / 2"));
+
+            } else {
+
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cNot enough players (" + this.players.size() + " / 2)"));
+
+            }
+
+            if (this.plugin.isSingleServer()) {
+                Scoreboard scoreboard = this.plugin.getServer().getScoreboardManager().getNewScoreboard();
+                Objective objective = scoreboard.registerNewObjective("lobby", Criteria.DUMMY, "");
+
+                objective.setDisplayName("§6§lCOMBAT TEST");
+
+                objective.getScore("§§§").setScore(4);
+
+                if (this.players.size() >= 2) {
+
+                    objective.getScore("§bStarting in " + this.time).setScore(3);
+                    objective.getScore("§§").setScore(2);
+                    objective.getScore("§7Players: §a" + this.players.size() + " / 2").setScore(1);
+
+                } else {
+
+
+                    objective.getScore("§cNot enough players").setScore(3);
+                    objective.getScore("§§").setScore(2);
+                    objective.getScore(" §7Players: §c" + this.players.size() + " / 2").setScore(1);
+
+                }
+
+                objective.getScore("§").setScore(0);
+
+                objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+                player.setScoreboard(scoreboard);
+            }
+
         }
 
         // SINGLE SERVER MODE

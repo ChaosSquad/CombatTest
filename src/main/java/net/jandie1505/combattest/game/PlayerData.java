@@ -13,6 +13,8 @@ public class PlayerData {
     private int respawntimer;
     private int points;
     private int regenerationCooldown;
+    private int kills;
+    private int deaths;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
@@ -87,5 +89,21 @@ public class PlayerData {
 
     public void setRegenerationCooldown(int regenerationCooldown) {
         this.regenerationCooldown = regenerationCooldown;
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
     }
 }

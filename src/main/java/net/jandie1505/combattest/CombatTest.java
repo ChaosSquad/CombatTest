@@ -51,6 +51,16 @@ public class CombatTest extends JavaPlugin {
                         this.game = this.game.getNextStatus();
                     }
 
+                } else {
+
+                    for (Player player : List.copyOf(this.getServer().getOnlinePlayers())) {
+
+                        if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
+                            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+                        }
+
+                    }
+
                 }
 
             } catch (Exception e) {

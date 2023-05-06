@@ -181,6 +181,10 @@ public class EventListener implements Listener {
                 event.setCancelled(true);
             }
 
+            if (ItemStorage.getMeleeReverse(event.getItemDrop().getItemStack()) != null) {
+                event.setCancelled(true);
+            }
+
         }
     }
 

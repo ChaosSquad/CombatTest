@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -83,6 +84,8 @@ public class Game implements GamePart {
 
             PlayerData playerData = this.players.get(playerId);
 
+            // Respawn
+
             if (!playerData.isAlive()) {
 
                 if ((player.getGameMode() != GameMode.SPECTATOR) && !(this.plugin.isPlayerBypassing(playerId))) {
@@ -109,11 +112,15 @@ public class Game implements GamePart {
 
             }
 
+            // Player Menu Object
+
             if (!this.playerMenus.containsKey(playerId)) {
 
                 this.playerMenus.put(playerId, new PlayerMenu(this, playerId));
 
             }
+
+            // Player Menu Button
 
             if (!ItemStorage.getPlayerMenuButton().isSimilar(player.getInventory().getItem(8))) {
 
@@ -122,10 +129,36 @@ public class Game implements GamePart {
 
             }
 
-            int meleeScore = playerData.getMeleeEquipment();
+            // Check scores
 
-            if (!((meleeScore == 0) || (meleeScore >= 100 && meleeScore <= 102) || (meleeScore >= 200 && meleeScore <= 202) || (meleeScore >= 1100 && meleeScore <= 1103) || (meleeScore >= 1200 && meleeScore <= 1203) || (meleeScore >= 1300 && meleeScore <= 1303) || (meleeScore >= 1400 && meleeScore <= 1403) || (meleeScore >= 1500 && meleeScore <= 1503) || (meleeScore >= 1600 && meleeScore <= 1603))) {
+            if (!((playerData.getMeleeEquipment() == 0) || (playerData.getMeleeEquipment() >= 100 && playerData.getMeleeEquipment() <= 102) || (playerData.getMeleeEquipment() >= 200 && playerData.getMeleeEquipment() <= 202) || (playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 302) || (playerData.getMeleeEquipment() >= 1100 && playerData.getMeleeEquipment() <= 1103) || (playerData.getMeleeEquipment() >= 1200 && playerData.getMeleeEquipment() <= 1203) || (playerData.getMeleeEquipment() >= 1300 && playerData.getMeleeEquipment() <= 1303) || (playerData.getMeleeEquipment() >= 1400 && playerData.getMeleeEquipment() <= 1403) || (playerData.getMeleeEquipment() >= 1500 && playerData.getMeleeEquipment() <= 1503) || (playerData.getMeleeEquipment() >= 1600 && playerData.getMeleeEquipment() <= 1603))) {
                 playerData.setMeleeEquipment(0);
+            }
+
+            if (!((playerData.getRangedEquipment() == 0) || (playerData.getRangedEquipment() >= 100 && playerData.getRangedEquipment() <= 101) || (playerData.getRangedEquipment() >= 200 && playerData.getRangedEquipment() <= 201) || (playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 301) || (playerData.getRangedEquipment() >= 1100 && playerData.getRangedEquipment() <= 1102) || (playerData.getRangedEquipment() >= 1200 && playerData.getRangedEquipment() <= 1202) || (playerData.getRangedEquipment() >= 1300 && playerData.getRangedEquipment() <= 1302) || (playerData.getRangedEquipment() >= 1400 && playerData.getRangedEquipment() <= 1402) || (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1502) || (playerData.getRangedEquipment() >= 1600 && playerData.getRangedEquipment() <= 1602))) {
+                playerData.setMeleeEquipment(0);
+            }
+
+            if (!((playerData.getArmorEquipment() == 0) || (playerData.getArmorEquipment() >= 100 && playerData.getArmorEquipment() <= 102) || (playerData.getArmorEquipment() >= 1100 && playerData.getArmorEquipment() <= 1103) || (playerData.getArmorEquipment() >= 1200 && playerData.getArmorEquipment() <= 1203))) {
+                playerData.setArmorEquipment(0);
+            }
+
+            // Remove unowned Equipment
+
+            for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
+
+                Integer meleeId = ItemStorage.getMeleeReverse(item);
+
+                if (meleeId != null && meleeId != playerData.getMeleeEquipment()) {
+                    player.getInventory().remove(item);
+                }
+
+            }
+
+            // Give owned Equipment
+
+            if (!player.getInventory().contains(ItemStorage.getMelee(playerData.getMeleeEquipment())) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(ItemStorage.getMelee(playerData.getMeleeEquipment())))) {
+                player.getInventory().addItem(ItemStorage.getMelee(playerData.getMeleeEquipment()));
             }
 
         }

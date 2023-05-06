@@ -12,6 +12,7 @@ public class PlayerData {
     private boolean alive;
     private int respawntimer;
     private int points;
+    private int regenerationCooldown;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
@@ -24,6 +25,8 @@ public class PlayerData {
         this.respawntimer = 0;
 
         this.points = 0;
+
+        this.regenerationCooldown = 0;
     }
 
     public UUID getPlayerId() {
@@ -76,5 +79,13 @@ public class PlayerData {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public int getRegenerationCooldown() {
+        return regenerationCooldown;
+    }
+
+    public void setRegenerationCooldown(int regenerationCooldown) {
+        this.regenerationCooldown = regenerationCooldown;
     }
 }

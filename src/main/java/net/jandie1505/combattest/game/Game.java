@@ -7,6 +7,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -159,6 +161,24 @@ public class Game implements GamePart {
 
             if (!player.getInventory().contains(ItemStorage.getMelee(playerData.getMeleeEquipment())) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(ItemStorage.getMelee(playerData.getMeleeEquipment())))) {
                 player.getInventory().addItem(ItemStorage.getMelee(playerData.getMeleeEquipment()));
+            }
+
+            // Saturation
+
+            if (player.getFoodLevel() < 20) {
+                player.setFoodLevel(20);
+            }
+
+            if (player.getSaturation() < 20) {
+                player.setSaturation(20);
+            }
+
+            // Regeneration
+
+            if (!player.hasPotionEffect(PotionEffectType.REGENERATION) && playerData.getRegenerationCooldown() >= 10) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, false, false));
+            } else if (!player.hasPotionEffect(PotionEffectType.REGENERATION) && playerData.getRegenerationCooldown() < 10) {
+                playerData.setRegenerationCooldown(playerData.getRegenerationCooldown() + 1);
             }
 
         }

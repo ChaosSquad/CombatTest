@@ -24,6 +24,8 @@ public class ItemStorage {
 
     static {
 
+        // MELEE ITEMS
+
         Map<Integer, ItemStack> meleeItemsInit = new HashMap<>();
 
         {
@@ -216,6 +218,7 @@ public class ItemStorage {
             item.setItemMeta(meta);
 
             meleeItemsInit.put(1203, item);
+            
         }
 
         meleeItemsInit.put(200, axeBuilder("Iron Axe", Material.IRON_AXE, 8, 0.5, 200));
@@ -301,6 +304,48 @@ public class ItemStorage {
         }
 
         return null;
+    }
+
+    public static int getMeleePrice(int id) {
+
+        // Is item specialized
+        if (id >= 1000) {
+
+            // Is melee item in final level (no more upgrades)
+            if ((id % 10) >= 3) {
+
+                return 10000;
+
+            } else if ((id % 10) == 0) {
+
+                return 10000;
+
+            } else {
+
+                return 5000;
+
+            }
+
+        } else {
+
+            // Is no item set (or default item set) (= melee level 0)
+            // If not, is item ready for specialisation
+            if (id == 0) {
+
+                return 0;
+
+            } else if ((id % 10) == 0) {
+
+                return 5000;
+
+            } else {
+
+                return 2500;
+
+            }
+
+        }
+
     }
 
     private static ItemStack axeBuilder(String name, Material material, double attackDamage, double attackSpeed, int id) {

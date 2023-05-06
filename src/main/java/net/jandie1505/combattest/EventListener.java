@@ -1,9 +1,6 @@
 package net.jandie1505.combattest;
 
-import net.jandie1505.combattest.game.ItemStorage;
-import net.jandie1505.combattest.game.Game;
-import net.jandie1505.combattest.game.Lobby;
-import net.jandie1505.combattest.game.PlayerMenu;
+import net.jandie1505.combattest.game.*;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -140,11 +137,28 @@ public class EventListener implements Listener {
                     } else {
 
                         Integer itemId = ItemStorage.getMeleeReverse(event.getCurrentItem());
+                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
 
-                        if (itemId != null) {
+                        if (itemId != null && itemId > playerData.getMeleeEquipment()) {
 
-                            ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId()).setMeleeEquipment(itemId);
-                            event.getWhoClicked().openInventory(menu.getInventory());
+                            if (playerData.getPoints() >= ItemStorage.getMeleePrice(itemId)) {
+
+                                playerData.setMeleeEquipment(itemId);
+                                playerData.setPoints(playerData.getPoints() - ItemStorage.getMeleePrice(itemId));
+                                event.getWhoClicked().closeInventory();
+                                event.getWhoClicked().sendMessage("§aItem successfully upgraded");
+
+                            } else {
+
+                                event.getWhoClicked().closeInventory();
+                                event.getWhoClicked().sendMessage("§cYou don't have enough points to upgrade (Price: " + ItemStorage.getMeleePrice(itemId) + ")");
+
+                            }
+
+                        } else {
+
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§cYou cannot upgrade to an item which is the same or below the item you already have");
 
                         }
 

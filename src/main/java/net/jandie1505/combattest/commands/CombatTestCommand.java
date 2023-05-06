@@ -1,10 +1,7 @@
 package net.jandie1505.combattest.commands;
 
 import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.game.Game;
-import net.jandie1505.combattest.game.GamePart;
-import net.jandie1505.combattest.game.Lobby;
-import net.jandie1505.combattest.game.PlayerData;
+import net.jandie1505.combattest.game.*;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -50,17 +47,20 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "bypass":
                 this.bypassSubcommand(sender, args);
                 break;
+            case "getpoints":
+                this.getScoreSubcommand(sender, args, 0);
+                break;
+            case "setpoints":
+                this.setScoreSubcommand(sender, args, 0);
+                break;
             case "getmelee":
-                this.getMelee(sender, args);
+                this.getScoreSubcommand(sender, args, 1);
                 break;
             case "setmelee":
-                this.setMelee(sender, args);
+                this.setScoreSubcommand(sender, args, 1);
                 break;
-            case "openinv":
-                if (this.plugin.getGame() instanceof Game) {
-                    ((Game) this.plugin.getGame()).getPlayerMenu(((Player) sender).getUniqueId()).setPage(0);
-                    ((Player) sender).openInventory(((Game) this.plugin.getGame()).getPlayerMenu(((Player) sender).getUniqueId()).getInventory());
-                }
+            case "menu":
+                this.menuSubcommand(sender);
                 break;
             default:
                 sender.sendMessage("§cUnknown command");
@@ -322,7 +322,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
-    public void getMelee(CommandSender sender, String[] args) {
+    public void getScoreSubcommand(CommandSender sender, String[] args, int score) {
 
         if (!this.hasPermissionAdmin(sender)) {
             sender.sendMessage("§cNo permission");
@@ -330,7 +330,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length != 2) {
-            sender.sendMessage("§cUsage: /combattest getmelee <player>");
+            sender.sendMessage("§cUsage: /combattest get<score> <player>");
             return;
         }
 
@@ -353,11 +353,27 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        sender.sendMessage("§7Players melee score: " + playerData.getMeleeEquipment());
+        switch (score) {
+            case 0:
+                sender.sendMessage("§7Points: " + playerData.getPoints());
+                break;
+            case 1:
+                sender.sendMessage("§7Melee score: " + playerData.getMeleeEquipment());
+                break;
+            case 2:
+                sender.sendMessage("§7Ranged score: " + playerData.getRangedEquipment());
+                break;
+            case 3:
+                sender.sendMessage("§7Armor score: " + playerData.getArmorEquipment());
+                break;
+            default:
+                sender.sendMessage("§cUnknown error");
+                break;
+        }
 
     }
 
-    public void setMelee(CommandSender sender, String[] args) {
+    public void setScoreSubcommand(CommandSender sender, String[] args, int score) {
 
         if (!this.hasPermissionAdmin(sender)) {
             sender.sendMessage("§cNo permission");
@@ -365,7 +381,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length != 3) {
-            sender.sendMessage("§cUsage: /combattest setmelee <player> <score>");
+            sender.sendMessage("§cUsage: /combattest set<score> <player> <score>");
             return;
         }
 
@@ -388,24 +404,62 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        int meleescore;
+        int value;
 
         try {
 
-            meleescore = Integer.parseInt(args[2]);
+            value = Integer.parseInt(args[2]);
 
         } catch (IllegalArgumentException e) {
             sender.sendMessage("§cPlease specify a valid int value");
             return;
         }
 
-        if (!((meleescore == 0) || (meleescore >= 100 && meleescore <= 102) || (meleescore >= 200 && meleescore <= 202) || (meleescore >= 1100 && meleescore <= 1103) || (meleescore >= 1200 && meleescore <= 1203) || (meleescore >= 1300 && meleescore <= 1303) || (meleescore >= 1400 && meleescore <= 1403) || (meleescore >= 1500 && meleescore <= 1503) || (meleescore >= 1600 && meleescore <= 1603))) {
-            sender.sendMessage("§cInvalid melee score");
+        switch (score) {
+            case 0:
+                playerData.setPoints(value);
+                sender.sendMessage("§aPoints set");
+                break;
+            case 1:
+                playerData.setMeleeEquipment(value);
+                sender.sendMessage("§aMelee score set");
+                break;
+            case 2:
+                playerData.setRangedEquipment(value);
+                sender.sendMessage("§aRanged score set");
+                break;
+            case 3:
+                playerData.setArmorEquipment(value);
+                sender.sendMessage("§aArmor score set");
+                break;
+            default:
+                sender.sendMessage("§cUnknown error");
+                break;
+        }
+
+    }
+
+    public void menuSubcommand(CommandSender sender) {
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("§cThis command can only be executed by a player");
             return;
         }
 
-        playerData.setMeleeEquipment(meleescore);
-        sender.sendMessage("§aMelee score set");
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(((Player) sender).getUniqueId());
+
+        if (menu == null) {
+            sender.sendMessage("§cYou are not ingame");
+            return;
+        }
+
+        menu.setPage(0);
+        ((Player) sender).openInventory(menu.getInventory());
 
     }
 

@@ -122,6 +122,12 @@ public class Game implements GamePart {
 
             }
 
+            int meleeScore = playerData.getMeleeEquipment();
+
+            if (!((meleeScore == 0) || (meleeScore >= 100 && meleeScore <= 102) || (meleeScore >= 200 && meleeScore <= 202) || (meleeScore >= 1100 && meleeScore <= 1103) || (meleeScore >= 1200 && meleeScore <= 1203) || (meleeScore >= 1300 && meleeScore <= 1303) || (meleeScore >= 1400 && meleeScore <= 1403) || (meleeScore >= 1500 && meleeScore <= 1503) || (meleeScore >= 1600 && meleeScore <= 1603))) {
+                playerData.setMeleeEquipment(0);
+            }
+
         }
 
         // HANDLE MENUS

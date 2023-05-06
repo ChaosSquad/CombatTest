@@ -57,7 +57,7 @@ public class CombatTest extends JavaPlugin {
                 this.getLogger().warning("Exception in game: " + e + "\nMessage: " + e.getMessage() + "\nStacktrace: " + Arrays.toString(e.getStackTrace()) + "--- END ---");
                 this.stopGame();
             }
-        }, 0, 20);
+        }, 0, 10);
     }
 
     public boolean startGame() {

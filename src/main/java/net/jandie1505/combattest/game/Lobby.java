@@ -15,6 +15,7 @@ import java.util.UUID;
 public class Lobby implements GamePart {
     private final CombatTest plugin;
     private boolean killswitch;
+    private int timeStep;
     private int time;
     private List<UUID> players;
     private boolean forcestart;
@@ -22,6 +23,7 @@ public class Lobby implements GamePart {
     public Lobby(CombatTest plugin) {
         this.plugin = plugin;
         this.killswitch = false;
+        this.timeStep = 0;
         this.time = 60;
         this.players = Collections.synchronizedList(new ArrayList<>());
         this.forcestart = false;
@@ -38,15 +40,23 @@ public class Lobby implements GamePart {
 
         // TIME MANAGEMENT
 
-        if (time > 0) {
+        if (this.timeStep >= 1) {
 
-            if (players.size() >= 2) {
-                time--;
-            } else if(time < 60) {
-                time++;
+            if (time > 0) {
+
+                if (players.size() >= 2) {
+                    time--;
+                } else if(time < 60) {
+                    time++;
+                }
+            } else {
+                return GameStatus.NEXT;
             }
+
+            this.timeStep = 0;
+
         } else {
-            return GameStatus.NEXT;
+            this.timeStep++;
         }
 
         // PLAYER MANAGEMENT

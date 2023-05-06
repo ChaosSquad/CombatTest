@@ -15,6 +15,7 @@ import java.util.*;
 public class Game implements GamePart {
     private final CombatTest plugin;
     private boolean killswitch;
+    private int timeStep;
     private int time;
     World world;
     private Map<UUID, PlayerData> players;
@@ -26,6 +27,7 @@ public class Game implements GamePart {
     public Game(CombatTest plugin, int time, World world, List<UUID> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border) {
         this.plugin = plugin;
         this.killswitch = false;
+        this.timeStep = 0;
         this.time = time;
         this.world = world;
 
@@ -68,10 +70,18 @@ public class Game implements GamePart {
 
         // TIME MANAGEMENT
 
-        if (this.time >= 0) {
-            this.time--;
+        if (this.timeStep >= 1) {
+
+            if (this.time >= 0) {
+                this.time--;
+            } else {
+                return GameStatus.NEXT;
+            }
+
+            this.timeStep = 0;
+
         } else {
-            return GameStatus.NEXT;
+            this.timeStep++;
         }
 
         // PLAYER MANAGEMENT

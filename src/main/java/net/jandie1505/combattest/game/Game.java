@@ -181,7 +181,77 @@ public class Game implements GamePart {
             ItemStack meleeItem = ItemStorage.getMelee(playerData.getMeleeEquipment());
 
             if (meleeItem != null && !player.getInventory().contains(meleeItem) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(meleeItem))) {
-                player.getInventory().addItem(meleeItem);
+
+                if ((playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 301) || (playerData.getMeleeEquipment() >= 1500 && playerData.getMeleeEquipment() <= 1699)) {
+
+                    switch (playerData.getMeleeEquipment()) {
+                        case 300:
+                        case 1600:
+                            if (playerData.getPotionTimer() >= 6) {
+                                player.getInventory().addItem(meleeItem);
+                                playerData.setPotionTimer(0);
+                            } else {
+                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
+                            }
+                            break;
+                        case 301:
+                        case 1601:
+                            if (playerData.getPotionTimer() >= 5) {
+                                player.getInventory().addItem(meleeItem);
+                                playerData.setPotionTimer(0);
+                            } else {
+                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
+                            }
+                            break;
+                        case 302:
+                        case 1602:
+                            if (playerData.getPotionTimer() >= 4) {
+                                player.getInventory().addItem(meleeItem);
+                                playerData.setPotionTimer(0);
+                            } else {
+                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
+                            }
+                            break;
+                        case 1500:
+                        case 1603:
+                            if (playerData.getPotionTimer() >= 3) {
+                                player.getInventory().addItem(meleeItem);
+                                playerData.setPotionTimer(0);
+                            } else {
+                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
+                            }
+                            break;
+                        case 1501:
+                            if (playerData.getPotionTimer() >= 2) {
+                                player.getInventory().addItem(meleeItem);
+                                playerData.setPotionTimer(0);
+                            } else {
+                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
+                            }
+                            break;
+                        case 1502:
+                            if (playerData.getPotionTimer() >= 1) {
+                                player.getInventory().addItem(meleeItem);
+                                playerData.setPotionTimer(0);
+                            } else {
+                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
+                            }
+                            break;
+                        case 1503:
+                            if (playerData.getPotionTimer() >= 0.5) {
+                                player.getInventory().addItem(meleeItem);
+                                playerData.setPotionTimer(0);
+                            } else {
+                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                } else {
+                    player.getInventory().addItem(meleeItem);
+                }
             }
 
             ItemStack rangedItem = ItemStorage.getRanged(playerData.getRangedEquipment());

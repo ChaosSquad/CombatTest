@@ -15,6 +15,7 @@ public class PlayerData {
     private int regenerationCooldown;
     private int kills;
     private int deaths;
+    private double potionTimer;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
@@ -29,6 +30,8 @@ public class PlayerData {
         this.points = 0;
 
         this.regenerationCooldown = 0;
+
+        this.potionTimer = 0;
     }
 
     public UUID getPlayerId() {
@@ -105,5 +108,13 @@ public class PlayerData {
 
     public void setDeaths(int deaths) {
         this.deaths = deaths;
+    }
+
+    public double getPotionTimer() {
+        return potionTimer;
+    }
+
+    public void setPotionTimer(double potionTimer) {
+        this.potionTimer = potionTimer;
     }
 }

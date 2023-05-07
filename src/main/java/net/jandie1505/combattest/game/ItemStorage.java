@@ -3,6 +3,7 @@ package net.jandie1505.combattest.game;
 import net.jandie1505.combattest.CombatTest;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Marker;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
@@ -878,6 +880,26 @@ public class ItemStorage {
             meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, level), false);
 
         }
+
+        item.setItemMeta(meta);
+
+        return item;
+
+    }
+
+    public static ItemStack getRocketLauncherAmmo() {
+
+        ItemStack item = new ItemStack(Material.FIREWORK_ROCKET);
+
+        FireworkMeta meta = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK_ROCKET);
+
+        meta.setDisplayName("Ammunition for Rocket Launcher Crossbow");
+        meta.addItemFlags(ItemFlag.values());
+
+        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
+        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
+        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
+        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
 
         item.setItemMeta(meta);
 

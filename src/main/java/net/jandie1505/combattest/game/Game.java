@@ -163,15 +163,23 @@ public class Game implements GamePart {
 
             for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
 
-                Integer meleeId = ItemStorage.getMeleeReverse(item);
-                Integer rangedId = ItemStorage.getRangedReverse(item);
+                if (item != null) {
 
-                if (meleeId != null && meleeId != playerData.getMeleeEquipment()) {
-                    player.getInventory().remove(item);
-                }
+                    Integer meleeId = ItemStorage.getMeleeReverse(item);
+                    Integer rangedId = ItemStorage.getRangedReverse(item);
 
-                if (rangedId != null && rangedId != playerData.getRangedEquipment()) {
-                    player.getInventory().remove(item);
+                    if (meleeId != null && meleeId != playerData.getMeleeEquipment()) {
+                        player.getInventory().remove(item);
+                    }
+
+                    if (rangedId != null && rangedId != playerData.getRangedEquipment()) {
+                        player.getInventory().remove(item);
+                    }
+
+                    if (!(playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && item.isSimilar(ItemStorage.getRocketLauncherAmmo())) {
+                        player.getInventory().remove(item);
+                    }
+
                 }
 
             }
@@ -252,12 +260,19 @@ public class Game implements GamePart {
                 } else {
                     player.getInventory().addItem(meleeItem);
                 }
+
             }
 
             ItemStack rangedItem = ItemStorage.getRanged(playerData.getRangedEquipment());
 
             if (rangedItem != null && !player.getInventory().contains(rangedItem) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(rangedItem))) {
+
                 player.getInventory().addItem(rangedItem);
+
+            }
+
+            if ((playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && (player.getInventory().getItem(40) == null || !player.getInventory().getItem(40).isSimilar(ItemStorage.getRocketLauncherAmmo()))) {
+                player.getInventory().setItem(40, ItemStorage.getRocketLauncherAmmo());
             }
 
             // Saturation

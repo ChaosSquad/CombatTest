@@ -6,10 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -87,6 +84,7 @@ public class EventListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if (this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getClickedInventory() != null && event.getClickedInventory().getHolder() == event.getWhoClicked()) {
 
+            // Block player menu slot
             if (event.getSlot() == 8) {
                 event.setCancelled(true);
 
@@ -104,15 +102,31 @@ public class EventListener implements Listener {
                     }
 
                 }
+
+                return;
             }
 
+            // Block player menu slot for number keys
             if (event.getHotbarButton() == 8) {
                 event.setCancelled(true);
+                return;
+            }
+
+            // Block offhand when player has rocket launcher crossbow
+            if (event.getSlot() == 40) {
+                PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                if (playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) {
+                    event.setCancelled(true);
+                }
+
+                return;
             }
 
             return;
         }
 
+        // Player Menu
         if (event.getClickedInventory() != null && event.getClickedInventory().getHolder() instanceof PlayerMenu) {
 
             event.setCancelled(true);
@@ -255,6 +269,7 @@ public class EventListener implements Listener {
 
                 }
 
+                return;
             }
 
         }
@@ -267,6 +282,14 @@ public class EventListener implements Listener {
 
             if (event.getPlayer().getInventory().getHeldItemSlot() == 8) {
                 event.setCancelled(true);
+                return;
+            }
+
+            PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId());
+
+            if (playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) {
+                event.setCancelled(true);
+                return;
             }
 
         }
@@ -296,6 +319,34 @@ public class EventListener implements Listener {
 
         }
     }
+
+    /*
+    @EventHandler
+    public void onEntityShootBow(EntityShootBowEvent event) {
+        if (event.getEntity() instanceof Player && this.plugin.getGame() instanceof  Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
+
+            PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId());
+
+            if (event.getBow() != null && playerData.getRangedEquipment() == 1602 && event.getBow().isSimilar(ItemStorage.getRanged(1602))) {
+
+                Random random = new Random();
+
+                if (random.nextInt(10) == 9) {
+
+                    if (((Game) this.plugin.getGame()).getWorld().getWeatherDuration() >= 0) {
+                        event.getEntity().sendMessage("§bThe weather has been changed through your weather manipulation ability");
+                    }
+
+                    ((Game) this.plugin.getGame()).getWorld().setThundering(true);
+
+
+                }
+
+            }
+
+        }
+    }
+     */
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {

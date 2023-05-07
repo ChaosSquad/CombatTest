@@ -150,6 +150,11 @@ public class EventListener implements Listener {
                         menu.setPage(2);
                         event.getWhoClicked().openInventory(menu.getInventory());
 
+                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getItemShopButton())) {
+
+                        menu.setPage(4);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
                     }
 
                 } else if (menu.getPage() == 1) {
@@ -221,6 +226,34 @@ public class EventListener implements Listener {
 
                             event.getWhoClicked().closeInventory();
                             event.getWhoClicked().sendMessage("§cYou cannot upgrade to an item which is the same or below the item you already have");
+
+                        }
+
+                    }
+
+                } else if (menu.getPage() == 4) {
+
+                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
+
+                        menu.setPage(0);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
+                    } else {
+
+                        Integer itemId = ItemStorage.getShopItemReverse(event.getCurrentItem());
+                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                        if (itemId != null) {
+
+                            if (playerData.getPoints() >= ItemStorage.getShopItemPrice(itemId)) {
+
+                                playerData.setPoints(playerData.getPoints() - 1);
+                                event.getWhoClicked().getInventory().addItem(ItemStorage.getShopItem(itemId));
+                                event.getWhoClicked().sendMessage("§aItem successfully purchased");
+
+                            } else {
+                                event.getWhoClicked().sendMessage("§cUnfortunately you cannot afford this item :(");
+                            }
 
                         }
 

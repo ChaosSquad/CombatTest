@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.UUID;
 
@@ -28,19 +30,22 @@ public class PlayerMenu implements InventoryHolder {
                 return this.getMeleeMenu();
             case 2:
                 return this.getRangedMenu();
+            case 4:
+                return this.getItemShop();
             default:
-                return Bukkit.createInventory(this, 27, "§aPlayer Menu");
+                return Bukkit.createInventory(this, 27, "§c§mPlayer Menu");
         }
 
     }
 
     private Inventory getMainMenu() {
 
-        Inventory inventory = Bukkit.createInventory(this, 27, "§aMain Menu");
+        Inventory inventory = Bukkit.createInventory(this, 27, "§6§lMain Menu");
 
         inventory.setItem(12, ItemStorage.getMeleeButton());
         inventory.setItem(13, ItemStorage.getRangedButton());
         inventory.setItem(14, ItemStorage.getArmorButton());
+        inventory.setItem(22, ItemStorage.getItemShopButton());
 
         PlayerData playerData = this.game.getPlayerMap().get(playerId);
 
@@ -56,12 +61,12 @@ public class PlayerMenu implements InventoryHolder {
 
     private Inventory getMeleeMenu() {
 
-        Inventory inventory = Bukkit.createInventory(this, 27, "§aMelee Weapons");
+        Inventory inventory = Bukkit.createInventory(this, 27, "§6§lMelee Weapons");
 
         PlayerData playerData = this.game.getPlayerMap().get(playerId);
 
         if (playerData == null) {
-            return Bukkit.createInventory(this, 27, "§aMelee Weapons");
+            return Bukkit.createInventory(this, 27, "§c§mMelee Weapons");
         }
 
         inventory.setItem(0, ItemStorage.getBackButton());
@@ -131,12 +136,12 @@ public class PlayerMenu implements InventoryHolder {
     }
 
     private Inventory getRangedMenu() {
-        Inventory inventory = Bukkit.createInventory(this, 27, "§aRanged Weapons");
+        Inventory inventory = Bukkit.createInventory(this, 27, "§c§lRanged Weapons");
 
         PlayerData playerData = this.game.getPlayerMap().get(playerId);
 
         if (playerData == null) {
-            return Bukkit.createInventory(this, 27, "§aRanged Weapons");
+            return Bukkit.createInventory(this, 27, "§c§mRanged Weapons");
         }
 
         inventory.setItem(0, ItemStorage.getBackButton());
@@ -201,6 +206,29 @@ public class PlayerMenu implements InventoryHolder {
             }
 
         }
+
+        return inventory;
+    }
+
+    public Inventory getItemShop() {
+        Inventory inventory = Bukkit.createInventory(this, 27, "§6§lItemShop");
+
+        PlayerData playerData = this.game.getPlayerMap().get(playerId);
+
+        if (playerData == null) {
+            return Bukkit.createInventory(this, 27, "§c§mItemShop");
+        }
+
+        inventory.setItem(0, ItemStorage.getBackButton());
+        inventory.setItem(8, ItemStorage.getDisplayItem("§a§lPoints: §r§a" + playerData.getPoints(), Material.EMERALD));
+
+        inventory.setItem(10, ItemStorage.getShopItem(100));
+        inventory.setItem(11, ItemStorage.getShopItem(101));
+        inventory.setItem(12, ItemStorage.getShopItem(102));
+        inventory.setItem(13, ItemStorage.getShopItem(103));
+        inventory.setItem(14, ItemStorage.getShopItem(104));
+        inventory.setItem(15, ItemStorage.getShopItem(105));
+        inventory.setItem(16, ItemStorage.getShopItem(106));
 
         return inventory;
     }

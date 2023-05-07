@@ -27,8 +27,10 @@ public class ItemStorage {
     public static final String EQUIPMENT_MELEE = "EM";
     public static final String EQUIPMENT_RANGED = "ER";
     public static final String EQUIPMENT_ARMOR = "EA";
+    public static final String SHOP_ITEM = "EU";
     private static final Map<Integer, ItemStack> MELEE_ITEMS;
     private static final Map<Integer, ItemStack> RANGED_ITEMS;
+    private static final Map<Integer, ItemStack> SHOP_ITEMS;
 
     static {
 
@@ -664,6 +666,126 @@ public class ItemStorage {
 
         RANGED_ITEMS = Map.copyOf(rangedItemsInit);
 
+        // SHOP ITEMS
+
+        Map<Integer, ItemStack> shopItemsInit = new HashMap<>();
+
+        {
+            ItemStack item = new ItemStack(Material.SPECTRAL_ARROW);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.SPECTRAL_ARROW);
+
+            meta.setDisplayName("Spotting Arrow");
+            meta.setLore(List.of("EU100", "Price: 100"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+
+            item.setItemMeta(meta);
+
+            shopItemsInit.put(100, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TIPPED_ARROW);
+
+            PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.TIPPED_ARROW);
+
+            meta.setDisplayName("Damage Arrow");
+            meta.setLore(List.of("EU101", "For an extra bit of damage", "(Recommended to combine with Powerful", "Bow for mass destruction)", "Price: 5000"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setColor(Color.fromRGB(4459017));
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, 0), false);
+
+            item.setItemMeta(meta);
+
+            shopItemsInit.put(101, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TIPPED_ARROW);
+
+            PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.TIPPED_ARROW);
+
+            meta.setDisplayName("Poisonous Arrow");
+            meta.setLore(List.of("EU102", "Price: 2500"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setColor(Color.GREEN);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 600, 0), false);
+
+            item.setItemMeta(meta);
+
+            shopItemsInit.put(102, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.TIPPED_ARROW);
+
+            PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.TIPPED_ARROW);
+
+            meta.setDisplayName("Slowness Arrow");
+            meta.setLore(List.of("EU103", "Price: 2500"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setColor(Color.GRAY);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 600, 0), false);
+
+            item.setItemMeta(meta);
+
+            shopItemsInit.put(103, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.POTION);
+
+            PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.POTION);
+
+            meta.setDisplayName("Medikit 3000");
+            meta.setLore(List.of("EU104", "Small injury?", "Headache?", "Arm cut off?", "Medikit 2000 is there for you!", "Price: 2500"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            meta.setColor(Color.RED);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0), false);
+
+            item.setItemMeta(meta);
+
+            shopItemsInit.put(104, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.SPLASH_POTION);
+
+            PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.SPLASH_POTION);
+
+            meta.setDisplayName("Throwable Vodka");
+            meta.setLore(List.of("EU105", "No description needed :)", "100% alcohol", "Price: 20000"));
+            meta.addItemFlags(ItemFlag.values());
+            meta.setColor(Color.fromRGB(11776947));
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 1200, 1), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, 1200, 1), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.BLINDNESS, 1200, 0), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.DARKNESS, 2400, 0), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 200, 2), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 0), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, 0), false);
+
+            item.setItemMeta(meta);
+
+            shopItemsInit.put(105, item);
+        }
+
+        {
+            ItemStack item = new ItemStack(Material.MILK_BUCKET);
+
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.MILK_BUCKET);
+
+            meta.setDisplayName("Decontamination Drink");
+            meta.setLore(List.of("EU106", "Recommended to consumers of Throwable Vodka", "Price: 10000"));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+
+            item.setItemMeta(meta);
+
+            shopItemsInit.put(106, item);
+        }
+
+        SHOP_ITEMS = Map.copyOf(shopItemsInit);
+
     }
 
     public static boolean hasId(ItemStack item, String prefix, int id) {
@@ -769,6 +891,8 @@ public class ItemStorage {
         }
         meta.setLore(lore);
 
+        meta.addItemFlags(ItemFlag.values());
+
         item.setItemMeta(meta);
 
         return item;
@@ -799,6 +923,10 @@ public class ItemStorage {
 
     public static ItemStack getArmorButton() {
         return buildInventoryButton(Material.IRON_CHESTPLATE, "Armor", null, 4);
+    }
+
+    public static ItemStack getItemShopButton() {
+        return buildInventoryButton(Material.SPECTRAL_ARROW, "Item Shop", null, 5);
     }
 
     public static ItemStack getMelee(int id) {
@@ -935,6 +1063,53 @@ public class ItemStorage {
 
     }
 
+    public static ItemStack getShopItem(int id) {
+        return SHOP_ITEMS.get(id);
+    }
+
+    public static Integer getShopItemReverse(ItemStack item) {
+
+        if(item.getItemMeta() == null || item.getItemMeta().getLore() == null) {
+            return null;
+        }
+
+        for (Integer id : Map.copyOf(SHOP_ITEMS).keySet()) {
+            ItemStack itemStack = SHOP_ITEMS.get(id);
+
+            if (itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null) {
+                continue;
+            }
+
+            if (itemStack.getItemMeta().getLore().get(0).equals(item.getItemMeta().getLore().get(0))) {
+                return id;
+            }
+        }
+
+        return null;
+    }
+
+    public static int getShopItemPrice(int id) {
+
+        switch (id) {
+            case 100:
+                return 100;
+            case 101:
+                return 5000;
+            case 102:
+            case 103:
+                return 2500;
+            case 104:
+                return 2000;
+            case 105:
+                return 20000;
+            case 106:
+                return 10000;
+            default:
+                return 0;
+        }
+
+    }
+
     private static ItemStack axeBuilder(String name, Material material, double attackDamage, double attackSpeed, int id) {
 
         ItemStack item = new ItemStack(material);
@@ -964,7 +1139,7 @@ public class ItemStorage {
 
         PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.SPLASH_POTION);
 
-        meta.setDisplayName("Damage Potion");
+        meta.setDisplayName(name);
         meta.setLore(List.of("EM" + id, "Damage: " + (level * 6), "Cooldown: " + cooldown));
         meta.addItemFlags(ItemFlag.values());
         meta.setUnbreakable(true);

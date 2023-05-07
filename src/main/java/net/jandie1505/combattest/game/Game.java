@@ -366,6 +366,35 @@ public class Game implements GamePart {
                 playerData.setRegenerationCooldown(playerData.getRegenerationCooldown() + 1);
             }
 
+            // Weather
+
+            if ((this.time % 100) == 0) {
+
+                Random random = new Random();
+
+                if (random.nextInt(2) == 1) {
+
+                    switch (random.nextInt(6)) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            CombatTest.setClearWeather(this.world);
+                            break;
+                        case 3:
+                        case 4:
+                            CombatTest.setRainingWeather(this.world);
+                            break;
+                        case 5:
+                            CombatTest.setThunderingWeather(this.world);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+            }
+
             // Actionbar
 
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a" + playerData.getKills() + " kills §8§l|§r§c " + playerData.getDeaths() + " deaths §8§l|§r§6 Points: " + playerData.getPoints() + " §8§l|§r§6 " + this.time + "s"));
@@ -550,6 +579,10 @@ public class Game implements GamePart {
 
     public int getTime() {
         return this.time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 
     public boolean isEnableBorder() {

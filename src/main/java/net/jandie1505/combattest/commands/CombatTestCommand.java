@@ -23,7 +23,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         if (args.length < 1) {
 
             if (this.hasPermissionAdmin(sender)) {
-                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/menu/points/leave");
+                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/menu/points/leave");
             } else {
                 sender.sendMessage("§7Usage: /combattest menu/points/leave");
             }
@@ -52,6 +52,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 break;
             case "bypass":
                 this.bypassSubcommand(sender, args);
+                break;
+            case "settime":
+                this.setTimeSubcommand(sender, args);
                 break;
             case "getpoints":
                 this.getScoreSubcommand(sender, args, 0);
@@ -391,6 +394,32 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void setTimeSubcommand(CommandSender sender, String[] args) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (args.length != 2) {
+            sender.sendMessage("§cUsage: /combattest settime <score>");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        try {
+            ((Game) this.plugin.getGame()).setTime(Integer.parseInt(args[1]));
+            sender.sendMessage("§aTime successfully changed");
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage("§cPlease specify a valid int value");
+        }
+
+    }
+
     public void setScoreSubcommand(CommandSender sender, String[] args, int score) {
 
         if (!this.hasPermissionAdmin(sender)) {
@@ -546,6 +575,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("removeplayer");
                 tabComplete.add("getplayers");
                 tabComplete.add("bypass");
+                tabComplete.add("settime");
                 tabComplete.add("getpoints");
                 tabComplete.add("setpoints");
                 tabComplete.add("getmelee");

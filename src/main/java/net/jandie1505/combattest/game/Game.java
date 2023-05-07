@@ -5,10 +5,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Trident;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -244,6 +241,7 @@ public class Game implements GamePart {
                     // remove firework rocket
                     if (!(playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && ItemStorage.getIdPrefix(item).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(item) == 9000) {
                         player.getInventory().remove(item);
+                        player.getInventory().setItem(40, new ItemStack(Material.AIR));
                         continue;
                     }
 

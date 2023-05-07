@@ -151,46 +151,62 @@ public class Game implements GamePart {
                 playerData.setMeleeEquipment(0);
             }
 
-            if (!((playerData.getRangedEquipment() == 0) || (playerData.getRangedEquipment() >= 100 && playerData.getRangedEquipment() <= 101) || (playerData.getRangedEquipment() >= 200 && playerData.getRangedEquipment() <= 201) || (playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 301) || (playerData.getRangedEquipment() >= 1100 && playerData.getRangedEquipment() <= 1102) || (playerData.getRangedEquipment() >= 1200 && playerData.getRangedEquipment() <= 1202) || (playerData.getRangedEquipment() >= 1300 && playerData.getRangedEquipment() <= 1302) || (playerData.getRangedEquipment() >= 1400 && playerData.getRangedEquipment() <= 1402) || (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1502) || (playerData.getRangedEquipment() >= 1600 && playerData.getRangedEquipment() <= 1602))) {
-                playerData.setMeleeEquipment(0);
+            if (!((playerData.getRangedEquipment() == 0) || (playerData.getRangedEquipment() >= 100 && playerData.getRangedEquipment() <= 101) || (playerData.getRangedEquipment() >= 200 && playerData.getRangedEquipment() <= 201) || (playerData.getRangedEquipment() >= 300 && playerData.getRangedEquipment() <= 301) || (playerData.getRangedEquipment() >= 1100 && playerData.getRangedEquipment() <= 1102) || (playerData.getRangedEquipment() >= 1200 && playerData.getRangedEquipment() <= 1202) || (playerData.getRangedEquipment() >= 1300 && playerData.getRangedEquipment() <= 1302) || (playerData.getRangedEquipment() >= 1400 && playerData.getRangedEquipment() <= 1402) || (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1502) || (playerData.getRangedEquipment() >= 1600 && playerData.getRangedEquipment() <= 1602))) {
+                playerData.setRangedEquipment(0);
             }
 
             if (!((playerData.getArmorEquipment() == 0) || (playerData.getArmorEquipment() >= 100 && playerData.getArmorEquipment() <= 102) || (playerData.getArmorEquipment() >= 1100 && playerData.getArmorEquipment() <= 1103) || (playerData.getArmorEquipment() >= 1200 && playerData.getArmorEquipment() <= 1203))) {
                 playerData.setArmorEquipment(0);
             }
 
-            // Remove unowned Equipment
+            // Player inventory handling (give and remove equipment)
+
+            boolean meleeItemMissing = true;
+            boolean rangedItemMissing = true;
 
             for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
 
                 if (item != null) {
 
+                    // Melee item
                     Integer meleeId = ItemStorage.getMeleeReverse(item);
+                    if (meleeId != null) {
+                        if (meleeId == playerData.getMeleeEquipment()) {
+                            meleeItemMissing = false;
+                        } else {
+                            player.getInventory().remove(item);
+                        }
+                        continue;
+                    }
+
+                    // Ranged item
                     Integer rangedId = ItemStorage.getRangedReverse(item);
-
-                    if (meleeId != null && meleeId != playerData.getMeleeEquipment()) {
-                        player.getInventory().remove(item);
+                    if (rangedId != null) {
+                        if (rangedId == playerData.getRangedEquipment()) {
+                            rangedItemMissing = false;
+                        } else {
+                            player.getInventory().remove(item);
+                            continue;
+                        }
+                        continue;
                     }
 
-                    if (rangedId != null && rangedId != playerData.getRangedEquipment()) {
+                    // remove firework rocket
+                    if (!(playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && ItemStorage.getIdPrefix(item).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(item) == 9000) {
                         player.getInventory().remove(item);
-                    }
-
-                    if (!(playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && item.isSimilar(ItemStorage.getRocketLauncherAmmo())) {
-                        player.getInventory().remove(item);
+                        continue;
                     }
 
                 }
 
             }
 
-            // Give owned Equipment
+            // Give melee equipment
 
             ItemStack meleeItem = ItemStorage.getMelee(playerData.getMeleeEquipment());
+            if (meleeItem != null && meleeItemMissing && !(player.getItemOnCursor() != null && ItemStorage.getIdPrefix(player.getItemOnCursor()).equals(ItemStorage.EQUIPMENT_MELEE) && ItemStorage.getId(player.getItemOnCursor()) == playerData.getMeleeEquipment())) {
 
-            if (meleeItem != null && !player.getInventory().contains(meleeItem) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(meleeItem))) {
-
-                if ((playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 301) || (playerData.getMeleeEquipment() >= 1500 && playerData.getMeleeEquipment() <= 1699)) {
+                if ((playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 399) || (playerData.getMeleeEquipment() >= 1500 && playerData.getMeleeEquipment() <= 1699)) {
 
                     switch (playerData.getMeleeEquipment()) {
                         case 300:
@@ -263,9 +279,10 @@ public class Game implements GamePart {
 
             }
 
-            ItemStack rangedItem = ItemStorage.getRanged(playerData.getRangedEquipment());
+            // Give ranged equipment
 
-            if (rangedItem != null && !player.getInventory().contains(rangedItem) && !(player.getItemOnCursor() != null && player.getItemOnCursor().isSimilar(rangedItem))) {
+            ItemStack rangedItem = ItemStorage.getRanged(playerData.getRangedEquipment());
+            if (rangedItem != null && rangedItemMissing && !(player.getItemOnCursor() != null && ItemStorage.getIdPrefix(player.getItemOnCursor()).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(player.getItemOnCursor()) == playerData.getRangedEquipment())) {
 
                 player.getInventory().addItem(rangedItem);
 

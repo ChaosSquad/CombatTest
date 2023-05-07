@@ -137,26 +137,4 @@ public class CombatTest extends JavaPlugin {
         return this.singleServer;
     }
 
-    public static ItemStack buildInventoryButton(Material material, String name, List<String> lore, int id) {
-
-        ItemStack item = new ItemStack(material);
-
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
-
-        if (name != null) {
-            meta.setDisplayName(name);
-        }
-
-        if (lore == null) {
-            lore = new ArrayList<>();
-        }
-
-        lore.add(String.valueOf(id));
-
-        meta.setLore(lore);
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
 }

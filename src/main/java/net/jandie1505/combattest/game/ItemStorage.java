@@ -19,12 +19,14 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ItemStorage {
+    public static final String MENU_ITEM = "M";
+    public static final String HOTBAR_ITEM = "H";
+    public static final String EQUIPMENT_MELEE = "EM";
+    public static final String EQUIPMENT_RANGED = "ER";
+    public static final String EQUIPMENT_ARMOR = "EA";
     private static final Map<Integer, ItemStack> MELEE_ITEMS;
     private static final Map<Integer, ItemStack> RANGED_ITEMS;
 
@@ -40,7 +42,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.STONE_SWORD);
 
             meta.setDisplayName("Crappy Sword");
-            meta.setLore(List.of("At least better than fighting with fists", "Damage: 5", "0"));
+            meta.setLore(List.of("EM0", "At least better than fighting with fists", "Damage: 5"));
             meta.addItemFlags(ItemFlag.values());
             meta.setUnbreakable(true);
 
@@ -55,7 +57,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Iron Sword");
-            meta.setLore(List.of("Damage: 6", "100"));
+            meta.setLore(List.of("EM100", "Damage: 6"));
             meta.addItemFlags(ItemFlag.values());
             meta.setUnbreakable(true);
 
@@ -70,7 +72,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Iron Sword +");
-            meta.setLore(List.of("Damage: 7", "101"));
+            meta.setLore(List.of("EM101", "Damage: 7"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
             meta.setUnbreakable(true);
@@ -86,7 +88,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Iron Sword ++");
-            meta.setLore(List.of("Damage: 7.5", "102"));
+            meta.setLore(List.of("EM102", "Damage: 7.5"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
             meta.setUnbreakable(true);
@@ -102,7 +104,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
 
             meta.setDisplayName("Diamond Sword");
-            meta.setLore(List.of("Damage: 8", "1100"));
+            meta.setLore(List.of("EM1100", "Damage: 8"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
             meta.setUnbreakable(true);
@@ -118,7 +120,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
 
             meta.setDisplayName("Diamond Sword +");
-            meta.setLore(List.of("Damage: 8.5", "1101"));
+            meta.setLore(List.of("EM1101", "Damage: 8.5"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
             meta.setUnbreakable(true);
@@ -134,7 +136,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
 
             meta.setDisplayName("Diamond Sword ++");
-            meta.setLore(List.of("Damage: 9", "1102"));
+            meta.setLore(List.of("EM1102", "Damage: 9"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 3, false);
             meta.setUnbreakable(true);
@@ -150,7 +152,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.NETHERITE_SWORD);
 
             meta.setDisplayName("Netherite Sword");
-            meta.setLore(List.of("Damage: 10", "1103"));
+            meta.setLore(List.of("EM1103", "Damage: 10"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 3, false);
             meta.setUnbreakable(true);
@@ -166,7 +168,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Fire Sword");
-            meta.setLore(List.of("Damage: 7", "Fire Aspect I", "1200"));
+            meta.setLore(List.of("EM1200", "Damage: 7", "Fire Aspect I"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
             meta.addEnchant(Enchantment.FIRE_ASPECT, 1, false);
@@ -181,7 +183,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Fire Sword +");
-            meta.setLore(List.of("Damage: 7", "Fire Aspect II", "1201"));
+            meta.setLore(List.of("EM1201", "Damage: 7", "Fire Aspect II"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
             meta.addEnchant(Enchantment.FIRE_ASPECT, 2, false);
@@ -198,7 +200,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Fire Sword ++");
-            meta.setLore(List.of("Damage: 7", "Fire Aspect III", "1202"));
+            meta.setLore(List.of("EM1202", "Damage: 7", "Fire Aspect III"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
             meta.addEnchant(Enchantment.FIRE_ASPECT, 3, false);
@@ -215,7 +217,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
 
             meta.setDisplayName("Fire Sword +++");
-            meta.setLore(List.of("Damage: 8", "Fire Aspect III", "1202"));
+            meta.setLore(List.of("EM1202", "Damage: 8", "Fire Aspect III"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
             meta.addEnchant(Enchantment.FIRE_ASPECT, 3, false);
@@ -263,7 +265,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
 
             meta.setDisplayName("Default Bow");
-            meta.setLore(List.of("100"));
+            meta.setLore(List.of("ER100"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
 
@@ -278,7 +280,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
 
             meta.setDisplayName("Default Bow +");
-            meta.setLore(List.of("101"));
+            meta.setLore(List.of("ER101"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, false);
@@ -294,7 +296,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
 
             meta.setDisplayName("Powerful Bow");
-            meta.setLore(List.of("1100"));
+            meta.setLore(List.of("ER1100"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, false);
@@ -310,7 +312,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
 
             meta.setDisplayName("Powerful Bow +");
-            meta.setLore(List.of("1101"));
+            meta.setLore(List.of("ER1101"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, false);
@@ -326,7 +328,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
 
             meta.setDisplayName("Most Powerful Bow");
-            meta.setLore(List.of("1102"));
+            meta.setLore(List.of("ER1102"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, false);
@@ -342,7 +344,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
 
             meta.setDisplayName("Misc Bow");
-            meta.setLore(List.of("1200"));
+            meta.setLore(List.of("ER1200"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
@@ -358,7 +360,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
 
             meta.setDisplayName("Misc Bow +");
-            meta.setLore(List.of("1201"));
+            meta.setLore(List.of("ER1201"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
@@ -375,7 +377,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BOW);
 
             meta.setDisplayName("Misc Bow ++");
-            meta.setLore(List.of("1202"));
+            meta.setLore(List.of("ER1202"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
@@ -393,7 +395,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
             meta.setDisplayName("Default Crossbow");
-            meta.setLore(List.of("200"));
+            meta.setLore(List.of("ER200"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
 
@@ -408,7 +410,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
             meta.setDisplayName("Default Crossbow +");
-            meta.setLore(List.of("201"));
+            meta.setLore(List.of("ER201"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
@@ -424,7 +426,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
             meta.setDisplayName("Multishot Crossbow");
-            meta.setLore(List.of("1300"));
+            meta.setLore(List.of("ER1300"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
@@ -441,7 +443,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
             meta.setDisplayName("Rocket Launcher Crossbow");
-            meta.setLore(List.of("Ammunition: Rockets", "1301"));
+            meta.setLore(List.of("ER1301", "Ammunition: Rockets"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
@@ -457,7 +459,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
             meta.setDisplayName("Rocket Launcher Crossbow +");
-            meta.setLore(List.of("Ammunition: Rockets", "1302"));
+            meta.setLore(List.of("ER1302", "Ammunition: Rockets"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
@@ -474,7 +476,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
             meta.setDisplayName("Piercing Crossbow");
-            meta.setLore(List.of("1400"));
+            meta.setLore(List.of("ER1400"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
@@ -491,7 +493,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
             meta.setDisplayName("Piercing Crossbow +");
-            meta.setLore(List.of("1401"));
+            meta.setLore(List.of("ER1401"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
@@ -508,7 +510,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
             meta.setDisplayName("Piercing Crossbow ++");
-            meta.setLore(List.of("1402"));
+            meta.setLore(List.of("ER1402"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
@@ -525,7 +527,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Trident");
-            meta.setLore(List.of("Melee damage disabled", "300"));
+            meta.setLore(List.of("ER300", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 1, false);
@@ -542,7 +544,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Trident +");
-            meta.setLore(List.of("Melee damage disabled", "301"));
+            meta.setLore(List.of("ER301", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 2, false);
@@ -559,7 +561,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Riptide Trident");
-            meta.setLore(List.of("Melee damage disabled", "1500"));
+            meta.setLore(List.of("ER1500", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 2, false);
@@ -577,7 +579,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Riptide Trident +");
-            meta.setLore(List.of("Melee damage disabled", "1501"));
+            meta.setLore(List.of("ER1501", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 2, false);
@@ -595,7 +597,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Riptide Trident ++");
-            meta.setLore(List.of("Melee damage disabled", "1502"));
+            meta.setLore(List.of("ER1502", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 2, false);
@@ -613,7 +615,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Extra-loyal Trident");
-            meta.setLore(List.of("Melee damage disabled", "1600"));
+            meta.setLore(List.of("ER1600", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 3, false);
@@ -630,7 +632,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Lightning Trident");
-            meta.setLore(List.of("Melee damage disabled", "1601"));
+            meta.setLore(List.of("ER1601", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 3, false);
@@ -648,7 +650,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Weather-manipulating Trident");
-            meta.setLore(List.of("Melee damage disabled", "1602"));
+            meta.setLore(List.of("ER1602", "10 % Chance of starting thunderstorms", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 3, false);
@@ -664,6 +666,61 @@ public class ItemStorage {
 
     }
 
+    public static boolean hasId(ItemStack item, String prefix, int id) {
+
+        if (item.getItemMeta() == null) {
+            return false;
+        }
+
+        if (item.getItemMeta().getLore() == null) {
+            return false;
+        }
+
+        if (item.getItemMeta().getLore().size() < 1) {
+            return false;
+        }
+
+        return item.getItemMeta().getLore().get(0).equals(prefix + id);
+    }
+
+    public static String getIdPrefix(ItemStack item) {
+
+        if (item.getItemMeta() == null) {
+            return "";
+        }
+
+        if (item.getItemMeta().getLore() == null) {
+            return "";
+        }
+
+        if (item.getItemMeta().getLore().size() < 1) {
+            return "";
+        }
+
+        return item.getItemMeta().getLore().get(0).replaceAll("[^A-Z]", "");
+    }
+
+    public static int getId(ItemStack item) {
+
+        if (item.getItemMeta() == null) {
+            return -1;
+        }
+
+        if (item.getItemMeta().getLore() == null) {
+            return -1;
+        }
+
+        if (item.getItemMeta().getLore().size() < 1) {
+            return -1;
+        }
+
+        try {
+            return Integer.parseInt(item.getItemMeta().getLore().get(0).replaceAll("[^0-9]", ""));
+        } catch (IllegalArgumentException e) {
+            return -1;
+        }
+    }
+
     public static ItemStack getBackButton() {
 
         ItemStack item = new ItemStack(Material.BARRIER);
@@ -671,6 +728,7 @@ public class ItemStorage {
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.BARRIER);
 
         meta.setDisplayName("§c§lBACK");
+        meta.setLore(List.of("M0"));
 
         item.setItemMeta(meta);
 
@@ -685,12 +743,35 @@ public class ItemStorage {
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
 
         meta.setDisplayName(text);
+        meta.setLore(List.of("M1"));
         meta.addItemFlags(ItemFlag.values());
 
         item.setItemMeta(meta);
 
         return item;
 
+    }
+
+    public static ItemStack buildInventoryButton(Material material, String name, List<String> l, int id) {
+
+        ItemStack item = new ItemStack(material);
+
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
+
+        if (name != null) {
+            meta.setDisplayName(name);
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add("M" + id);
+        if (l != null) {
+            lore.addAll(l);
+        }
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 
     public static ItemStack getPlayerMenuButton() {
@@ -700,6 +781,7 @@ public class ItemStorage {
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CHEST);
 
         meta.setDisplayName("§a§lOpen Player Menu §r§a(right click)");
+        meta.setLore(List.of("H0"));
 
         item.setItemMeta(meta);
 
@@ -708,15 +790,15 @@ public class ItemStorage {
     }
 
     public static ItemStack getMeleeButton() {
-        return CombatTest.buildInventoryButton(Material.NETHERITE_SWORD, "Melee Weapons", null, 0);
+        return buildInventoryButton(Material.NETHERITE_SWORD, "Melee Weapons", null, 2);
     }
 
     public static ItemStack getRangedButton() {
-        return CombatTest.buildInventoryButton(Material.BOW, "Ranged Weapons", null, 1);
+        return buildInventoryButton(Material.BOW, "Ranged Weapons", null, 3);
     }
 
     public static ItemStack getArmorButton() {
-        return CombatTest.buildInventoryButton(Material.IRON_CHESTPLATE, "Armor", null, 2);
+        return buildInventoryButton(Material.IRON_CHESTPLATE, "Armor", null, 4);
     }
 
     public static ItemStack getMelee(int id) {
@@ -725,10 +807,18 @@ public class ItemStorage {
 
     public static Integer getMeleeReverse(ItemStack item) {
 
+        if(item.getItemMeta() == null || item.getItemMeta().getLore() == null) {
+            return null;
+        }
+
         for (Integer id : Map.copyOf(MELEE_ITEMS).keySet()) {
             ItemStack itemStack = MELEE_ITEMS.get(id);
 
-            if (itemStack.isSimilar(item)) {
+            if (itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null) {
+                continue;
+            }
+
+            if (itemStack.getItemMeta().getLore().get(0).equals(item.getItemMeta().getLore().get(0))) {
                 return id;
             }
         }
@@ -784,10 +874,18 @@ public class ItemStorage {
 
     public static Integer getRangedReverse(ItemStack item) {
 
+        if (item.getItemMeta() == null || item.getItemMeta().getLore() == null) {
+            return null;
+        }
+
         for (Integer id : Map.copyOf(RANGED_ITEMS).keySet()) {
             ItemStack itemStack = RANGED_ITEMS.get(id);
 
-            if (itemStack.isSimilar(item)) {
+            if (itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null) {
+                continue;
+            }
+
+            if (itemStack.getItemMeta().getLore().get(0).equals(item.getItemMeta().getLore().get(0))) {
                 return id;
             }
         }
@@ -843,7 +941,7 @@ public class ItemStorage {
 
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
         meta.setDisplayName(name);
-        meta.setLore(List.of("Damage: " + attackDamage, "Speed: " + attackSpeed, String.valueOf(id)));
+        meta.setLore(List.of("EM" + id, "Damage: " + attackDamage, "Speed: " + attackSpeed));
         meta.addItemFlags(ItemFlag.values());
 
         attackDamage = attackSpeed - 1;
@@ -867,7 +965,7 @@ public class ItemStorage {
         PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.SPLASH_POTION);
 
         meta.setDisplayName("Damage Potion");
-        meta.setLore(List.of("Damage: " + (level * 6), "Cooldown: " + cooldown, String.valueOf(id)));
+        meta.setLore(List.of("EM" + id, "Damage: " + (level * 6), "Cooldown: " + cooldown));
         meta.addItemFlags(ItemFlag.values());
         meta.setUnbreakable(true);
 
@@ -894,6 +992,7 @@ public class ItemStorage {
         FireworkMeta meta = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK_ROCKET);
 
         meta.setDisplayName("Ammunition for Rocket Launcher Crossbow");
+        meta.setLore(List.of("ER9000"));
         meta.addItemFlags(ItemFlag.values());
 
         meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
@@ -906,4 +1005,5 @@ public class ItemStorage {
         return item;
 
     }
+
 }

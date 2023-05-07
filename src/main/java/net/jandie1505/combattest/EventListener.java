@@ -2,6 +2,7 @@ package net.jandie1505.combattest;
 
 import net.jandie1505.combattest.game.*;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +14,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -88,16 +90,16 @@ public class EventListener implements Listener {
             if (event.getSlot() == 8) {
                 event.setCancelled(true);
 
-                if ((event.getAction() == InventoryAction.PICKUP_ALL || event.getAction() == InventoryAction.PICKUP_HALF || event.getAction() == InventoryAction.PICKUP_ONE) && event.getCurrentItem() != null && event.getCurrentItem().isSimilar(ItemStorage.getPlayerMenuButton())) {
+                if ((event.getAction() == InventoryAction.PICKUP_ALL || event.getAction() == InventoryAction.PICKUP_HALF || event.getAction() == InventoryAction.PICKUP_ONE) && event.getCurrentItem() != null && ItemStorage.getIdPrefix(event.getCurrentItem()).equals(ItemStorage.HOTBAR_ITEM) && ItemStorage.getId(event.getCurrentItem()) == 0) {
 
                     PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId());
 
                     menu.setPage(0);
                     event.getWhoClicked().openInventory(menu.getInventory());
 
-                    if (event.getWhoClicked().getItemOnCursor() != null && event.getWhoClicked().getItemOnCursor().isSimilar(ItemStorage.getPlayerMenuButton())) {
+                    if (event.getWhoClicked().getItemOnCursor() != null && ItemStorage.getIdPrefix(event.getWhoClicked().getItemOnCursor()).equals(ItemStorage.HOTBAR_ITEM) && ItemStorage.getId(event.getWhoClicked().getItemOnCursor()) == 0) {
 
-                        event.getWhoClicked().getInventory().remove(ItemStorage.getPlayerMenuButton());
+                        event.getWhoClicked().getInventory().setItem(40, new ItemStack(Material.AIR));
 
                     }
 
@@ -256,7 +258,7 @@ public class EventListener implements Listener {
 
         if (this.plugin.getGame() instanceof  Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 
-            if (event.getItem() != null && event.getItem().isSimilar(ItemStorage.getPlayerMenuButton())) {
+            if (event.getItem() != null && ItemStorage.getIdPrefix(event.getItem()).equals(ItemStorage.HOTBAR_ITEM) && ItemStorage.getId(event.getItem()) == 0) {
 
                 event.setCancelled(true);
 

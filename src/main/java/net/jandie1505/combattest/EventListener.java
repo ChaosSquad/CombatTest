@@ -4,6 +4,7 @@ import net.jandie1505.combattest.game.*;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -322,25 +323,26 @@ public class EventListener implements Listener {
         }
     }
 
-    /*
     @EventHandler
-    public void onEntityShootBow(EntityShootBowEvent event) {
-        if (event.getEntity() instanceof Player && this.plugin.getGame() instanceof  Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
+    public void onProjectileLaunch(ProjectileLaunchEvent event) {
+        if (this.plugin.getGame() instanceof Game) {
 
-            PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId());
-
-            if (event.getBow() != null && playerData.getRangedEquipment() == 1602 && event.getBow().isSimilar(ItemStorage.getRanged(1602))) {
+            if (event.getEntity() instanceof Trident && ItemStorage.getIdPrefix(((Trident) event.getEntity()).getItem()).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(((Trident) event.getEntity()).getItem()) == 1602) {
 
                 Random random = new Random();
+                int number = random.nextInt(10);
 
-                if (random.nextInt(10) == 9) {
+                if (number == 9) {
 
-                    if (((Game) this.plugin.getGame()).getWorld().getWeatherDuration() >= 0) {
-                        event.getEntity().sendMessage("§bThe weather has been changed through your weather manipulation ability");
+                    if (CombatTest.getWeather(((Game) this.plugin.getGame()).getWorld()) != 2) {
+
+                        if (event.getEntity().getShooter() != null && event.getEntity().getShooter() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(((Player) event.getEntity().getShooter()).getUniqueId())) {
+                            ((Player) event.getEntity().getShooter()).sendMessage("§bThe weather has been changed through your weather manipulation ability");
+                        }
+
+                        CombatTest.setThunderingWeather(((Game) this.plugin.getGame()).getWorld());
+
                     }
-
-                    ((Game) this.plugin.getGame()).getWorld().setThundering(true);
-
 
                 }
 
@@ -348,7 +350,6 @@ public class EventListener implements Listener {
 
         }
     }
-     */
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {

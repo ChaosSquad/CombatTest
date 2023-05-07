@@ -9,6 +9,7 @@ import net.jandie1505.combattest.game.Lobby;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -135,6 +136,66 @@ public class CombatTest extends JavaPlugin {
 
     public boolean isSingleServer() {
         return this.singleServer;
+    }
+
+    public static int getWeather(World world) {
+
+        if (world == null) {
+            return -1;
+        }
+
+        if (world.hasStorm() && world.getWeatherDuration() > 0) {
+            if (world.isThundering() && world.getThunderDuration() > 0) {
+                return 2;
+            } else {
+                return 1;
+            }
+        } else {
+            return 0;
+        }
+
+    }
+
+    public static void setClearWeather(World world) {
+
+        if (world == null) {
+            return;
+        }
+
+        world.setStorm(false);
+        world.setThundering(false);
+        world.setClearWeatherDuration(112801);
+        world.setWeatherDuration(0);
+        world.setThunderDuration(0);
+
+    }
+
+    public static void setRainingWeather(World world) {
+
+        if (world == null) {
+            return;
+        }
+
+        world.setStorm(true);
+        world.setThundering(false);
+        world.setClearWeatherDuration(0);
+        world.setWeatherDuration(15376);
+        world.setThunderDuration(15376);
+
+    }
+
+    public static void setThunderingWeather(World world) {
+
+        if (world == null) {
+            return;
+        }
+
+        world.setStorm(true);
+        world.setThundering(true);
+        world.setClearWeatherDuration(0);
+        world.setWeatherDuration(13834);
+        world.setThunderDuration(13834);
+
     }
 
 }

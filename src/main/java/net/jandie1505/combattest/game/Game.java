@@ -3,12 +3,12 @@ package net.jandie1505.combattest.game;
 import net.jandie1505.combattest.CombatTest;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -86,6 +86,56 @@ public class Game implements GamePart {
 
         } else {
             this.timeStep++;
+        }
+
+        // TRIDENT ENTITIES
+
+        List<Player> tridentList = new ArrayList<>();
+        for (Entity entity : world.getEntities()) {
+
+            if (entity instanceof Trident) {
+                Trident trident = (Trident) entity;
+
+                if (trident.getTicksLived() > 600) {
+                    trident.remove();
+                    continue;
+                }
+
+                if (trident.getItem().getItemMeta() == null) {
+                    trident.remove();
+                    continue;
+                }
+
+                if (!trident.getItem().getItemMeta().hasEnchant(Enchantment.LOYALTY)) {
+                    trident.remove();
+                    continue;
+                }
+
+                if (trident.getShooter() == null) {
+                    trident.remove();
+                    continue;
+                }
+
+                if (!(trident.getShooter() instanceof Player)) {
+                    trident.remove();
+                    continue;
+                }
+
+                if (this.players.containsKey(((Player) trident.getShooter()).getUniqueId())) {
+                    tridentList.add((Player) trident.getShooter());
+                } else {
+                    trident.remove();
+                    continue;
+                }
+            } else if (entity instanceof Item) {
+
+                if (((Item) entity).getItemStack().getType() == Material.TRIDENT) {
+                    entity.remove();
+                    continue;
+                }
+
+            }
+
         }
 
         // PLAYER MANAGEMENT
@@ -284,7 +334,13 @@ public class Game implements GamePart {
             ItemStack rangedItem = ItemStorage.getRanged(playerData.getRangedEquipment());
             if (rangedItem != null && rangedItemMissing && !(player.getItemOnCursor() != null && ItemStorage.getIdPrefix(player.getItemOnCursor()).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(player.getItemOnCursor()) == playerData.getRangedEquipment())) {
 
-                player.getInventory().addItem(rangedItem);
+                if ((playerData.getRangedEquipment() >= 300 && playerData.getRangedEquipment() <= 399) || (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1699)) {
+                    if (!tridentList.contains(player)) {
+                        player.getInventory().addItem(rangedItem);
+                    }
+                } else {
+                    player.getInventory().addItem(rangedItem);
+                }
 
             }
 

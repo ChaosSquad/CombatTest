@@ -16,6 +16,7 @@ public class PlayerData {
     private int kills;
     private int deaths;
     private double potionTimer;
+    private boolean hasTrident;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
@@ -32,6 +33,8 @@ public class PlayerData {
         this.regenerationCooldown = 0;
 
         this.potionTimer = 0;
+
+        this.hasTrident = false;
     }
 
     public UUID getPlayerId() {
@@ -116,5 +119,13 @@ public class PlayerData {
 
     public void setPotionTimer(double potionTimer) {
         this.potionTimer = potionTimer;
+    }
+
+    public boolean hasTrident() {
+        return hasTrident;
+    }
+
+    public void setHasTrident(boolean hasTrident) {
+        this.hasTrident = hasTrident;
     }
 }

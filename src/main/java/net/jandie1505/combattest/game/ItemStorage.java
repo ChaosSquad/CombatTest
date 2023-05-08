@@ -30,6 +30,7 @@ public class ItemStorage {
     public static final String SHOP_ITEM = "EU";
     private static final Map<Integer, ItemStack> MELEE_ITEMS;
     private static final Map<Integer, ItemStack> RANGED_ITEMS;
+    private static final Map<Integer, ItemStack> ARMOR_ITEMS;
     private static final Map<Integer, ItemStack> SHOP_ITEMS;
 
     static {
@@ -666,6 +667,25 @@ public class ItemStorage {
 
         RANGED_ITEMS = Map.copyOf(rangedItemsInit);
 
+        // ARMOR ITEMS
+
+        Map<Integer, ItemStack> armorItemsInit = new HashMap<>();
+
+        armorItemsInit.put(0, armorBuilder("Default Armor", Material.LEATHER_HELMET, 0, 0, 0, 0));
+        armorItemsInit.put(100, armorBuilder("Chainmail Armor", Material.CHAINMAIL_HELMET, 5, 0, 0, 100));
+        armorItemsInit.put(101, armorBuilder("Chainmail Armor +", Material.CHAINMAIL_HELMET, 9, 0, 0, 101));
+        armorItemsInit.put(102, armorBuilder("Chainmail Armor ++", Material.CHAINMAIL_HELMET, 12, 0, 0, 102));
+        armorItemsInit.put(1100, armorBuilder("Heavy Armor", Material.DIAMOND_HELMET, 15, 5, 0, 1100));
+        armorItemsInit.put(1101, armorBuilder("Heavy Armor +", Material.DIAMOND_HELMET, 17, 7, 0, 1101));
+        armorItemsInit.put(1102, armorBuilder("Heavy Armor ++", Material.DIAMOND_HELMET, 18, 8, 0, 1102));
+        armorItemsInit.put(1103, armorBuilder("Heavy Armor +++", Material.NETHERITE_HELMET, 20, 10, 0, 1103));
+        armorItemsInit.put(1200, armorBuilder("Multi-Defense Armor", Material.IRON_HELMET, 0, 0, 10, 1200));
+        armorItemsInit.put(1201, armorBuilder("Multi-Defense Armor +", Material.IRON_HELMET, 0, 0, 12, 1201));
+        armorItemsInit.put(1202, armorBuilder("Multi-Defense Armor ++", Material.IRON_HELMET, 0, 0, 13, 1202));
+        armorItemsInit.put(1203, armorBuilder("Multi-Defense Armor +++", Material.GOLDEN_HELMET, 0, 0, 15, 1203));
+
+        ARMOR_ITEMS = Map.copyOf(armorItemsInit);
+
         // SHOP ITEMS
 
         Map<Integer, ItemStack> shopItemsInit = new HashMap<>();
@@ -756,7 +776,7 @@ public class ItemStorage {
             meta.setDisplayName("Throwable Vodka");
             meta.setLore(List.of("EU105", "No description needed :)", "100% alcohol", "Price: 20000"));
             meta.addItemFlags(ItemFlag.values());
-            meta.setColor(Color.fromRGB(11776947));
+            meta.setColor(Color.fromRGB(14737632));
             meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 1200, 1), false);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, 1200, 1), false);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.BLINDNESS, 1200, 0), false);
@@ -1063,6 +1083,85 @@ public class ItemStorage {
 
     }
 
+    public static ItemStack getArmor(int id) {
+        return ARMOR_ITEMS.get(id);
+    }
+
+    public static Integer getArmorReverse(ItemStack item) {
+
+        if(item.getItemMeta() == null || item.getItemMeta().getLore() == null) {
+            return null;
+        }
+
+        for (Integer id : Map.copyOf(ARMOR_ITEMS).keySet()) {
+            ItemStack itemStack = ARMOR_ITEMS.get(id);
+
+            if (itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null) {
+                continue;
+            }
+
+            if (itemStack.getItemMeta().getLore().get(0).equals(item.getItemMeta().getLore().get(0))) {
+                return id;
+            }
+        }
+
+        return null;
+    }
+
+    public static int getArmorPrice(int id) {
+
+        // Is item specialized
+        if (id >= 1000) {
+
+            // Is melee item in final level (no more upgrades)
+            if ((id % 10) >= 3) {
+
+                return 10000;
+
+            } else if ((id % 10) == 0) {
+
+                return 10000;
+
+            } else {
+
+                return 5000;
+
+            }
+
+        } else {
+
+            // Is no item set (or default item set) (= melee level 0)
+            // If not, is item ready for specialisation
+            if (id == 0) {
+
+                return 0;
+
+            } else if ((id % 10) == 0) {
+
+                return 5000;
+
+            } else {
+
+                return 2500;
+
+            }
+
+        }
+
+    }
+
+    public static ItemStack getArmorChestplate() {
+        return armorBuilder("Armor Part (SEE HELMET)", Material.LEATHER_CHESTPLATE, 0, 0, 0, 10);
+    }
+
+    public static ItemStack getArmorLeggings() {
+        return armorBuilder("Armor Part (SEE HELMET)", Material.LEATHER_LEGGINGS, 0, 0, 0, 10);
+    }
+
+    public static ItemStack getArmorBoots() {
+        return armorBuilder("Armor Part (SEE HELMET)", Material.LEATHER_BOOTS, 0, 0, 0, 10);
+    }
+
     public static ItemStack getShopItem(int id) {
         return SHOP_ITEMS.get(id);
     }
@@ -1160,6 +1259,30 @@ public class ItemStorage {
 
     }
 
+    public static ItemStack armorBuilder(String name, Material material, int armor, int toughness, int protection, int id) {
+
+        ItemStack item = new ItemStack(material);
+
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
+
+        meta.setDisplayName(name);
+        meta.setLore(List.of("EA" + id, "Armor: " + armor, "Toughness: " + toughness, "Protection: " + protection));
+        meta.addItemFlags(ItemFlag.values());
+        meta.setUnbreakable(true);
+
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier("generic.armor", armor, AttributeModifier.Operation.ADD_NUMBER));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier("generic.armor_toughness", toughness, AttributeModifier.Operation.ADD_NUMBER));
+
+        if (protection > 0) {
+            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, protection, false);
+        }
+
+        item.setItemMeta(meta);
+
+        return item;
+
+    }
+
     public static ItemStack getRocketLauncherAmmo() {
 
         ItemStack item = new ItemStack(Material.FIREWORK_ROCKET);
@@ -1178,6 +1301,17 @@ public class ItemStorage {
         item.setItemMeta(meta);
 
         return item;
+
+    }
+
+    public static boolean isArmor(ItemStack itemStack) {
+
+        if (itemStack == null) {
+            return false;
+        }
+
+        String typeNameString = itemStack.getType().name();
+        return typeNameString.contains("HELMET") || typeNameString.contains("CHESTPLATE") || typeNameString.contains("LEGGINGS") || typeNameString.contains("BOOTS");
 
     }
 

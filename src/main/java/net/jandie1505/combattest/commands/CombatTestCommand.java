@@ -74,6 +74,12 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "setranged":
                 this.setScoreSubcommand(sender, args, 2);
                 break;
+            case "getarmor":
+                this.getScoreSubcommand(sender, args, 3);
+                break;
+            case "setarmor":
+                this.setScoreSubcommand(sender, args, 3);
+                break;
             case "menu":
                 this.menuSubcommand(sender);
                 break;

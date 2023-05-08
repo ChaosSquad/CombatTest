@@ -30,6 +30,8 @@ public class PlayerMenu implements InventoryHolder {
                 return this.getMeleeMenu();
             case 2:
                 return this.getRangedMenu();
+            case 3:
+                return this.getArmorMenu();
             case 4:
                 return this.getItemShop();
             default:
@@ -82,7 +84,7 @@ public class PlayerMenu implements InventoryHolder {
 
             } else {
 
-                inventory.setItem(22, ItemStorage.getMelee(playerData.getMeleeEquipment()));
+                inventory.setItem(4, ItemStorage.getMelee(playerData.getMeleeEquipment()));
 
                 inventory.setItem(22, ItemStorage.getMelee(playerData.getMeleeEquipment() + 1));
 
@@ -136,7 +138,7 @@ public class PlayerMenu implements InventoryHolder {
     }
 
     private Inventory getRangedMenu() {
-        Inventory inventory = Bukkit.createInventory(this, 27, "§c§lRanged Weapons");
+        Inventory inventory = Bukkit.createInventory(this, 27, "§6§lRanged Weapons");
 
         PlayerData playerData = this.game.getPlayerMap().get(playerId);
 
@@ -157,7 +159,7 @@ public class PlayerMenu implements InventoryHolder {
 
             } else {
 
-                inventory.setItem(22, ItemStorage.getRanged(playerData.getRangedEquipment()));
+                inventory.setItem(4, ItemStorage.getRanged(playerData.getRangedEquipment()));
 
                 inventory.setItem(22, ItemStorage.getRanged(playerData.getRangedEquipment() + 1));
 
@@ -202,6 +204,65 @@ public class PlayerMenu implements InventoryHolder {
                 inventory.setItem(4, ItemStorage.getRanged(playerData.getRangedEquipment()));
 
                 inventory.setItem(22, ItemStorage.getRanged(playerData.getRangedEquipment() + 1));
+
+            }
+
+        }
+
+        return inventory;
+    }
+
+    public Inventory getArmorMenu() {
+        Inventory inventory = Bukkit.createInventory(this, 27, "§6§lArmor");
+
+        PlayerData playerData = this.game.getPlayerMap().get(playerId);
+
+        if (playerData == null) {
+            return Bukkit.createInventory(this, 27, "§c§mArmor");
+        }
+
+        inventory.setItem(0, ItemStorage.getBackButton());
+        inventory.setItem(8, ItemStorage.getDisplayItem("§a§lPoints: §r§a" + playerData.getPoints(), Material.EMERALD));
+
+        // Is item specialized
+        if (playerData.getArmorEquipment() >= 1000) {
+
+            // Is Armor item in final level (no more upgrades)
+            if ((playerData.getArmorEquipment() % 10) >= 3) {
+
+                inventory.setItem(13, ItemStorage.getArmor(playerData.getArmorEquipment()));
+
+            } else {
+
+                inventory.setItem(4, ItemStorage.getArmor(playerData.getArmorEquipment()));
+
+                inventory.setItem(22, ItemStorage.getArmor(playerData.getArmorEquipment() + 1));
+
+            }
+
+        } else {
+
+            // Is no item set (or default item set) (= Armor level 0)
+            // If not, is item ready for specialisation
+            if (playerData.getArmorEquipment() == 0) {
+
+                inventory.setItem(4, ItemStorage.getArmor(0));
+
+                inventory.setItem(22, ItemStorage.getArmor(100));
+
+            } else if ((playerData.getArmorEquipment() % 10) >= 2) {
+
+                if (playerData.getArmorEquipment() == 102) {
+                    inventory.setItem(4, ItemStorage.getArmor(101));
+                    inventory.setItem(21, ItemStorage.getArmor(1100));
+                    inventory.setItem(23, ItemStorage.getArmor(1200));
+                }
+
+            } else {
+
+                inventory.setItem(4, ItemStorage.getArmor(playerData.getArmorEquipment()));
+
+                inventory.setItem(22, ItemStorage.getArmor(playerData.getArmorEquipment() + 1));
 
             }
 

@@ -210,6 +210,7 @@ public class Game implements GamePart {
 
             boolean meleeItemMissing = true;
             boolean rangedItemMissing = true;
+            boolean armorItemMissing = true;
 
             for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
 
@@ -233,7 +234,6 @@ public class Game implements GamePart {
                             rangedItemMissing = false;
                         } else {
                             player.getInventory().remove(item);
-                            continue;
                         }
                         continue;
                     }
@@ -242,6 +242,21 @@ public class Game implements GamePart {
                     if (!(playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && ItemStorage.getIdPrefix(item).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(item) == 9000) {
                         player.getInventory().remove(item);
                         player.getInventory().setItem(40, new ItemStack(Material.AIR));
+                        continue;
+                    }
+
+                    // Armor item
+                    Integer armorId = ItemStorage.getArmorReverse(item);
+                    if (armorId != null) {
+                        if (armorId == playerData.getArmorEquipment()) {
+                            armorItemMissing = false;
+                        } else {
+                            player.getInventory().remove(item);
+                            player.getInventory().setItem(39, new ItemStack(Material.AIR));
+                            player.getInventory().setItem(38, new ItemStack(Material.AIR));
+                            player.getInventory().setItem(37, new ItemStack(Material.AIR));
+                            player.getInventory().setItem(36, new ItemStack(Material.AIR));
+                        }
                         continue;
                     }
 
@@ -344,6 +359,25 @@ public class Game implements GamePart {
 
             if ((playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && (player.getInventory().getItem(40) == null || !player.getInventory().getItem(40).isSimilar(ItemStorage.getRocketLauncherAmmo()))) {
                 player.getInventory().setItem(40, ItemStorage.getRocketLauncherAmmo());
+            }
+
+            // Give armor equipment
+
+            ItemStack armorItem = ItemStorage.getArmor(playerData.getArmorEquipment());
+            if (armorItem != null && armorItemMissing) {
+                player.getInventory().setItem(39, armorItem);
+            }
+
+            if (player.getInventory().getItem(38) == null || !(ItemStorage.getIdPrefix(player.getInventory().getItem(38)).equals(ItemStorage.EQUIPMENT_ARMOR) && ItemStorage.getId(player.getInventory().getItem(38)) == 10)) {
+                player.getInventory().setItem(38, ItemStorage.getArmorChestplate());
+            }
+
+            if (player.getInventory().getItem(37) == null || !(ItemStorage.getIdPrefix(player.getInventory().getItem(37)).equals(ItemStorage.EQUIPMENT_ARMOR) && ItemStorage.getId(player.getInventory().getItem(37)) == 10)) {
+                player.getInventory().setItem(37, ItemStorage.getArmorLeggings());
+            }
+
+            if (player.getInventory().getItem(36) == null || !(ItemStorage.getIdPrefix(player.getInventory().getItem(36)).equals(ItemStorage.EQUIPMENT_ARMOR) && ItemStorage.getId(player.getInventory().getItem(36)) == 10)) {
+                player.getInventory().setItem(36, ItemStorage.getArmorBoots());
             }
 
             // Saturation

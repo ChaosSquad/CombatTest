@@ -63,6 +63,8 @@ public class EventListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
 
+            PlayerData victimData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId());
+
             ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId()).setAlive(false);
             event.getEntity().setGameMode(GameMode.SPECTATOR);
             event.getDrops().clear();
@@ -71,6 +73,40 @@ public class EventListener implements Listener {
                 this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
                     event.getEntity().spigot().respawn();
                 }, 2);
+            }
+
+            if ((victimData.getMeleeEquipment() % 100) != 0) {
+                victimData.setMeleeEquipment(victimData.getMeleeEquipment() - 1);
+            }
+
+            if ((victimData.getRangedEquipment() % 100) != 0) {
+                victimData.setRangedEquipment(victimData.getRangedEquipment() - 1);
+            }
+
+            if ((victimData.getArmorEquipment() % 100) != 0) {
+                victimData.setArmorEquipment(victimData.getArmorEquipment() - 1);
+            }
+
+            if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+
+                if (((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager().getUniqueId())) {
+
+                    Player damager = (Player) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
+
+                    PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(damager.getUniqueId());
+                    damagerData.setPoints(damagerData.getPoints() + 1000);
+                    damager.sendMessage("§bPlayer Kill: + 1000 Points");
+
+                    int comparedEquipmentLevels = PlayerData.compareEquipmentLevels(damagerData, victimData);
+
+                    if (comparedEquipmentLevels < 0) {
+                        int receivedPoints = (500 * comparedEquipmentLevels * (-1));
+                        damagerData.setPoints(damagerData.getPoints() + receivedPoints);
+                        damager.sendMessage("§bPlayer Kill (Equipment Bonus): + " + receivedPoints);
+                    }
+
+                }
+
             }
 
         }
@@ -464,11 +500,16 @@ public class EventListener implements Listener {
 
             }
 
+        } else if (this.plugin.getGame() instanceof Game) {
+
+            if (event.getEntity() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId()) && event.getDamager() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getDamager().getUniqueId())) {
+
+                PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getDamager().getUniqueId());
+
+                playerData.setPoints(playerData.getPoints() + (int) event.getDamage());
+
+            }
+
         }
-    }
-
-    @EventHandler
-    public void onDeath(PlayerDeathEvent event) {
-
     }
 }

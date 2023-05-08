@@ -128,4 +128,41 @@ public class PlayerData {
     public void setHasTrident(boolean hasTrident) {
         this.hasTrident = hasTrident;
     }
+
+    public static int getEqupmentCompareLevel(int level) {
+
+        if (level > 1000) {
+
+            return 3 + (level % 1000);
+
+        } else {
+
+            if (level == 0) {
+                return 0;
+            } else {
+                return 1 + (level % 100);
+            }
+
+        }
+
+    }
+
+    public static int compareEquipmentLevels(PlayerData data, PlayerData compareData) {
+
+        int p1Melee = getEqupmentCompareLevel(data.getMeleeEquipment());
+        int p2Melee = getEqupmentCompareLevel(compareData.getMeleeEquipment());
+        int p1Ranged = getEqupmentCompareLevel(data.getRangedEquipment());
+        int p2Ranged = getEqupmentCompareLevel(compareData.getRangedEquipment());
+        int p1Armor = getEqupmentCompareLevel(data.getArmorEquipment());
+        int p2Armor = getEqupmentCompareLevel(compareData.getArmorEquipment());
+
+        int p1All = p1Melee + p1Ranged + p1Armor;
+        p1All = p1All / 3;
+
+        int p2All = p2Melee + p2Ranged + p2Armor;
+        p2All = p2All / 3;
+
+        return (p1All - p2All);
+
+    }
 }

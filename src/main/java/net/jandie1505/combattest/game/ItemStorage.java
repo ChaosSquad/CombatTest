@@ -737,8 +737,8 @@ public class ItemStorage {
 
             PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.POTION);
 
-            meta.setDisplayName("Medikit 3000");
-            meta.setLore(List.of("EU104", "Small injury?", "Headache?", "Arm cut off?", "Medikit 2000 is there for you!", "Price: 2500"));
+            meta.setDisplayName("Medikit 2000");
+            meta.setLore(List.of("EU104", "Small injury?", "Headache?", "Arm cut off?", "Medikit 2000 is there for you!", "Price: 1000"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setColor(Color.RED);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0), false);
@@ -1099,7 +1099,7 @@ public class ItemStorage {
             case 103:
                 return 2500;
             case 104:
-                return 2000;
+                return 1000;
             case 105:
                 return 20000;
             case 106:

@@ -221,7 +221,8 @@ public class Lobby implements GamePart {
                         this.plugin.getConfigManager().getConfig().optJSONObject("gameConfig", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x2", 5),
                         this.plugin.getConfigManager().getConfig().optJSONObject("gameConfig", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("y2", 5),
                         this.plugin.getConfigManager().getConfig().optJSONObject("gameConfig", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("z2", 5)
-                }
+                },
+                this.plugin.getConfigManager().getConfig().optJSONObject("gameConfig", new JSONObject()).optBoolean("enforcepvp", false)
         );
     }
 

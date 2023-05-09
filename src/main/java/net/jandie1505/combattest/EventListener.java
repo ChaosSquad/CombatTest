@@ -501,13 +501,13 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (this.plugin.getGame() instanceof Lobby) {
+        if (this.plugin.getGame() instanceof Lobby || this.plugin.getGame() instanceof Endlobby) {
 
             if (event.getEntity() instanceof Player) {
 
-                if (((Lobby) this.plugin.getGame()).getPlayers().contains(event.getEntity().getUniqueId())) {
+                if (this.plugin.getGame().getPlayers().contains(event.getEntity().getUniqueId())) {
                     event.setCancelled(true);
-                } else if (event.getDamager() instanceof Player && ((Lobby) this.plugin.getGame()).getPlayers().contains(event.getDamager().getUniqueId())) {
+                } else if (event.getDamager() instanceof Player && this.plugin.getGame().getPlayers().contains(event.getDamager().getUniqueId())) {
                     event.setCancelled(true);
                 }
 
@@ -543,6 +543,8 @@ public class EventListener implements Listener {
 
             }
 
+        } else if (this.plugin.getGame() == null && this.plugin.isSingleServer() && this.plugin.isAutostartNewGame()) {
+            event.setCancelled(true);
         }
     }
 }

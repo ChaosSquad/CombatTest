@@ -5,6 +5,8 @@ import net.jandie1505.combattest.game.*;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         if (args.length < 1) {
 
             if (this.hasPermissionAdmin(sender)) {
-                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/getteam/setteam/menu/points/leave/stats");
+                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/getteam/setteam/isautostart/setautostart/getmaxtime/setmaxtime/reload/menu/points/leave/stats");
             } else {
                 sender.sendMessage("§7Usage: /combattest menu/points/leave/stats");
             }
@@ -85,6 +87,15 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 break;
             case "setteam":
                 this.setScoreSubcommand(sender, args, 4);
+                break;
+            case "isautostart":
+                this.isAutostartSubcommand(sender);
+                break;
+            case "setautostart":
+                this.setAutostartSubcommand(sender, args);
+                break;
+            case "reload":
+                this.reloadSubcommand(sender);
                 break;
             case "menu":
                 this.menuSubcommand(sender);
@@ -633,6 +644,46 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void isAutostartSubcommand(CommandSender sender) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        sender.sendMessage("§7Autostart: " + this.plugin.isAutostartNewGame());
+
+    }
+
+    public void setAutostartSubcommand(CommandSender sender, String[] args) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (args.length != 2) {
+            sender.sendMessage("§cUsage: /combattest setmaxtime <time>");
+            return;
+        }
+
+        this.plugin.setAutostartNewGame(Boolean.parseBoolean(args[1]));
+        sender.sendMessage("§aAutostart of new games set to: " + this.plugin.isAutostartNewGame());
+
+    }
+
+    public void reloadSubcommand(CommandSender sender) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        this.plugin.getConfigManager().reloadConfig();
+        sender.sendMessage("§aReloading config...");
+
+    }
+
     public boolean hasPermissionAdmin(CommandSender sender) {
         return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
     }
@@ -664,6 +715,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("setarmor");
                 tabComplete.add("getteam");
                 tabComplete.add("setteam");
+                tabComplete.add("isautostart");
+                tabComplete.add("setautostart");
+                tabComplete.add("reload");
 
             }
 

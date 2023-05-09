@@ -6,6 +6,8 @@ import net.jandie1505.combattest.config.DefaultConfigValues;
 import net.jandie1505.combattest.game.GamePart;
 import net.jandie1505.combattest.game.GameStatus;
 import net.jandie1505.combattest.game.Lobby;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -24,6 +26,9 @@ public class CombatTest extends JavaPlugin {
     private List<UUID> bypassingPlayers;
     private String permissionPrefix;
     private boolean singleServer;
+    private boolean autostartNewGame;
+    private int timeStep;
+    private int autostartNewGameTimer;
 
     @Override
     public void onEnable() {
@@ -33,6 +38,9 @@ public class CombatTest extends JavaPlugin {
         this.bypassingPlayers = Collections.synchronizedList(new ArrayList<>());
         this.permissionPrefix = this.configManager.getConfig().optString("permissionsPrefix", "combattest");
         this.singleServer = this.configManager.getConfig().optBoolean("singleServerMode", false);
+        this.autostartNewGame = this.configManager.getConfig().optBoolean("autostartNewGame", false);
+        this.timeStep = 0;
+        this.autostartNewGameTimer = 30;
 
         this.getCommand("combattest").setExecutor(new CombatTestCommand(this));
         this.getCommand("combattest").setTabCompleter(new CombatTestCommand(this));
@@ -60,8 +68,29 @@ public class CombatTest extends JavaPlugin {
                             player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
                         }
 
+                        if (this.autostartNewGame && this.singleServer) {
+                            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§b--- Starting new game in " + this.autostartNewGameTimer + " seconds ---"));
+                        }
+
                     }
 
+                    if (this.autostartNewGame && this.timeStep == 1) {
+
+                        if (this.autostartNewGameTimer <= 0) {
+                            this.autostartNewGameTimer = 30;
+                            this.startGame();
+                        } else {
+                            this.autostartNewGameTimer--;
+                        }
+
+                    }
+
+                }
+
+                if (this.timeStep != 0) {
+                    this.timeStep = 0;
+                } else {
+                    this.timeStep = 1;
                 }
 
             } catch (Exception e) {
@@ -136,6 +165,14 @@ public class CombatTest extends JavaPlugin {
 
     public boolean isSingleServer() {
         return this.singleServer;
+    }
+
+    public boolean isAutostartNewGame() {
+        return this.autostartNewGame;
+    }
+
+    public void setAutostartNewGame(boolean autostartNewGame) {
+        this.autostartNewGame = autostartNewGame;
     }
 
     public static int getWeather(World world) {

@@ -24,8 +24,9 @@ public class Game implements GamePart {
     private boolean enableBorder;
     private int[] border;
     private Map<UUID, PlayerMenu> playerMenus;
+    private boolean enforcePvp;
 
-    public Game(CombatTest plugin, int time, World world, List<UUID> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border) {
+    public Game(CombatTest plugin, int time, World world, List<UUID> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border, boolean enforcePvp) {
         this.plugin = plugin;
         this.killswitch = false;
         this.timeStep = 0;
@@ -56,6 +57,8 @@ public class Game implements GamePart {
         if (enableBorder && border.length < 6) {
             this.killswitch = true;
         }
+
+        this.enforcePvp = enforcePvp;
 
         this.playerMenus = Collections.synchronizedMap(new HashMap<>());
     }
@@ -389,29 +392,18 @@ public class Game implements GamePart {
                 playerData.setRegenerationCooldown(playerData.getRegenerationCooldown() + 1);
             }
 
-            // Weather
+            // No PvP Timer
 
-            if ((this.time % 100) == 0) {
+            if (this.enforcePvp) {
 
-                Random random = new Random();
+                if (this.timeStep >= 1) {
 
-                if (random.nextInt(2) == 1) {
-
-                    switch (random.nextInt(6)) {
-                        case 0:
-                        case 1:
-                        case 2:
-                            CombatTest.setClearWeather(this.world);
-                            break;
-                        case 3:
-                        case 4:
-                            CombatTest.setRainingWeather(this.world);
-                            break;
-                        case 5:
-                            CombatTest.setThunderingWeather(this.world);
-                            break;
-                        default:
-                            break;
+                    if (playerData.getNoPvpTimer() >= 60) {
+                        player.sendMessage("§bYour position was revealed because you were not in combat for too long");
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 0, false, false));
+                        playerData.setNoPvpTimer(0);
+                    } else {
+                        playerData.setNoPvpTimer(playerData.getNoPvpTimer() + 1);
                     }
 
                 }
@@ -531,6 +523,35 @@ public class Game implements GamePart {
             if (player == null || !this.players.containsKey(playerId)) {
 
                 this.playerMenus.remove(playerId);
+
+            }
+
+        }
+
+        // WEATHER
+
+        if ((this.time % 100) == 0) {
+
+            Random random = new Random();
+
+            if (random.nextInt(2) == 1) {
+
+                switch (random.nextInt(6)) {
+                    case 0:
+                    case 1:
+                    case 2:
+                        CombatTest.setClearWeather(this.world);
+                        break;
+                    case 3:
+                    case 4:
+                        CombatTest.setRainingWeather(this.world);
+                        break;
+                    case 5:
+                        CombatTest.setThunderingWeather(this.world);
+                        break;
+                    default:
+                        break;
+                }
 
             }
 

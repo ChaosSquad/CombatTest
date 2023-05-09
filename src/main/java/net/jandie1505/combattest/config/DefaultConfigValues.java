@@ -11,6 +11,7 @@ public final class DefaultConfigValues {
 
         config.put("permissionsPrefix", "combattest");
         config.put("singleServerMode", true);
+        config.put("autostartNewGame", false);
 
         JSONObject gameConfig = new JSONObject();
         gameConfig.put("world", "world");
@@ -35,6 +36,7 @@ public final class DefaultConfigValues {
         gameConfig.put("border", borderGameConfig);
         gameConfig.put("spawnpointBlockedRadius", 10);
         gameConfig.put("time", 900);
+        gameConfig.put("enforcepvp", false);
         config.put("gameConfig", gameConfig);
 
         return config;

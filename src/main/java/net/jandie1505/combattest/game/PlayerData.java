@@ -21,6 +21,7 @@ public class PlayerData {
     private double potionTimer;
     private int team;
     private Scoreboard scoreboard;
+    private int noPvpTimer;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
@@ -41,6 +42,8 @@ public class PlayerData {
         this.team = 0;
 
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+
+        this.noPvpTimer = 0;
     }
 
     public UUID getPlayerId() {
@@ -147,6 +150,14 @@ public class PlayerData {
 
     public void resetScoreboard() {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+    }
+
+    public int getNoPvpTimer() {
+        return noPvpTimer;
+    }
+
+    public void setNoPvpTimer(int noPvpTimer) {
+        this.noPvpTimer = noPvpTimer;
     }
 
     public static int getEqupmentCompareLevel(int level) {

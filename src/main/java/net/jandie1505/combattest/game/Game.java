@@ -400,7 +400,7 @@ public class Game implements GamePart {
 
                     if (playerData.getNoPvpTimer() >= 60) {
                         player.sendMessage("§bYour position was revealed because you were not in combat for too long");
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 0, false, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 0, true, true));
                         playerData.setNoPvpTimer(0);
                     } else {
                         playerData.setNoPvpTimer(playerData.getNoPvpTimer() + 1);

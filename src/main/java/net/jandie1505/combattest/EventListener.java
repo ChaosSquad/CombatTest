@@ -464,6 +464,7 @@ public class EventListener implements Listener {
             if (event.getEntity() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
 
                 ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId()).setRegenerationCooldown(0);
+                ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId()).setNoPvpTimer(0);
                 ((Player) event.getEntity()).removePotionEffect(PotionEffectType.REGENERATION);
 
             }
@@ -538,6 +539,7 @@ public class EventListener implements Listener {
                     }
 
                     damagerData.setPoints(damagerData.getPoints() + (int) event.getDamage());
+                    damagerData.setNoPvpTimer(0);
 
                 }
 

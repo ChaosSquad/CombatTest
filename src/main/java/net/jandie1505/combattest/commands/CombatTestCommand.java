@@ -80,6 +80,12 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "setarmor":
                 this.setScoreSubcommand(sender, args, 3);
                 break;
+            case "getteam":
+                this.getScoreSubcommand(sender, args, 4);
+                break;
+            case "setteam":
+                this.setScoreSubcommand(sender, args, 4);
+                break;
             case "menu":
                 this.menuSubcommand(sender);
                 break;
@@ -88,6 +94,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 break;
             case "leave":
                 this.leaveSubcommand(sender);
+                break;
+            case "stats":
+                this.statsSubcommand(sender, args);
                 break;
             default:
                 sender.sendMessage("§cUnknown command");
@@ -393,6 +402,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case 3:
                 sender.sendMessage("§7Armor score: " + playerData.getArmorEquipment());
                 break;
+            case 4:
+                sender.sendMessage("§7Team score: " + playerData.getTeam());
+                break;
             default:
                 sender.sendMessage("§cUnknown error");
                 break;
@@ -485,6 +497,14 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 playerData.setArmorEquipment(value);
                 sender.sendMessage("§aArmor score set");
                 break;
+            case 4:
+                if (value >= 0) {
+                    playerData.setTeam(value);
+                    sender.sendMessage("§aTeam score set");
+                } else {
+                    sender.sendMessage("§cTeam values must be 0 for no team or a positive value for a team id");
+                }
+                break;
             default:
                 sender.sendMessage("§cUnknown error");
                 break;
@@ -561,6 +581,58 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void statsSubcommand(CommandSender sender, String[] args) {
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        Player player;
+        PlayerData playerData;
+
+        if (args.length == 2) {
+
+            player = this.plugin.getPlayerFromString(args[1]);
+
+            if (player == null) {
+                sender.sendMessage("§cPlayer is offline");
+                return;
+            }
+
+            playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(player.getUniqueId());
+
+        } else {
+
+            if (!(sender instanceof Player)) {
+                sender.sendMessage("§cThis command can only be executed by a player");
+                return;
+            }
+
+            player = (Player) sender;
+            playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(player.getUniqueId());
+
+        }
+
+        if (playerData == null) {
+            sender.sendMessage("§cPlayer not ingame");
+            return;
+        }
+
+        sender.sendMessage("§7§lStats of §a§l" + player.getName() + "§a§l:§r\n" +
+                "§7Kills: §a" + playerData.getKills() + "\n" +
+                "§7Deaths: §a" + playerData.getDeaths() + "\n" +
+                "§7K/D: §a" + PlayerData.getKD(playerData.getKills(), playerData.getDeaths()));
+
+        if (playerData.getTeam() > 0) {
+            sender.sendMessage("§7&lStats of §a§lTeam " + playerData.getTeam() + "§a§l:§r\n" +
+                    "§7Kills: §a" + ((Game) this.plugin.getGame()).getTeamKills(playerData.getTeam()) + "\n" +
+                    "§7Deaths: §a" + ((Game) this.plugin.getGame()).getTeamDeaths(playerData.getTeam()) + "\n" +
+                    "§7K/D: §a" + PlayerData.getKD(((Game) this.plugin.getGame()).getTeamKills(playerData.getTeam()), ((Game) this.plugin.getGame()).getTeamDeaths(playerData.getTeam())));
+        }
+
+    }
+
     public boolean hasPermissionAdmin(CommandSender sender) {
         return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
     }
@@ -590,12 +662,15 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("setranged");
                 tabComplete.add("getarmor");
                 tabComplete.add("setarmor");
+                tabComplete.add("getteam");
+                tabComplete.add("setteam");
 
             }
 
             tabComplete.add("menu");
             tabComplete.add("points");
             tabComplete.add("leave");
+            tabComplete.add("stats");
 
         }
 

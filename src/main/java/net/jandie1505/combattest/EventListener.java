@@ -504,9 +504,15 @@ public class EventListener implements Listener {
 
             if (event.getEntity() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId()) && event.getDamager() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getDamager().getUniqueId())) {
 
-                PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getDamager().getUniqueId());
+                PlayerData victimData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId());
+                PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getDamager().getUniqueId());
 
-                playerData.setPoints(playerData.getPoints() + (int) event.getDamage());
+                if (victimData.getTeam() > 0 && victimData.getTeam() == damagerData.getTeam()) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                damagerData.setPoints(damagerData.getPoints() + (int) event.getDamage());
 
             }
 

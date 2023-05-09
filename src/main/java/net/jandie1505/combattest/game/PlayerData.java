@@ -1,7 +1,10 @@
 package net.jandie1505.combattest.game;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 public class PlayerData {
@@ -16,7 +19,8 @@ public class PlayerData {
     private int kills;
     private int deaths;
     private double potionTimer;
-    private boolean hasTrident;
+    private int team;
+    private Scoreboard scoreboard;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
@@ -34,7 +38,9 @@ public class PlayerData {
 
         this.potionTimer = 0;
 
-        this.hasTrident = false;
+        this.team = 0;
+
+        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     }
 
     public UUID getPlayerId() {
@@ -121,12 +127,26 @@ public class PlayerData {
         this.potionTimer = potionTimer;
     }
 
-    public boolean hasTrident() {
-        return hasTrident;
+    public int getTeam() {
+        return team;
     }
 
-    public void setHasTrident(boolean hasTrident) {
-        this.hasTrident = hasTrident;
+    public void setTeam(int team) {
+        if (team >= 0) {
+            this.team = team;
+        }
+    }
+
+    public void setScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
+    public Scoreboard getScoreboard() {
+        return scoreboard;
+    }
+
+    public void resetScoreboard() {
+        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     }
 
     public static int getEqupmentCompareLevel(int level) {
@@ -164,5 +184,19 @@ public class PlayerData {
 
         return (p1All - p2All);
 
+    }
+
+    public static double getKD(int k, int d) {
+
+        double kills = k;
+        double deaths = d;
+
+        if (deaths == 0) {
+            return kills;
+        }
+
+        double kd = kills / deaths;
+
+        return Math.round(kd * 100.0) / 100.0;
     }
 }

@@ -437,20 +437,97 @@ public class Game implements GamePart {
 
             if (this.plugin.isSingleServer()) {
 
-                Scoreboard scoreboard = this.plugin.getServer().getScoreboardManager().getNewScoreboard();
-                Objective objective = scoreboard.registerNewObjective("player", Criteria.DUMMY, "");
-                objective.setDisplayName("§6§lCOMBAT TEST");
-                objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+                Scoreboard scoreboard = playerData.getScoreboard();
 
-                objective.getScore("§§§").setScore(6);
-                objective.getScore("Kills: §a" + playerData.getKills()).setScore(5);
-                objective.getScore("Deaths: §a" + playerData.getDeaths()).setScore(4);
-                objective.getScore("Points: §a" + playerData.getPoints()).setScore(3);
-                objective.getScore("§§").setScore(2);
-                objective.getScore("Time: §a" + this.time + "s").setScore(1);
-                objective.getScore("§").setScore(0);
+                // Reset all scores
+                for (String playerString : scoreboard.getEntries()) {
+                    scoreboard.resetScores(playerString);
+                }
 
-                player.setScoreboard(scoreboard);
+                // Sidebar
+                if (scoreboard.getObjective("sidebar") == null) {
+                    Objective sidebarObjective = scoreboard.registerNewObjective("sidebar", Criteria.DUMMY, "§6§lCOMBAT TEST");
+                    sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
+                }
+                Objective sidebarObjective = scoreboard.getObjective("sidebar");
+
+                sidebarObjective.getScore("§§§§").setScore(11);
+                sidebarObjective.getScore("Kills: §a" + playerData.getKills()).setScore(10);
+                sidebarObjective.getScore("Deaths: §a" + playerData.getDeaths()).setScore(9);
+                sidebarObjective.getScore("K/D: §a" + PlayerData.getKD(playerData.getKills(), playerData.getDeaths())).setScore(8);
+                sidebarObjective.getScore("Points: §a" + playerData.getPoints()).setScore(7);
+
+                if (playerData.getTeam() > 0) {
+
+                    sidebarObjective.getScore("§§§").setScore(6);
+                    sidebarObjective.getScore("Team Kills: §a" + this.getTeamKills(playerData.getTeam())).setScore(5);
+                    sidebarObjective.getScore("Team Deaths: §a" + this.getTeamDeaths(playerData.getTeam())).setScore(4);
+                    sidebarObjective.getScore("Team K/D: §a" + PlayerData.getKD(this.getTeamKills(playerData.getTeam()), this.getTeamDeaths(playerData.getTeam()))).setScore(3);
+
+                }
+
+                sidebarObjective.getScore("§§").setScore(2);
+                sidebarObjective.getScore("Time: §a" + this.time + "s").setScore(1);
+                sidebarObjective.getScore("§").setScore(0);
+
+                // Teams
+                if (scoreboard.getTeam("spectator") == null) {
+                    scoreboard.registerNewTeam("spectator");
+                }
+                Team spectatorTeam = scoreboard.getTeam("spectator");
+
+                if (scoreboard.getTeam("own") == null) {
+                    Team ownTeam = scoreboard.registerNewTeam("own");
+                    ownTeam.setAllowFriendlyFire(false);
+                    ownTeam.setColor(ChatColor.GREEN);
+                    ownTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+                }
+                Team ownTeam = scoreboard.getTeam("own");
+
+                if (scoreboard.getTeam("enemy") == null) {
+                    Team enemyTeam = scoreboard.registerNewTeam("enemy");
+                    enemyTeam.setAllowFriendlyFire(true);
+                    enemyTeam.setColor(ChatColor.RED);
+                    enemyTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+                }
+                Team enemyTeam = scoreboard.getTeam("enemy");
+
+                if (scoreboard.getObjective("tablist") == null) {
+                    Objective tablistObjective = scoreboard.registerNewObjective("tablist", Criteria.DUMMY, "");
+                    tablistObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+                }
+                Objective tablistObjective = scoreboard.getObjective("tablist");
+
+                ownTeam.addEntry(player.getName());
+                tablistObjective.getScore(player.getName()).setScore(playerData.getTeam());
+
+                for (Player p : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
+
+                    if (p == player) {
+                        continue;
+                    }
+
+                    if (this.getPlayerMap().containsKey(p.getUniqueId())) {
+                        PlayerData pdata = this.getPlayerMap().get(p.getUniqueId());
+
+                        if (playerData.getTeam() > 0 && pdata.getTeam() == playerData.getTeam()) {
+                            ownTeam.addEntry(p.getName());
+                        } else {
+                            enemyTeam.addEntry(p.getName());
+                        }
+
+                        tablistObjective.getScore(p.getName()).setScore(pdata.getTeam());
+
+                    } else {
+                        spectatorTeam.addEntry(p.getName());
+                    }
+
+                }
+
+                // Set scoreboard
+                if (player.getScoreboard() != scoreboard) {
+                    player.setScoreboard(scoreboard);
+                }
 
             }
 
@@ -559,7 +636,9 @@ public class Game implements GamePart {
             return false;
         }
 
-        Spawnpoint spawnpoint = this.getRandomSpawnpoint(0);
+        PlayerData playerData = this.getPlayerMap().get(player.getUniqueId());
+
+        Spawnpoint spawnpoint = this.getRandomSpawnpoint(playerData.getTeam());
 
         if (spawnpoint == null) {
             return false;
@@ -633,6 +712,26 @@ public class Game implements GamePart {
 
     public PlayerMenu getPlayerMenu(UUID playerId) {
         return this.getPlayerMenus().get(playerId);
+    }
+
+    public int getTeamKills(int teamId) {
+        int teamKills = 0;
+
+        for (UUID p : this.getPlayerMap().keySet()) {
+            teamKills = teamKills + this.getPlayerMap().get(p).getKills();
+        }
+
+        return teamKills;
+    }
+
+    public int getTeamDeaths(int teamId) {
+        int teamDeaths = 0;
+
+        for (UUID p : this.getPlayerMap().keySet()) {
+            teamDeaths = teamDeaths + this.getPlayerMap().get(p).getDeaths();
+        }
+
+        return teamDeaths;
     }
 
     @Override

@@ -273,14 +273,14 @@ public class Game implements GamePart {
 
                 if ((playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 399) || (playerData.getMeleeEquipment() >= 1500 && playerData.getMeleeEquipment() <= 1699)) {
 
+                    playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
+
                     switch (playerData.getMeleeEquipment()) {
                         case 300:
                         case 1600:
                             if (playerData.getPotionTimer() >= 6) {
                                 player.getInventory().addItem(meleeItem);
                                 playerData.setPotionTimer(0);
-                            } else {
-                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
                             }
                             break;
                         case 301:
@@ -288,8 +288,6 @@ public class Game implements GamePart {
                             if (playerData.getPotionTimer() >= 5) {
                                 player.getInventory().addItem(meleeItem);
                                 playerData.setPotionTimer(0);
-                            } else {
-                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
                             }
                             break;
                         case 302:
@@ -297,8 +295,6 @@ public class Game implements GamePart {
                             if (playerData.getPotionTimer() >= 4) {
                                 player.getInventory().addItem(meleeItem);
                                 playerData.setPotionTimer(0);
-                            } else {
-                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
                             }
                             break;
                         case 1500:
@@ -306,35 +302,28 @@ public class Game implements GamePart {
                             if (playerData.getPotionTimer() >= 3) {
                                 player.getInventory().addItem(meleeItem);
                                 playerData.setPotionTimer(0);
-                            } else {
-                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
                             }
                             break;
                         case 1501:
                             if (playerData.getPotionTimer() >= 2) {
                                 player.getInventory().addItem(meleeItem);
                                 playerData.setPotionTimer(0);
-                            } else {
-                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
                             }
                             break;
                         case 1502:
                             if (playerData.getPotionTimer() >= 1) {
                                 player.getInventory().addItem(meleeItem);
                                 playerData.setPotionTimer(0);
-                            } else {
-                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
                             }
                             break;
                         case 1503:
                             if (playerData.getPotionTimer() >= 0.5) {
                                 player.getInventory().addItem(meleeItem);
                                 playerData.setPotionTimer(0);
-                            } else {
-                                playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
                             }
                             break;
                         default:
+                            playerData.setPotionTimer(0);
                             break;
                     }
 

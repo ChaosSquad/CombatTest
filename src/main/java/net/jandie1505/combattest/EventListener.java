@@ -86,6 +86,8 @@ public class EventListener implements Listener {
                 victimData.setArmorEquipment(victimData.getArmorEquipment() - 1);
             }
 
+            victimData.setDeaths(victimData.getDeaths() + 1);
+
             if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
                 Player damager;
@@ -113,6 +115,8 @@ public class EventListener implements Listener {
                         damagerData.setPoints(damagerData.getPoints() + receivedPoints);
                         damager.sendMessage("§bPlayer Kill (Low Equipment Bonus): + " + receivedPoints);
                     }
+
+                    damagerData.setKills(damagerData.getKills() + 1);
 
                 }
 

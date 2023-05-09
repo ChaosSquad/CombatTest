@@ -14,4 +14,4 @@ permissions:
     children:
       - combattest.admin
 author: jandie1505
-api-version: 1.13
+api-version: 1.19

@@ -153,14 +153,14 @@ public class PlayerData {
 
         if (level > 1000) {
 
-            return 3 + (level % 1000);
+            return 3 + (level % 10);
 
         } else {
 
             if (level == 0) {
                 return 0;
             } else {
-                return 1 + (level % 100);
+                return 1 + (level % 10);
             }
 
         }

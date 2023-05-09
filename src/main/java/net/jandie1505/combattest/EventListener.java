@@ -99,10 +99,12 @@ public class EventListener implements Listener {
 
                     int comparedEquipmentLevels = PlayerData.compareEquipmentLevels(damagerData, victimData);
 
+                    System.out.println(comparedEquipmentLevels);
+
                     if (comparedEquipmentLevels < 0) {
-                        int receivedPoints = (500 * comparedEquipmentLevels * (-1));
+                        int receivedPoints = (1000 * comparedEquipmentLevels * (-1));
                         damagerData.setPoints(damagerData.getPoints() + receivedPoints);
-                        damager.sendMessage("§bPlayer Kill (Equipment Bonus): + " + receivedPoints);
+                        damager.sendMessage("§bPlayer Kill (Low Equipment Bonus): + " + receivedPoints);
                     }
 
                 }

@@ -92,9 +92,9 @@ public class EventListener implements Listener {
 
                 Player damager;
 
-                if (((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager() instanceof Player) {
+                if (((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager().getUniqueId())) {
                     damager = (Player) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager();
-                } else if (((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager() instanceof Projectile && ((Projectile) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager()).getShooter() instanceof Player) {
+                } else if (((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager() instanceof Projectile && ((Projectile) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager()).getShooter() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(((Player) ((Projectile) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager()).getShooter()).getUniqueId())) {
                     damager = (Player) ((Projectile) ((EntityDamageByEntityEvent) event.getEntity().getLastDamageCause()).getDamager()).getShooter();
                 } else {
                     damager = null;
@@ -515,17 +515,31 @@ public class EventListener implements Listener {
 
         } else if (this.plugin.getGame() instanceof Game) {
 
-            if (event.getEntity() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId()) && event.getDamager() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getDamager().getUniqueId())) {
+            if (event.getEntity() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
 
-                PlayerData victimData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId());
-                PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getDamager().getUniqueId());
+                Player damager;
 
-                if (victimData.getTeam() > 0 && victimData.getTeam() == damagerData.getTeam()) {
-                    event.setCancelled(true);
-                    return;
+                if (event.getDamager() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getDamager().getUniqueId())) {
+                    damager = (Player) event.getDamager();
+                } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(((Player) ((Projectile) event.getDamager()).getShooter()).getUniqueId())) {
+                    damager = (Player) ((Projectile) event.getDamager()).getShooter();
+                } else {
+                    damager = null;
                 }
 
-                damagerData.setPoints(damagerData.getPoints() + (int) event.getDamage());
+                if (damager != null) {
+
+                    PlayerData victimData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId());
+                    PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getDamager().getUniqueId());
+
+                    if (victimData.getTeam() > 0 && victimData.getTeam() == damagerData.getTeam()) {
+                        event.setCancelled(true);
+                        return;
+                    }
+
+                    damagerData.setPoints(damagerData.getPoints() + (int) event.getDamage());
+
+                }
 
             }
 

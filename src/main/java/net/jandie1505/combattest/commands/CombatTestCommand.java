@@ -23,9 +23,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         if (args.length < 1) {
 
             if (this.hasPermissionAdmin(sender)) {
-                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/menu/points/leave");
+                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/getteam/setteam/menu/points/leave/stats");
             } else {
-                sender.sendMessage("§7Usage: /combattest menu/points/leave");
+                sender.sendMessage("§7Usage: /combattest menu/points/leave/stats");
             }
 
             return true;

@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.UUID;
 
 public class PlayerData {
@@ -209,5 +210,17 @@ public class PlayerData {
         double kd = kills / deaths;
 
         return Math.round(kd * 100.0) / 100.0;
+    }
+
+    public static Comparator<PlayerData> getKillsComparator() {
+        return Comparator.comparingInt(PlayerData::getKills);
+    }
+
+    public static Comparator<PlayerData> getDeathsComparator() {
+        return Comparator.comparingInt(PlayerData::getDeaths);
+    }
+
+    public static Comparator<PlayerData> getKDComparator() {
+        return Comparator.comparingDouble(o -> PlayerData.getKD(o.getKills(), o.getDeaths()));
     }
 }

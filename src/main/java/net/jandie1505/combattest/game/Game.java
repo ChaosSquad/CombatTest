@@ -532,27 +532,31 @@ public class Game implements GamePart {
 
         if ((this.time % 100) == 0) {
 
-            Random random = new Random();
+            if (time > 0) {
+                Random random = new Random();
 
-            if (random.nextInt(2) == 1) {
+                if (random.nextInt(2) == 1) {
 
-                switch (random.nextInt(6)) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        CombatTest.setClearWeather(this.world);
-                        break;
-                    case 3:
-                    case 4:
-                        CombatTest.setRainingWeather(this.world);
-                        break;
-                    case 5:
-                        CombatTest.setThunderingWeather(this.world);
-                        break;
-                    default:
-                        break;
+                    switch (random.nextInt(6)) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            CombatTest.setClearWeather(this.world);
+                            break;
+                        case 3:
+                        case 4:
+                            CombatTest.setRainingWeather(this.world);
+                            break;
+                        case 5:
+                            CombatTest.setThunderingWeather(this.world);
+                            break;
+                        default:
+                            break;
+                    }
+
                 }
-
+            } else {
+                CombatTest.setClearWeather(this.world);
             }
 
         }
@@ -724,11 +728,28 @@ public class Game implements GamePart {
         return this.getPlayerMenus().get(playerId);
     }
 
+    public List<Integer> getTeams() {
+        List<Integer> teamList = new ArrayList<>();
+
+        for (UUID p : this.getPlayerMap().keySet()) {
+            PlayerData playerData = this.getPlayerMap().get(p);
+
+            if (playerData.getTeam() > 0 && !teamList.contains(playerData.getTeam())) {
+                teamList.add(playerData.getTeam());
+            }
+        }
+
+        return List.copyOf(teamList);
+    }
+
     public int getTeamKills(int teamId) {
         int teamKills = 0;
 
         for (UUID p : this.getPlayerMap().keySet()) {
-            teamKills = teamKills + this.getPlayerMap().get(p).getKills();
+            PlayerData playerData = this.getPlayerMap().get(p);
+            if (playerData.getTeam() == teamId) {
+                teamKills = teamKills + this.getPlayerMap().get(p).getKills();
+            }
         }
 
         return teamKills;
@@ -738,7 +759,10 @@ public class Game implements GamePart {
         int teamDeaths = 0;
 
         for (UUID p : this.getPlayerMap().keySet()) {
-            teamDeaths = teamDeaths + this.getPlayerMap().get(p).getDeaths();
+            PlayerData playerData = this.getPlayerMap().get(p);
+            if (playerData.getTeam() == teamId) {
+                teamDeaths = teamDeaths + this.getPlayerMap().get(p).getDeaths();
+            }
         }
 
         return teamDeaths;
@@ -746,6 +770,6 @@ public class Game implements GamePart {
 
     @Override
     public GamePart getNextStatus() {
-        return new Endlobby(this.plugin);
+        return new Endlobby(this.plugin, this.players);
     }
 }

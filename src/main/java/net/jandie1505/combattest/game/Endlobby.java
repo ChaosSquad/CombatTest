@@ -191,6 +191,10 @@ public class Endlobby implements GamePart {
 
             player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 
+            if (!this.plugin.isPlayerBypassing(player.getUniqueId())) {
+                player.getInventory().clear();
+            }
+
         }
 
         if (this.time >= 0) {

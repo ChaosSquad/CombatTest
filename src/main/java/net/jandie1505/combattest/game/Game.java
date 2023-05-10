@@ -47,6 +47,8 @@ public class Game implements GamePart {
             }
 
             this.players.put(playerId, new PlayerData(playerId));
+
+            player.getInventory().clear();
         }
 
         this.spawnpoints = Collections.synchronizedList(new ArrayList<>());

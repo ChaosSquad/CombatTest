@@ -115,6 +115,10 @@ public class Lobby implements GamePart {
                 objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
                 player.setScoreboard(scoreboard);
+
+                if (!this.plugin.isPlayerBypassing(player.getUniqueId())) {
+                    player.getInventory().clear();
+                }
             }
 
         }

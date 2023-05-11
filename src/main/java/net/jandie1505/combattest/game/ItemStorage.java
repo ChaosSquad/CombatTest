@@ -949,6 +949,10 @@ public class ItemStorage {
         return buildInventoryButton(Material.SPECTRAL_ARROW, "Item Shop", null, 5);
     }
 
+    public static ItemStack getResetButton() {
+        return buildInventoryButton(Material.TNT, "§4§lReset", List.of("Price: 10000"), 6);
+    }
+
     public static ItemStack getMelee(int id) {
         return MELEE_ITEMS.get(id);
     }

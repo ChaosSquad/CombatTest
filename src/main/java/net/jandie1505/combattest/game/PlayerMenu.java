@@ -73,6 +73,7 @@ public class PlayerMenu implements InventoryHolder {
 
         inventory.setItem(0, ItemStorage.getBackButton());
         inventory.setItem(8, ItemStorage.getDisplayItem("§a§lPoints: §r§a" + playerData.getPoints(), Material.EMERALD));
+        inventory.setItem(26, ItemStorage.getResetButton());
 
         // Is item specialized
         if (playerData.getMeleeEquipment() >= 1000) {
@@ -148,6 +149,7 @@ public class PlayerMenu implements InventoryHolder {
 
         inventory.setItem(0, ItemStorage.getBackButton());
         inventory.setItem(8, ItemStorage.getDisplayItem("§a§lPoints: §r§a" + playerData.getPoints(), Material.EMERALD));
+        inventory.setItem(26, ItemStorage.getResetButton());
 
         // Is item specialized
         if (playerData.getRangedEquipment() >= 1000) {
@@ -223,6 +225,7 @@ public class PlayerMenu implements InventoryHolder {
 
         inventory.setItem(0, ItemStorage.getBackButton());
         inventory.setItem(8, ItemStorage.getDisplayItem("§a§lPoints: §r§a" + playerData.getPoints(), Material.EMERALD));
+        inventory.setItem(26, ItemStorage.getResetButton());
 
         // Is item specialized
         if (playerData.getArmorEquipment() >= 1000) {

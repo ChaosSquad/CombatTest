@@ -229,6 +229,22 @@ public class EventListener implements Listener {
                         menu.setPage(0);
                         event.getWhoClicked().openInventory(menu.getInventory());
 
+                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getResetButton())) {
+
+                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                        if (playerData.getPoints() >= 10000) {
+
+                            playerData.setMeleeEquipment(0);
+                            playerData.setPoints(playerData.getPoints() - 10000);
+                            event.getWhoClicked().sendMessage("§aSuccessfully reset your melee equipment");
+
+                        } else {
+
+                            event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your melee equipment");
+
+                        }
+
                     } else {
 
                         Integer itemId = ItemStorage.getMeleeReverse(event.getCurrentItem());
@@ -265,6 +281,22 @@ public class EventListener implements Listener {
 
                         menu.setPage(0);
                         event.getWhoClicked().openInventory(menu.getInventory());
+
+                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getResetButton())) {
+
+                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                        if (playerData.getPoints() >= 10000) {
+
+                            playerData.setRangedEquipment(0);
+                            playerData.setPoints(playerData.getPoints() - 10000);
+                            event.getWhoClicked().sendMessage("§aSuccessfully reset your ranged equipment");
+
+                        } else {
+
+                            event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your ranged equipment");
+
+                        }
 
                     } else {
 
@@ -339,6 +371,22 @@ public class EventListener implements Listener {
 
                         menu.setPage(0);
                         event.getWhoClicked().openInventory(menu.getInventory());
+
+                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getResetButton())) {
+
+                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                        if (playerData.getPoints() >= 10000) {
+
+                            playerData.setArmorEquipment(0);
+                            playerData.setPoints(playerData.getPoints() - 10000);
+                            event.getWhoClicked().sendMessage("§aSuccessfully reset your armor");
+
+                        } else {
+
+                            event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your armor");
+
+                        }
 
                     } else {
 

@@ -179,19 +179,19 @@ public class PlayerData {
 
     }
 
-    public static int compareEquipmentLevels(PlayerData data, PlayerData compareData) {
+    public static double compareEquipmentLevels(PlayerData data, PlayerData compareData) {
 
-        int p1Melee = getEqupmentCompareLevel(data.getMeleeEquipment());
-        int p2Melee = getEqupmentCompareLevel(compareData.getMeleeEquipment());
-        int p1Ranged = getEqupmentCompareLevel(data.getRangedEquipment());
-        int p2Ranged = getEqupmentCompareLevel(compareData.getRangedEquipment());
-        int p1Armor = getEqupmentCompareLevel(data.getArmorEquipment());
-        int p2Armor = getEqupmentCompareLevel(compareData.getArmorEquipment());
+        double p1Melee = getEqupmentCompareLevel(data.getMeleeEquipment());
+        double p2Melee = getEqupmentCompareLevel(compareData.getMeleeEquipment());
+        double p1Ranged = getEqupmentCompareLevel(data.getRangedEquipment());
+        double p2Ranged = getEqupmentCompareLevel(compareData.getRangedEquipment());
+        double p1Armor = getEqupmentCompareLevel(data.getArmorEquipment());
+        double p2Armor = getEqupmentCompareLevel(compareData.getArmorEquipment());
 
-        int p1All = p1Melee + p1Ranged + p1Armor;
+        double p1All = p1Melee + p1Ranged + p1Armor;
         p1All = p1All / 3;
 
-        int p2All = p2Melee + p2Ranged + p2Armor;
+        double p2All = p2Melee + p2Ranged + p2Armor;
         p2All = p2All / 3;
 
         return (p1All - p2All);

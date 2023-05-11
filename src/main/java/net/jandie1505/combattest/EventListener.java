@@ -106,12 +106,12 @@ public class EventListener implements Listener {
                     damagerData.setPoints(damagerData.getPoints() + 1000);
                     damager.sendMessage("§bPlayer Kill: + 1000 Points");
 
-                    int comparedEquipmentLevels = PlayerData.compareEquipmentLevels(damagerData, victimData);
+                    double comparedEquipmentLevels = PlayerData.compareEquipmentLevels(damagerData, victimData);
 
                     System.out.println(comparedEquipmentLevels);
 
                     if (comparedEquipmentLevels < 0) {
-                        int receivedPoints = (1000 * comparedEquipmentLevels * (-1));
+                        int receivedPoints = ((int) (1000.0 * comparedEquipmentLevels * (-1.0)));
                         damagerData.setPoints(damagerData.getPoints() + receivedPoints);
                         damager.sendMessage("§bPlayer Kill (Low Equipment Bonus): + " + receivedPoints);
                     }
@@ -538,7 +538,7 @@ public class EventListener implements Listener {
                         return;
                     }
 
-                    damagerData.setPoints(damagerData.getPoints() + (int) event.getDamage());
+                    damagerData.setPoints(damagerData.getPoints() + (2 * (int) event.getDamage()));
                     damagerData.setNoPvpTimer(0);
 
                 }

@@ -103,8 +103,8 @@ public class EventListener implements Listener {
                 if (damager != null && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(damager.getUniqueId())) {
 
                     PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(damager.getUniqueId());
-                    damagerData.setPoints(damagerData.getPoints() + 1000);
-                    damager.sendMessage("§bPlayer Kill: + 1000 Points");
+                    damagerData.setPoints(damagerData.getPoints() + 2000);
+                    damager.sendMessage("§bPlayer Kill: + 2000 Points");
 
                     double comparedEquipmentLevels = PlayerData.compareEquipmentLevels(damagerData, victimData);
 
@@ -237,10 +237,12 @@ public class EventListener implements Listener {
 
                             playerData.setMeleeEquipment(0);
                             playerData.setPoints(playerData.getPoints() - 10000);
+                            event.getWhoClicked().closeInventory();
                             event.getWhoClicked().sendMessage("§aSuccessfully reset your melee equipment");
 
                         } else {
 
+                            event.getWhoClicked().closeInventory();
                             event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your melee equipment");
 
                         }
@@ -290,10 +292,12 @@ public class EventListener implements Listener {
 
                             playerData.setRangedEquipment(0);
                             playerData.setPoints(playerData.getPoints() - 10000);
+                            event.getWhoClicked().closeInventory();
                             event.getWhoClicked().sendMessage("§aSuccessfully reset your ranged equipment");
 
                         } else {
 
+                            event.getWhoClicked().closeInventory();
                             event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your ranged equipment");
 
                         }
@@ -335,6 +339,24 @@ public class EventListener implements Listener {
                         menu.setPage(0);
                         event.getWhoClicked().openInventory(menu.getInventory());
 
+                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getResetButton())) {
+
+                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                        if (playerData.getPoints() >= 10000) {
+
+                            playerData.setArmorEquipment(0);
+                            playerData.setPoints(playerData.getPoints() - 10000);
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§aSuccessfully reset your armor");
+
+                        } else {
+
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your armor");
+
+                        }
+
                     } else {
 
                         Integer itemId = ItemStorage.getArmorReverse(event.getCurrentItem());
@@ -371,22 +393,6 @@ public class EventListener implements Listener {
 
                         menu.setPage(0);
                         event.getWhoClicked().openInventory(menu.getInventory());
-
-                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getResetButton())) {
-
-                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                        if (playerData.getPoints() >= 10000) {
-
-                            playerData.setArmorEquipment(0);
-                            playerData.setPoints(playerData.getPoints() - 10000);
-                            event.getWhoClicked().sendMessage("§aSuccessfully reset your armor");
-
-                        } else {
-
-                            event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your armor");
-
-                        }
 
                     } else {
 
@@ -586,7 +592,7 @@ public class EventListener implements Listener {
                         return;
                     }
 
-                    damagerData.setPoints(damagerData.getPoints() + (2 * (int) event.getDamage()));
+                    damagerData.setPoints(damagerData.getPoints() + (4 * (int) event.getDamage()));
                     damagerData.setNoPvpTimer(0);
 
                 }

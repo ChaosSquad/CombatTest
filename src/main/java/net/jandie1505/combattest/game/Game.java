@@ -416,6 +416,12 @@ public class Game implements GamePart {
 
             }
 
+            // Idle points
+
+            if (this.timeStep >= 1) {
+                playerData.setPoints(playerData.getPoints() + 2);
+            }
+
             // Actionbar
 
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a" + playerData.getKills() + " kills §8§l|§r§c " + playerData.getDeaths() + " deaths §8§l|§r§6 Points: " + playerData.getPoints() + " §8§l|§r§6 " + this.time + "s"));

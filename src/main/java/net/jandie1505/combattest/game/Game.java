@@ -63,6 +63,10 @@ public class Game implements GamePart {
         this.enforcePvp = enforcePvp;
 
         this.playerMenus = Collections.synchronizedMap(new HashMap<>());
+
+        if (world != null) {
+            world.setTime(6000);
+        }
     }
 
     @Override

@@ -758,7 +758,7 @@ public class ItemStorage {
             PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.POTION);
 
             meta.setDisplayName("Medikit 2000");
-            meta.setLore(List.of("EU104", "Small injury?", "Headache?", "Arm cut off?", "Medikit 2000 is there for you!", "Price: 1000"));
+            meta.setLore(List.of("EU104", "Small injury?", "Headache?", "Arm cut off?", "Medikit 2000 is there for you!", "Price: 500"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setColor(Color.RED);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0), false);
@@ -774,7 +774,7 @@ public class ItemStorage {
             PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.SPLASH_POTION);
 
             meta.setDisplayName("Throwable Vodka");
-            meta.setLore(List.of("EU105", "No description needed :)", "100% alcohol", "Price: 20000"));
+            meta.setLore(List.of("EU105", "No description needed :)", "100% alcohol", "Price: 15000"));
             meta.addItemFlags(ItemFlag.values());
             meta.setColor(Color.fromRGB(14737632));
             meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 1200, 1), false);
@@ -796,7 +796,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.MILK_BUCKET);
 
             meta.setDisplayName("Decontamination Drink");
-            meta.setLore(List.of("EU106", "Recommended to consumers of Throwable Vodka", "Price: 10000"));
+            meta.setLore(List.of("EU106", "Recommended to consumers of Throwable Vodka", "Price: 7500"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
 
             item.setItemMeta(meta);
@@ -982,15 +982,15 @@ public class ItemStorage {
             // Is melee item in final level (no more upgrades)
             if ((id % 10) >= 3) {
 
-                return 10000;
+                return 5000;
 
             } else if ((id % 10) == 0) {
 
-                return 10000;
+                return 7500;
 
             } else {
 
-                return 5000;
+                return 2500;
 
             }
 
@@ -1004,11 +1004,11 @@ public class ItemStorage {
 
             } else if ((id % 10) == 0) {
 
-                return 5000;
+                return 2500;
 
             } else {
 
-                return 2500;
+                return 1250;
 
             }
 
@@ -1049,15 +1049,15 @@ public class ItemStorage {
             // Is melee item in final level (no more upgrades)
             if ((id % 10) >= 2) {
 
-                return 10000;
+                return 5000;
 
             } else if ((id % 10) == 0) {
 
-                return 10000;
+                return 7500;
 
             } else {
 
-                return 5000;
+                return 2500;
 
             }
 
@@ -1071,11 +1071,11 @@ public class ItemStorage {
 
             } else if ((id % 10) == 0) {
 
-                return 5000;
+                return 2500;
 
             } else {
 
-                return 2500;
+                return 1250;
 
             }
 
@@ -1116,15 +1116,15 @@ public class ItemStorage {
             // Is melee item in final level (no more upgrades)
             if ((id % 10) >= 3) {
 
-                return 10000;
+                return 5000;
 
             } else if ((id % 10) == 0) {
 
-                return 10000;
+                return 7500;
 
             } else {
 
-                return 5000;
+                return 2500;
 
             }
 
@@ -1138,11 +1138,11 @@ public class ItemStorage {
 
             } else if ((id % 10) == 0) {
 
-                return 5000;
+                return 2500;
 
             } else {
 
-                return 2500;
+                return 1250;
 
             }
 
@@ -1198,11 +1198,11 @@ public class ItemStorage {
             case 103:
                 return 2500;
             case 104:
-                return 1000;
+                return 500;
             case 105:
-                return 20000;
+                return 15000;
             case 106:
-                return 10000;
+                return 7500;
             default:
                 return 0;
         }

@@ -94,6 +94,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "setautostart":
                 this.setAutostartSubcommand(sender, args);
                 break;
+            case "givepoints":
+                this.givePointsSubcommand(sender, args);
+                break;
             case "reload":
                 this.reloadSubcommand(sender);
                 break;
@@ -672,6 +675,37 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void givePointsSubcommand(CommandSender sender, String[] args) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (args.length != 2) {
+            sender.sendMessage("§cUsage: /combattest givepoints <amount>");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        try {
+
+            for (UUID playerId : ((Game) this.plugin.getGame()).getPlayerMap().keySet()) {
+                PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(playerId);
+
+                playerData.setPoints(playerData.getPoints() + Integer.parseInt(args[1]));
+            }
+
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage("§cPlease specify a valid int value");
+        }
+
+    }
+
     public void reloadSubcommand(CommandSender sender) {
 
         if (!this.hasPermissionAdmin(sender)) {
@@ -717,6 +751,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("setteam");
                 tabComplete.add("isautostart");
                 tabComplete.add("setautostart");
+                tabComplete.add("givepoints");
                 tabComplete.add("reload");
 
             }

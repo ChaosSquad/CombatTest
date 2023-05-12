@@ -77,7 +77,7 @@ public class ItemStorage {
             meta.setDisplayName("Iron Sword +");
             meta.setLore(List.of("EM101", "Damage: 7"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -93,7 +93,7 @@ public class ItemStorage {
             meta.setDisplayName("Iron Sword ++");
             meta.setLore(List.of("EM102", "Damage: 7.5"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -109,7 +109,7 @@ public class ItemStorage {
             meta.setDisplayName("Diamond Sword");
             meta.setLore(List.of("EM1100", "Damage: 8"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -125,7 +125,7 @@ public class ItemStorage {
             meta.setDisplayName("Diamond Sword +");
             meta.setLore(List.of("EM1101", "Damage: 8.5"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -141,7 +141,7 @@ public class ItemStorage {
             meta.setDisplayName("Diamond Sword ++");
             meta.setLore(List.of("EM1102", "Damage: 9"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 3, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 3, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -157,7 +157,7 @@ public class ItemStorage {
             meta.setDisplayName("Netherite Sword");
             meta.setLore(List.of("EM1103", "Damage: 10"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 3, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 3, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -173,8 +173,8 @@ public class ItemStorage {
             meta.setDisplayName("Fire Sword");
             meta.setLore(List.of("EM1200", "Damage: 7", "Fire Aspect I"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 1, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+            meta.addEnchant(Enchantment.FIRE_ASPECT, 1, true);
             meta.setUnbreakable(true);
 
             meleeItemsInit.put(1200, item);
@@ -188,8 +188,8 @@ public class ItemStorage {
             meta.setDisplayName("Fire Sword +");
             meta.setLore(List.of("EM1201", "Damage: 7", "Fire Aspect II"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 2, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+            meta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -205,8 +205,8 @@ public class ItemStorage {
             meta.setDisplayName("Fire Sword ++");
             meta.setLore(List.of("EM1202", "Damage: 7", "Fire Aspect III"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 3, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+            meta.addEnchant(Enchantment.FIRE_ASPECT, 3, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -222,8 +222,8 @@ public class ItemStorage {
             meta.setDisplayName("Fire Sword +++");
             meta.setLore(List.of("EM1202", "Damage: 8", "Fire Aspect III"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 3, false);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+            meta.addEnchant(Enchantment.FIRE_ASPECT, 3, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -286,7 +286,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER101"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, false);
+            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, true);
 
             item.setItemMeta(meta);
 
@@ -302,7 +302,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1100"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, false);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
 
             item.setItemMeta(meta);
 
@@ -318,7 +318,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1101"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, false);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
 
             item.setItemMeta(meta);
 
@@ -334,7 +334,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1102"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, false);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, true);
 
             item.setItemMeta(meta);
 
@@ -350,7 +350,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1200"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
+            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, true);
 
             item.setItemMeta(meta);
 
@@ -366,8 +366,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1201"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
-            meta.addEnchant(Enchantment.ARROW_FIRE, 1, false);
+            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, true);
+            meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
 
             item.setItemMeta(meta);
 
@@ -383,9 +383,9 @@ public class ItemStorage {
             meta.setLore(List.of("ER1202"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, false);
-            meta.addEnchant(Enchantment.ARROW_FIRE, 1, false);
-            meta.addEnchant(Enchantment.ARROW_INFINITE, 1, false);
+            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, true);
+            meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
+            meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
 
             item.setItemMeta(meta);
 
@@ -416,7 +416,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER201"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, true);
 
             item.setItemMeta(meta);
 
@@ -432,8 +432,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1300"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
-            meta.addEnchant(Enchantment.MULTISHOT, 1, false);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, true);
+            meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 
             item.setItemMeta(meta);
 
@@ -449,7 +449,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1301", "Ammunition: Rockets"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, true);
 
             item.setItemMeta(meta);
 
@@ -465,8 +465,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1302", "Ammunition: Rockets"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, false);
-            meta.addEnchant(Enchantment.MULTISHOT, 1, false);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 1, true);
+            meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 
             item.setItemMeta(meta);
 
@@ -482,8 +482,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1400"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
-            meta.addEnchant(Enchantment.PIERCING, 2, false);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, true);
+            meta.addEnchant(Enchantment.PIERCING, 2, true);
 
             item.setItemMeta(meta);
 
@@ -499,8 +499,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1401"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
-            meta.addEnchant(Enchantment.PIERCING, 3, false);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, true);
+            meta.addEnchant(Enchantment.PIERCING, 3, true);
 
             item.setItemMeta(meta);
 
@@ -516,8 +516,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1402"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, false);
-            meta.addEnchant(Enchantment.PIERCING, 4, false);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, true);
+            meta.addEnchant(Enchantment.PIERCING, 4, true);
 
             item.setItemMeta(meta);
 
@@ -533,7 +533,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER300", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.LOYALTY, 1, false);
+            meta.addEnchant(Enchantment.LOYALTY, 1, true);
             meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
@@ -550,7 +550,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER301", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.LOYALTY, 2, false);
+            meta.addEnchant(Enchantment.LOYALTY, 2, true);
             meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
@@ -567,8 +567,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1500", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.LOYALTY, 2, false);
-            meta.addEnchant(Enchantment.RIPTIDE, 2, false);
+            meta.addEnchant(Enchantment.LOYALTY, 2, true);
+            meta.addEnchant(Enchantment.RIPTIDE, 2, true);
             meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
@@ -585,8 +585,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1501", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.LOYALTY, 2, false);
-            meta.addEnchant(Enchantment.RIPTIDE, 3, false);
+            meta.addEnchant(Enchantment.LOYALTY, 2, true);
+            meta.addEnchant(Enchantment.RIPTIDE, 3, true);
             meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
@@ -603,8 +603,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1502", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.LOYALTY, 2, false);
-            meta.addEnchant(Enchantment.RIPTIDE, 4, false);
+            meta.addEnchant(Enchantment.LOYALTY, 2, true);
+            meta.addEnchant(Enchantment.RIPTIDE, 4, true);
             meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
@@ -621,7 +621,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1600", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.LOYALTY, 3, false);
+            meta.addEnchant(Enchantment.LOYALTY, 3, true);
             meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
@@ -638,8 +638,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1601", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.LOYALTY, 3, false);
-            meta.addEnchant(Enchantment.CHANNELING, 1, false);
+            meta.addEnchant(Enchantment.LOYALTY, 3, true);
+            meta.addEnchant(Enchantment.CHANNELING, 1, true);
             meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
@@ -656,8 +656,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1602", "10 % Chance of starting thunderstorms", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.LOYALTY, 3, false);
-            meta.addEnchant(Enchantment.CHANNELING, 1, false);
+            meta.addEnchant(Enchantment.LOYALTY, 3, true);
+            meta.addEnchant(Enchantment.CHANNELING, 1, true);
             meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
@@ -1253,7 +1253,7 @@ public class ItemStorage {
 
             level = level - 1;
 
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, level), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, level), true);
 
         }
 
@@ -1278,7 +1278,7 @@ public class ItemStorage {
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier("generic.armor_toughness", toughness, AttributeModifier.Operation.ADD_NUMBER));
 
         if (protection > 0) {
-            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, protection, false);
+            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, protection, true);
         }
 
         item.setItemMeta(meta);

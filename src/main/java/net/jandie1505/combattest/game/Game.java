@@ -545,11 +545,9 @@ public class Game implements GamePart {
         if ((this.time % 100) == 0) {
 
             if (time > 0) {
-                Random random = new Random();
+                if (new Random().nextInt(2) == 1) {
 
-                if (random.nextInt(2) == 1) {
-
-                    switch (random.nextInt(6)) {
+                    switch (new Random().nextInt(6)) {
                         case 0:
                         case 1:
                         case 2:

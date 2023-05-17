@@ -426,6 +426,14 @@ public class Game implements GamePart {
 
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a" + playerData.getKills() + " kills §8§l|§r§c " + playerData.getDeaths() + " deaths §8§l|§r§6 Points: " + playerData.getPoints() + " §8§l|§r§6 " + this.time + "s"));
 
+            // Player weather
+
+            if (playerData.isWeatherDisabled() && player.getPlayerWeather() != WeatherType.CLEAR) {
+                player.setPlayerWeather(WeatherType.CLEAR);
+            } else if (!playerData.isWeatherDisabled() && ((CombatTest.getWeather(this.world) != 0 && player.getPlayerWeather() != WeatherType.DOWNFALL) || (CombatTest.getWeather(this.world) == 0 && player.getPlayerWeather() == WeatherType.DOWNFALL))){
+                player.resetPlayerWeather();
+            }
+
             // Scoreboard
 
             if (this.plugin.isSingleServer()) {

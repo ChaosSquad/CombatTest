@@ -112,6 +112,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "stats":
                 this.statsSubcommand(sender, args);
                 break;
+            case "disableweather":
+                this.disableWeather(sender);
+                break;
             default:
                 sender.sendMessage("§cUnknown command");
                 break;
@@ -718,6 +721,35 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void disableWeather(CommandSender sender) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(((Player) sender).getUniqueId());
+
+        if (playerData == null) {
+            sender.sendMessage("§cYou are not ingame");
+            return;
+        }
+
+        playerData.setWeatherDisabled(!playerData.isWeatherDisabled());
+
+        if (playerData.isWeatherDisabled()) {
+            sender.sendMessage("§aRain and thunder disabled");
+        } else {
+            sender.sendMessage("§aUsing global weather");
+        }
+
+    }
+
     public boolean hasPermissionAdmin(CommandSender sender) {
         return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
     }
@@ -760,6 +792,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             tabComplete.add("points");
             tabComplete.add("leave");
             tabComplete.add("stats");
+            tabComplete.add("disableweather");
 
         }
 

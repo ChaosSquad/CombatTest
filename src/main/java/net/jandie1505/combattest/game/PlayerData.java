@@ -23,6 +23,7 @@ public class PlayerData {
     private int team;
     private Scoreboard scoreboard;
     private int noPvpTimer;
+    private boolean weatherDisabled;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
@@ -45,6 +46,8 @@ public class PlayerData {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
         this.noPvpTimer = 0;
+
+        this.weatherDisabled = false;
     }
 
     public UUID getPlayerId() {
@@ -159,6 +162,14 @@ public class PlayerData {
 
     public void setNoPvpTimer(int noPvpTimer) {
         this.noPvpTimer = noPvpTimer;
+    }
+
+    public boolean isWeatherDisabled() {
+        return weatherDisabled;
+    }
+
+    public void setWeatherDisabled(boolean weatherDisabled) {
+        this.weatherDisabled = weatherDisabled;
     }
 
     public static int getEqupmentCompareLevel(int level) {

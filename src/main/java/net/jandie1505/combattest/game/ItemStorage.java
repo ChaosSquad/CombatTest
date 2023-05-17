@@ -177,6 +177,8 @@ public class ItemStorage {
             meta.addEnchant(Enchantment.FIRE_ASPECT, 1, true);
             meta.setUnbreakable(true);
 
+            item.setItemMeta(meta);
+
             meleeItemsInit.put(1200, item);
         }
 
@@ -1220,9 +1222,9 @@ public class ItemStorage {
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
         meta.setDisplayName(name);
         meta.setLore(List.of("EM" + id, "Damage: " + attackDamage, "Speed: " + attackSpeed));
-        meta.addItemFlags(ItemFlag.values());
+        //meta.addItemFlags(ItemFlag.values());
 
-        attackDamage = attackSpeed - 1;
+        attackDamage = attackDamage - 1;
         attackSpeed = attackSpeed - 3.5;
 
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", attackDamage, AttributeModifier.Operation.ADD_NUMBER));

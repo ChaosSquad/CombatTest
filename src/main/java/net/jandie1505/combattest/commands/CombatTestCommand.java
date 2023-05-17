@@ -593,7 +593,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        ((Game) this.plugin.getGame()).getPlayerMap().remove(((Player) sender).getUniqueId());
+        ((Game) this.plugin.getGame()).removePlayer(((Player) sender).getUniqueId());
         sender.sendMessage("§aYou successfully left the game");
 
     }

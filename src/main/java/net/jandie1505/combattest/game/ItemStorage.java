@@ -1222,7 +1222,7 @@ public class ItemStorage {
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
         meta.setDisplayName(name);
         meta.setLore(List.of("EM" + id, "Damage: " + attackDamage, "Speed: " + attackSpeed));
-        //meta.addItemFlags(ItemFlag.values());
+        meta.addItemFlags(ItemFlag.values());
 
         attackDamage = attackDamage - 1;
         attackSpeed = attackSpeed - 3.5;

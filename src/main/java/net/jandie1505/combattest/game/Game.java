@@ -760,6 +760,20 @@ public class Game implements GamePart {
         return List.copyOf(teamList);
     }
 
+    public List<UUID> getTeamMembers(int teamId) {
+        List<UUID> teamMembers = new ArrayList<>();
+
+        for (UUID p : this.getPlayerMap().keySet()) {
+
+            if (this.getPlayerMap().get(p).getTeam() == teamId) {
+                teamMembers.add(p);
+            }
+
+        }
+
+        return List.copyOf(teamMembers);
+    }
+
     public int getTeamKills(int teamId) {
         int teamKills = 0;
 

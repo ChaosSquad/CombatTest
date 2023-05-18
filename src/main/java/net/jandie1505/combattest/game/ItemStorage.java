@@ -776,7 +776,7 @@ public class ItemStorage {
             PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.SPLASH_POTION);
 
             meta.setDisplayName("Throwable Vodka");
-            meta.setLore(List.of("EU105", "No description needed :)", "100% alcohol", "Price: 15000"));
+            meta.setLore(List.of("EU105", "No description needed :)", "100% alcohol", "Price: 20000"));
             meta.addItemFlags(ItemFlag.values());
             meta.setColor(Color.fromRGB(14737632));
             meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 1200, 1), false);
@@ -1206,7 +1206,7 @@ public class ItemStorage {
             case 104:
                 return 500;
             case 105:
-                return 15000;
+                return 20000;
             case 106:
                 return 7500;
             default:

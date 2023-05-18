@@ -18,10 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class EventListener implements Listener {
     private final CombatTest plugin;
@@ -117,6 +114,17 @@ public class EventListener implements Listener {
                     }
 
                     damagerData.setKills(damagerData.getKills() + 1);
+
+                    if (damagerData.getTeam() > 0) {
+
+                        for (UUID playerId : ((Game) this.plugin.getGame()).getTeamMembers(damagerData.getTeam())) {
+                            if (!damager.getUniqueId().equals(playerId) && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(playerId)) {
+                                PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(playerId);
+                                playerData.setPoints((playerData.getPoints() + 500));
+                            }
+                        }
+
+                    }
 
                 }
 
@@ -587,13 +595,28 @@ public class EventListener implements Listener {
                     PlayerData victimData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId());
                     PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getDamager().getUniqueId());
 
-                    if (victimData.getTeam() > 0 && victimData.getTeam() == damagerData.getTeam()) {
-                        event.setCancelled(true);
-                        return;
-                    }
+                    if (damagerData != null) {
 
-                    damagerData.setPoints(damagerData.getPoints() + (4 * (int) event.getDamage()));
-                    damagerData.setNoPvpTimer(0);
+                        if (victimData.getTeam() > 0 && victimData.getTeam() == damagerData.getTeam()) {
+                            event.setCancelled(true);
+                            return;
+                        }
+
+                        damagerData.setPoints(damagerData.getPoints() + (5 * (int) event.getDamage()));
+                        damagerData.setNoPvpTimer(0);
+
+                        if (damagerData.getTeam() > 0) {
+
+                            for (UUID playerId : ((Game) this.plugin.getGame()).getTeamMembers(damagerData.getTeam())) {
+                                if (!event.getDamager().getUniqueId().equals(playerId) && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(playerId)) {
+                                    PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(playerId);
+                                    playerData.setPoints((playerData.getPoints() + ((int) (5.0 * event.getDamage() * 0.25))));
+                                }
+                            }
+
+                        }
+
+                    }
 
                 }
 

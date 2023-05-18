@@ -222,7 +222,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
 
             meta.setDisplayName("Fire Sword +++");
-            meta.setLore(List.of("EM1202", "Damage: 8", "Fire Aspect III"));
+            meta.setLore(List.of("EM1203", "Damage: 8", "Fire Aspect III"));
             meta.addItemFlags(ItemFlag.values());
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
             meta.addEnchant(Enchantment.FIRE_ASPECT, 3, true);
@@ -234,17 +234,17 @@ public class ItemStorage {
             
         }
 
-        meleeItemsInit.put(200, axeBuilder("Iron Axe", Material.IRON_AXE, 8, 0.5, 200));
-        meleeItemsInit.put(201, axeBuilder("Iron Axe +", Material.IRON_AXE, 8, 0.7, 201));
-        meleeItemsInit.put(202, axeBuilder("Iron Axe ++", Material.IRON_AXE, 9, 0.7, 202));
-        meleeItemsInit.put(1300, axeBuilder("Heavy Axe", Material.DIAMOND_AXE, 10, 0.3, 1300));
-        meleeItemsInit.put(1301, axeBuilder("Heavy Axe +", Material.DIAMOND_AXE, 10.5, 0.3, 1301));
-        meleeItemsInit.put(1302, axeBuilder("Heavy Axe ++", Material.DIAMOND_AXE, 11, 0.3, 1302));
-        meleeItemsInit.put(1303, axeBuilder("Heavy Axe +++", Material.NETHERITE_AXE, 12, 0.3, 1303));
-        meleeItemsInit.put(1400, axeBuilder("Light Axe", Material.IRON_AXE, 9, 0.8, 1400));
-        meleeItemsInit.put(1401, axeBuilder("Light Axe +", Material.IRON_AXE, 9.5, 0.8, 1401));
-        meleeItemsInit.put(1402, axeBuilder("Light Axe ++", Material.IRON_AXE, 9.5, 0.9, 1402));
-        meleeItemsInit.put(1403, axeBuilder("Light Axe +++", Material.DIAMOND_AXE, 10, 0.9, 1403));
+        meleeItemsInit.put(200, axeBuilder("Iron Axe", Material.IRON_AXE, 8, 0.7, 200));
+        meleeItemsInit.put(201, axeBuilder("Iron Axe +", Material.IRON_AXE, 8, 0.9, 201));
+        meleeItemsInit.put(202, axeBuilder("Iron Axe ++", Material.IRON_AXE, 9, 0.9, 202));
+        meleeItemsInit.put(1300, axeBuilder("Heavy Axe", Material.DIAMOND_AXE, 10, 0.5, 1300));
+        meleeItemsInit.put(1301, axeBuilder("Heavy Axe +", Material.DIAMOND_AXE, 10.5, 0.5, 1301));
+        meleeItemsInit.put(1302, axeBuilder("Heavy Axe ++", Material.DIAMOND_AXE, 11, 0.5, 1302));
+        meleeItemsInit.put(1303, axeBuilder("Heavy Axe +++", Material.NETHERITE_AXE, 12, 0.5, 1303));
+        meleeItemsInit.put(1400, axeBuilder("Light Axe", Material.IRON_AXE, 9, 1, 1400));
+        meleeItemsInit.put(1401, axeBuilder("Light Axe +", Material.IRON_AXE, 9.5, 1, 1401));
+        meleeItemsInit.put(1402, axeBuilder("Light Axe ++", Material.IRON_AXE, 9.5, 1.1, 1402));
+        meleeItemsInit.put(1403, axeBuilder("Light Axe +++", Material.DIAMOND_AXE, 10, 1.1, 1403));
 
         meleeItemsInit.put(300, potionBuilder("Damage Potion", 1, 6, 300));
         meleeItemsInit.put(301, potionBuilder("Damage Potion +", 1, 5, 301));

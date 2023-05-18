@@ -676,6 +676,7 @@ public class Game implements GamePart {
             return false;
         }
 
+        player.setGameMode(GameMode.ADVENTURE);
         player.teleport(spawnpoint.buildLocation(world));
         this.getPlayerMap().get(player.getUniqueId()).setAlive(true);
 
@@ -694,7 +695,13 @@ public class Game implements GamePart {
 
                 if (attempt < 4) {
                     if (teamMode == spawnpoint.getTeamMode() || teamMode == -1) {
-                        Collection<Entity> nearbyEntities = world.getNearbyEntities(spawnpoint.buildLocation(world), this.plugin.getConfigManager().getConfig().getInt("spawnpointBlockedRadius"), 2, this.plugin.getConfigManager().getConfig().getInt("spawnpointBlockedRadius"));
+                        Collection<Entity> nearbyEntities = world.getNearbyEntities(spawnpoint.buildLocation(world), this.plugin.getConfigManager().getConfig().getInt("spawnpointBlockedRadius"), this.plugin.getConfigManager().getConfig().getInt("spawnpointBlockedRadius"), this.plugin.getConfigManager().getConfig().getInt("spawnpointBlockedRadius"));
+
+                        for (Entity entity : nearbyEntities) {
+                            if (!(entity instanceof Player)) {
+                                nearbyEntities.remove(entity);
+                            }
+                        }
 
                         if (nearbyEntities.isEmpty()) {
                             return spawnpoint;

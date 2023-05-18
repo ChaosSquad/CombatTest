@@ -403,7 +403,7 @@ public class EventListener implements Listener {
 
                             if (playerData.getPoints() >= ItemStorage.getShopItemPrice(itemId)) {
 
-                                playerData.setPoints(playerData.getPoints() - 1);
+                                playerData.setPoints(playerData.getPoints() - ItemStorage.getShopItemPrice(itemId));
                                 event.getWhoClicked().getInventory().addItem(ItemStorage.getShopItem(itemId));
                                 event.getWhoClicked().sendMessage("§aItem successfully purchased");
 

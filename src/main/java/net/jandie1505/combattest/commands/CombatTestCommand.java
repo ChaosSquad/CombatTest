@@ -5,8 +5,6 @@ import net.jandie1505.combattest.game.*;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +111,10 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 this.statsSubcommand(sender, args);
                 break;
             case "disableweather":
-                this.disableWeather(sender);
+                this.disableWeatherSubcommand(sender);
+                break;
+            case "pay":
+                this.paySubcommand(sender, args);
                 break;
             default:
                 sender.sendMessage("§cUnknown command");
@@ -721,12 +722,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
-    public void disableWeather(CommandSender sender) {
-
-        if (!this.hasPermissionAdmin(sender)) {
-            sender.sendMessage("§cNo permission");
-            return;
-        }
+    public void disableWeatherSubcommand(CommandSender sender) {
 
         if (!(this.plugin.getGame() instanceof Game)) {
             sender.sendMessage("§cNo game running");
@@ -747,6 +743,70 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         } else {
             sender.sendMessage("§aUsing global weather");
         }
+
+    }
+
+    public void paySubcommand(CommandSender sender, String[] args) {
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("§cThis command can only be executed by a player");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Game)) {
+            sender.sendMessage("§cNo game running");
+            return;
+        }
+
+        if (!((Game) this.plugin.getGame()).getPlayerMap().containsKey(((Player) sender).getUniqueId())) {
+            sender.sendMessage("§cYou are not ingame");
+            return;
+        }
+
+        if (args.length != 3) {
+            sender.sendMessage("§cUsage: /combattest pay <player> <amount>");
+            return;
+        }
+
+        PlayerData senderData = ((Game) this.plugin.getGame()).getPlayerMap().get(((Player) sender).getUniqueId());
+
+        if (senderData == null) {
+            sender.sendMessage("§cNot ingame");
+            return;
+        }
+
+        Player receiver = this.plugin.getPlayerFromString(args[1]);
+
+        if (receiver == null) {
+            sender.sendMessage("§cReceiving player is not online");
+            return;
+        }
+
+        PlayerData receiverData = ((Game) this.plugin.getGame()).getPlayerMap().get(receiver.getUniqueId());
+
+        if (receiverData == null) {
+            sender.sendMessage("§cReceiving player is not ingame");
+            return;
+        }
+
+        int amount;
+
+        try {
+            amount = Integer.parseInt(args[2]);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage("§cPlease specify a valid int value");
+            return;
+        }
+
+        if (senderData.getPoints() < amount) {
+            sender.sendMessage("§cYou don't have enough points");
+            return;
+        }
+
+        senderData.setPoints(senderData.getPoints() - amount);
+        receiverData.setPoints(receiverData.getPoints() + amount);
+        sender.sendMessage("§aSuccessfully sent " + amount + " points to " + receiver.getName());
+        receiver.sendMessage("§bReceived " + amount + " points from " + sender.getName());
 
     }
 

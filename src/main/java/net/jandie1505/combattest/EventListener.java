@@ -5,12 +5,11 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryView;
@@ -172,13 +171,20 @@ public class EventListener implements Listener {
                 return;
             }
 
-            // Block offhand when player has rocket launcher crossbow
-            if (event.getSlot() == 40) {
+            // Block offhand
+            if (event.getSlot() == 40 || event.getRawSlot() == 45 || event.getClick() == ClickType.SWAP_OFFHAND) {
+
+                event.setCancelled(true);
+                event.getWhoClicked().sendMessage("§cOffhand can only be used for specific items");
+
+                /*
                 PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
 
                 if (playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) {
                     event.setCancelled(true);
                 }
+
+                */
 
                 return;
             }
@@ -432,6 +438,28 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getInventory() != null && event.getInventory().getHolder() == event.getWhoClicked()) {
+
+            if (event.getInventorySlots().contains(8)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (event.getInventorySlots().contains(40) || event.getRawSlots().contains(45)) {
+                event.setCancelled(true);
+                return;
+            }
+
+        }
+
+        if (event.getInventory() != null && event.getInventory().getHolder() instanceof PlayerMenu) {
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
 
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
@@ -493,6 +521,11 @@ public class EventListener implements Listener {
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 
+            event.setCancelled(true);
+            event.getPlayer().sendMessage("§cThe offhand is managed by the system and cannot be used for any items.");
+            return;
+
+            /*
             if (event.getPlayer().getInventory().getHeldItemSlot() == 8) {
                 event.setCancelled(true);
                 return;
@@ -504,6 +537,8 @@ public class EventListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
+
+             */
 
         }
     }

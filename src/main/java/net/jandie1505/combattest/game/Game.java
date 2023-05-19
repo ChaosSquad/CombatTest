@@ -349,7 +349,14 @@ public class Game implements GamePart {
 
                 if ((playerData.getRangedEquipment() >= 300 && playerData.getRangedEquipment() <= 399) || (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1699)) {
                     if (!tridentList.contains(player)) {
-                        player.getInventory().addItem(rangedItem);
+
+                        if (playerData.getTridentTimer() >= 10) {
+                            player.getInventory().addItem(rangedItem);
+                            playerData.setTridentTimer(0);
+                        } else {
+                            playerData.setTridentTimer(playerData.getTridentTimer() + 1);
+                        }
+
                     }
                 } else {
                     player.getInventory().addItem(rangedItem);

@@ -20,6 +20,8 @@ public class PlayerData {
     private int kills;
     private int deaths;
     private double potionTimer;
+    private int tridentTimer;
+    private boolean hasUsedTrident;
     private int team;
     private Scoreboard scoreboard;
     private int noPvpTimer;
@@ -40,6 +42,8 @@ public class PlayerData {
         this.regenerationCooldown = 0;
 
         this.potionTimer = 0;
+        this.tridentTimer = 0;
+        this.hasUsedTrident = false;
 
         this.team = 0;
 
@@ -170,6 +174,22 @@ public class PlayerData {
 
     public void setWeatherDisabled(boolean weatherDisabled) {
         this.weatherDisabled = weatherDisabled;
+    }
+
+    public int getTridentTimer() {
+        return tridentTimer;
+    }
+
+    public void setTridentTimer(int tridentTimer) {
+        this.tridentTimer = tridentTimer;
+    }
+
+    public boolean hasUsedTrident() {
+        return hasUsedTrident;
+    }
+
+    public void setHasUsedTrident(boolean hasUsedTrident) {
+        this.hasUsedTrident = hasUsedTrident;
     }
 
     public static int getEqupmentCompareLevel(int level) {

@@ -217,6 +217,16 @@ public class Game implements GamePart {
                 playerData.setArmorEquipment(0);
             }
 
+            // Remove empty bottles and buckets
+
+            if (player.getInventory().contains(Material.GLASS_BOTTLE)) {
+                player.getInventory().remove(Material.GLASS_BOTTLE);
+            }
+
+            if (player.getInventory().contains(Material.BUCKET)) {
+                player.getInventory().remove(Material.BUCKET);
+            }
+
             // Player inventory handling (give and remove equipment)
 
             boolean meleeItemMissing = true;

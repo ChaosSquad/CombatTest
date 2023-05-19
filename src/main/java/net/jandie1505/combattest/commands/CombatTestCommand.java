@@ -853,6 +853,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             tabComplete.add("leave");
             tabComplete.add("stats");
             tabComplete.add("disableweather");
+            tabComplete.add("pay");
 
         }
 

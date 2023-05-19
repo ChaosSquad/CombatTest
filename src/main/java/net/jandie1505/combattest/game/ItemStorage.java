@@ -693,11 +693,11 @@ public class ItemStorage {
         Map<Integer, ItemStack> shopItemsInit = new HashMap<>();
 
         {
-            ItemStack item = new ItemStack(Material.SPECTRAL_ARROW);
+            ItemStack item = new ItemStack(Material.ARROW);
 
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.SPECTRAL_ARROW);
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.ARROW);
 
-            meta.setDisplayName("Spotting Arrow");
+            meta.setDisplayName("Default Arrow");
             meta.setLore(List.of("EU100", "Price: 100"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
 
@@ -948,7 +948,7 @@ public class ItemStorage {
     }
 
     public static ItemStack getItemShopButton() {
-        return buildInventoryButton(Material.SPECTRAL_ARROW, "Item Shop", null, 5);
+        return buildInventoryButton(Material.EMERALD, "Item Shop", null, 5);
     }
 
     public static ItemStack getResetButton() {

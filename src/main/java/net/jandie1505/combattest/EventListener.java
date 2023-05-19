@@ -125,6 +125,10 @@ public class EventListener implements Listener {
                         int receivedPoints = ((int) (1000.0 * comparedEquipmentLevels * (-1.0)));
                         damagerData.setPoints(damagerData.getPoints() + receivedPoints);
                         damager.sendMessage("§bPlayer Kill (Low Equipment Bonus): + " + receivedPoints);
+                    } else if (comparedEquipmentLevels > 0) {
+                        int receivedPoints = ((int) (500.0 * comparedEquipmentLevels));
+                        victimData.setPoints(victimData.getPoints() + receivedPoints);
+                        event.getEntity().sendMessage("§bYou were killed by a player with significantly higher equipment: + " + receivedPoints + " Points");
                     }
 
                     damagerData.setKills(damagerData.getKills() + 1);

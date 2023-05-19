@@ -711,22 +711,18 @@ public class Game implements GamePart {
     private Spawnpoint getRandomSpawnpoint(int teamMode) {
         int attempt = 0;
 
-        while (attempt < 5) {
+        while (attempt < 11) {
 
             try {
 
                 Random random = new Random();
                 Spawnpoint spawnpoint = this.spawnpoints.get(random.nextInt(this.spawnpoints.size()));
 
-                if (attempt < 4) {
-                    if (teamMode == spawnpoint.getTeamMode() || teamMode == -1) {
-                        Collection<Entity> nearbyEntities = world.getNearbyEntities(spawnpoint.buildLocation(world), this.plugin.getConfigManager().getConfig().getInt("spawnpointBlockedRadius"), this.plugin.getConfigManager().getConfig().getInt("spawnpointBlockedRadius"), this.plugin.getConfigManager().getConfig().getInt("spawnpointBlockedRadius"));
+                if (attempt < 10) {
+                    if (teamMode == spawnpoint.getTeamMode() || spawnpoint.getTeamMode() == -1) {
+                        int radius = this.plugin.getConfigManager().getConfig().optInt("spawnpointBlockedRadius", 10);
 
-                        for (Entity entity : nearbyEntities) {
-                            if (!(entity instanceof Player)) {
-                                nearbyEntities.remove(entity);
-                            }
-                        }
+                        Collection<Entity> nearbyEntities = world.getNearbyEntities(spawnpoint.buildLocation(world), radius, radius, radius);
 
                         if (nearbyEntities.isEmpty()) {
                             return spawnpoint;
@@ -737,7 +733,7 @@ public class Game implements GamePart {
                 }
 
             } catch (Exception ignored) {
-                // ignored
+                ignored.printStackTrace();
             }
 
             attempt++;

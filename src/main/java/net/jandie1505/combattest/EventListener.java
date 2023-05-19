@@ -48,8 +48,22 @@ public class EventListener implements Listener {
                 }
 
             } else if (!((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).isAlive()) {
-                event.setCancelled(true);
-                return;
+
+                if (event.getTo() == null) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                if (event.getFrom().getWorld() != event.getTo().getWorld()) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
+                    event.setCancelled(true);
+                    return;
+                }
+
             }
 
         }

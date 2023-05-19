@@ -405,6 +405,14 @@ public class Game implements GamePart {
                 playerData.setRegenerationCooldown(playerData.getRegenerationCooldown() + 1);
             }
 
+            // Clear riptide trident after use
+
+            if (!player.isRiptiding() && playerData.hasUsedTrident() && playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1599) {
+                playerData.setHasUsedTrident(false);
+                player.getInventory().remove(Material.TRIDENT);
+                player.sendMessage("§bYour Trident no longer has enough energy to fly and needs to recharge first");
+            }
+
             // No PvP Timer
 
             if (this.enforcePvp) {

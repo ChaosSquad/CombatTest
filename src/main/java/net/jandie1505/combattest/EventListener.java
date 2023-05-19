@@ -37,18 +37,19 @@ public class EventListener implements Listener {
                     if (((Game) this.plugin.getGame()).isInBorders(event.getFrom())) {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage("§cYou cannot leave the game area");
+                        return;
                     } else {
                         event.setCancelled(true);
                         ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).setAlive(false);
                         event.getPlayer().sendMessage("§cYou have been killed for leaving the game area");
+                        return;
                     }
 
                 }
 
             } else if (!((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).isAlive()) {
-
                 event.setCancelled(true);
-
+                return;
             }
 
         }
@@ -659,6 +660,20 @@ public class EventListener implements Listener {
 
         } else if (this.plugin.getGame() == null && this.plugin.isSingleServer() && this.plugin.isAutostartNewGame()) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerRiptide(PlayerRiptideEvent event) {
+        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
+
+            PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId());
+
+            if (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1599) {
+                playerData.setHasUsedTrident(true);
+                return;
+            }
+
         }
     }
 }

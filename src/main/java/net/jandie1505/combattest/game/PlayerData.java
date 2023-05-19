@@ -1,10 +1,8 @@
 package net.jandie1505.combattest.game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.UUID;
 

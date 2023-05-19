@@ -320,7 +320,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1101"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 2, true);
 
             item.setItemMeta(meta);
 
@@ -336,7 +336,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1102"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, true);
+            meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
 
             item.setItemMeta(meta);
 

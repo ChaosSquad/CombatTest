@@ -947,7 +947,7 @@ public class ItemStorage {
     }
 
     public static ItemStack getItemShopButton() {
-        return buildInventoryButton(Material.EMERALD, "Item Shop", null, 5);
+        return buildInventoryButton(Material.SPECTRAL_ARROW, "Item Shop", null, 5);
     }
 
     public static ItemStack getResetButton() {

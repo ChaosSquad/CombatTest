@@ -32,13 +32,16 @@ Most of the commands are self-explanatory.
 | /combattest get<melee/ranged/armor/points/team/time> | Get specified value | Admin |
 | /combattest set<melee/ranged/armor/points/team/time> | Set specified value | Admin |
 | /combattest isautostart | See if autostart new game is enabled | Admin |
-| /combattest | setautostart | Set autostart new game true/false | Admin |
+| /combattest setautostart | Set autostart new game true/false | Admin |
 | /combattest addplayer/removeplayer/getplayers | Manage players | Admin |
+| /combattest givepoints | Give specific amount of points to all players | Admin |
 | /combattest reload | Reload config | Admin |
 | /combattest menu | Open player menu | Ingame |
 | /combattest points | See own points | Ingame |
 | /combattest leave | Leave game | Ingame |
 | /combattest stats | Show player stats | Ingame |
+| /combattest disableweather | Disable weather for yourself (riptide won't work anymore) | Ingame |
+| /combattest pay | Pay amount of points to another player | Ingame |
 
 ## Config
 | Option | Description                                                                                                                                                                       |

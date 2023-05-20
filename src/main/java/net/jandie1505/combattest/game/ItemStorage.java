@@ -431,12 +431,11 @@ public class ItemStorage {
 
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
-            meta.setDisplayName("Multishot Crossbow");
-            meta.setLore(List.of("ER1300"));
+            meta.setDisplayName("Rocket Launcher Crossbow");
+            meta.setLore(List.of("ER1300", "Ammunition: Rocket Tier 1"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 1, true);
-            meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 
             item.setItemMeta(meta);
 
@@ -448,8 +447,8 @@ public class ItemStorage {
 
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
-            meta.setDisplayName("Rocket Launcher Crossbow");
-            meta.setLore(List.of("ER1301", "Ammunition: Rockets"));
+            meta.setDisplayName("Rocket Launcher Crossbow +");
+            meta.setLore(List.of("ER1301", "Ammunition: Rocket Tier 2"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 1, true);
@@ -464,12 +463,11 @@ public class ItemStorage {
 
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
-            meta.setDisplayName("Rocket Launcher Crossbow +");
-            meta.setLore(List.of("ER1302", "Ammunition: Rockets"));
+            meta.setDisplayName("Rocket Launcher Crossbow ++");
+            meta.setLore(List.of("ER1302", "Ammunition: Rocket Tier 3"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 1, true);
-            meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 
             item.setItemMeta(meta);
 
@@ -481,7 +479,7 @@ public class ItemStorage {
 
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
-            meta.setDisplayName("Piercing Crossbow");
+            meta.setDisplayName("Advanced Crossbow");
             meta.setLore(List.of("ER1400"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
@@ -498,12 +496,13 @@ public class ItemStorage {
 
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
-            meta.setDisplayName("Piercing Crossbow +");
+            meta.setDisplayName("Advanced Crossbow +");
             meta.setLore(List.of("ER1401"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 3, true);
             meta.addEnchant(Enchantment.PIERCING, 3, true);
+            meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 
             item.setItemMeta(meta);
 
@@ -515,12 +514,13 @@ public class ItemStorage {
 
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.CROSSBOW);
 
-            meta.setDisplayName("Piercing Crossbow ++");
+            meta.setDisplayName("Advanced Crossbow ++");
             meta.setLore(List.of("ER1402"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 2, true);
             meta.addEnchant(Enchantment.PIERCING, 4, true);
+            meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 
             item.setItemMeta(meta);
 
@@ -693,9 +693,9 @@ public class ItemStorage {
 
         Map<Integer, ItemStack> offhandItemsInit = new HashMap<>();
 
-        offhandItemsInit.put(9000, getRocketLauncherAmmo(1, 9000));
-        offhandItemsInit.put(9001, getRocketLauncherAmmo(3, 9001));
-        offhandItemsInit.put(9002, getRocketLauncherAmmo(5, 9002));
+        offhandItemsInit.put(9000, getRocketLauncherAmmo("Rocket Tier 1", 1, 9000));
+        offhandItemsInit.put(9001, getRocketLauncherAmmo("Rocket Tier 2", 3, 9001));
+        offhandItemsInit.put(9002, getRocketLauncherAmmo("Rocket Tier 3", 5, 9002));
 
         offhandItemsInit.put(100, shieldBuilder("Chainmail Armor Shield", 6, 100));
         offhandItemsInit.put(101, shieldBuilder("Chainmail Armor + Shield", 13, 101));
@@ -1337,17 +1337,17 @@ public class ItemStorage {
 
     }
 
-    public static ItemStack getRocketLauncherAmmo(int tier, int id) {
+    public static ItemStack getRocketLauncherAmmo(String name, int fireworkStars, int id) {
 
         ItemStack item = new ItemStack(Material.FIREWORK_ROCKET);
 
         FireworkMeta meta = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK_ROCKET);
 
-        meta.setDisplayName("Ammunition for Rocket Launcher Crossbow");
+        meta.setDisplayName(name);
         meta.setLore(List.of(EQUIPMENT_OFFHAND + id));
         meta.addItemFlags(ItemFlag.values());
 
-        for (int i = 0; i < tier; i++) {
+        for (int i = 0; i < fireworkStars; i++) {
             meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
         }
 

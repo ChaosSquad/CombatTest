@@ -1348,6 +1348,8 @@ public class ItemStorage {
         meta.setLore(List.of(EQUIPMENT_OFFHAND + id));
         meta.addItemFlags(ItemFlag.values());
 
+        meta.setPower(fireworkStars * 2);
+
         for (int i = 0; i < fireworkStars; i++) {
             meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
         }
@@ -1376,7 +1378,7 @@ public class ItemStorage {
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.SHIELD);
 
         meta.setDisplayName(name);
-        meta.setLore(List.of(EQUIPMENT_OFFHAND + id));
+        meta.setLore(List.of(EQUIPMENT_OFFHAND + id, "Press F to reload shield"));
 
         item.setItemMeta(meta);
 

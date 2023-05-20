@@ -543,7 +543,7 @@ public class EventListener implements Listener {
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 
             event.setCancelled(true);
-            event.getPlayer().sendMessage("§cThe offhand is managed by the system and cannot be used for any items.");
+            event.getPlayer().getInventory().setItem(40, new ItemStack(Material.AIR));
             return;
 
             /*

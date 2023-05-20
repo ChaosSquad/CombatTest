@@ -247,17 +247,17 @@ public class ItemStorage {
         meleeItemsInit.put(1402, axeBuilder("Light Axe ++", Material.IRON_AXE, 9.5, 1.1, 1402));
         meleeItemsInit.put(1403, axeBuilder("Light Axe +++", Material.DIAMOND_AXE, 10, 1.1, 1403));
 
-        meleeItemsInit.put(300, potionBuilder("Damage Potion", 1, 6, 300));
-        meleeItemsInit.put(301, potionBuilder("Damage Potion +", 1, 5, 301));
-        meleeItemsInit.put(302, potionBuilder("Damage Potion ++", 1, 4, 302));
-        meleeItemsInit.put(1500, potionBuilder("Fast Damage Potion", 1, 3, 1500));
+        meleeItemsInit.put(300, potionBuilder("Damage Potion", 1, 4, 300));
+        meleeItemsInit.put(301, potionBuilder("Damage Potion +", 1, 3.5, 301));
+        meleeItemsInit.put(302, potionBuilder("Damage Potion ++", 1, 3, 302));
+        meleeItemsInit.put(1500, potionBuilder("Fast Damage Potion", 1, 2.5, 1500));
         meleeItemsInit.put(1501, potionBuilder("Fast Damage Potion +", 1, 2, 1501));
-        meleeItemsInit.put(1502, potionBuilder("Fast Damage Potion ++", 1, 1, 1502));
-        meleeItemsInit.put(1503, potionBuilder("Fast Damage Potion +++", 1, 0.5, 1503));
-        meleeItemsInit.put(1600, potionBuilder("Heavy Damage Potion", 2, 6, 1600));
-        meleeItemsInit.put(1601, potionBuilder("Heavy Damage Potion +", 2, 5, 1601));
-        meleeItemsInit.put(1602, potionBuilder("Heavy Damage Potion ++", 2, 4, 1602));
-        meleeItemsInit.put(1603, potionBuilder("Heavy Damage Potion +++", 2, 3, 1603));
+        meleeItemsInit.put(1502, potionBuilder("Fast Damage Potion ++", 1, 1.5, 1502));
+        meleeItemsInit.put(1503, potionBuilder("Fast Damage Potion +++", 1, 1, 1503));
+        meleeItemsInit.put(1600, potionBuilder("Heavy Damage Potion", 2, 4, 1600));
+        meleeItemsInit.put(1601, potionBuilder("Heavy Damage Potion +", 2, 3.5, 1601));
+        meleeItemsInit.put(1602, potionBuilder("Heavy Damage Potion ++", 2, 3, 1602));
+        meleeItemsInit.put(1603, potionBuilder("Heavy Damage Potion +++", 2, 2.5, 1603));
 
         MELEE_ITEMS = Map.copyOf(meleeItemsInit);
 

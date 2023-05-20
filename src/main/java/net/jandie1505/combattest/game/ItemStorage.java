@@ -721,7 +721,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.ARROW);
 
             meta.setDisplayName("Default Arrow");
-            meta.setLore(List.of("EU100", "Price: 100"));
+            meta.setLore(List.of("EU100", "Price: 50"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
 
             item.setItemMeta(meta);
@@ -735,7 +735,7 @@ public class ItemStorage {
             PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.TIPPED_ARROW);
 
             meta.setDisplayName("Damage Arrow");
-            meta.setLore(List.of("EU101", "For an extra bit of damage", "(Recommended to combine with Powerful", "Bow for mass destruction)", "Price: 5000"));
+            meta.setLore(List.of("EU101", "For an extra bit of damage", "(Recommended to combine with Powerful", "Bow for mass destruction)", "Price: 2000"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setColor(Color.fromRGB(4459017));
             meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, 0), false);
@@ -767,7 +767,7 @@ public class ItemStorage {
             PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.TIPPED_ARROW);
 
             meta.setDisplayName("Slowness Arrow");
-            meta.setLore(List.of("EU103", "Price: 2500"));
+            meta.setLore(List.of("EU103", "Price: 500"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setColor(Color.GRAY);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 600, 0), false);
@@ -783,7 +783,7 @@ public class ItemStorage {
             PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.POTION);
 
             meta.setDisplayName("Medikit 2000");
-            meta.setLore(List.of("EU104", "Small injury?", "Headache?", "Arm cut off?", "Medikit 2000 is there for you!", "Price: 500"));
+            meta.setLore(List.of("EU104", "Small injury?", "Headache?", "Arm cut off?", "Medikit 2000 is there for you!", "Price: 250"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setColor(Color.RED);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0), false);
@@ -821,7 +821,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.MILK_BUCKET);
 
             meta.setDisplayName("Decontamination Drink");
-            meta.setLore(List.of("EU106", "Recommended to consumers of Throwable Vodka", "Price: 7500"));
+            meta.setLore(List.of("EU106", "Recommended to consumers of Throwable Vodka", "Price: 5000"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
 
             item.setItemMeta(meta);
@@ -1245,18 +1245,19 @@ public class ItemStorage {
 
         switch (id) {
             case 100:
-                return 100;
+                return 50;
             case 101:
-                return 5000;
+                return 2000;
             case 102:
-            case 103:
                 return 2500;
-            case 104:
+            case 103:
                 return 500;
+            case 104:
+                return 250;
             case 105:
                 return 20000;
             case 106:
-                return 7500;
+                return 5000;
             default:
                 return 0;
         }

@@ -656,7 +656,7 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.TRIDENT);
 
             meta.setDisplayName("Weather-manipulating Trident");
-            meta.setLore(List.of("ER1602", "10 % Chance of starting thunderstorms", "Melee damage disabled"));
+            meta.setLore(List.of("ER1602", "20 % Chance of starting thunderstorms", "Melee damage disabled"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 3, true);

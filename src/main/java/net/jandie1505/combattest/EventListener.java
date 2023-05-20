@@ -599,7 +599,7 @@ public class EventListener implements Listener {
                 Random random = new Random();
                 int number = random.nextInt(10);
 
-                if (number == 9) {
+                if (number >= 8) {
 
                     if (CombatTest.getWeather(((Game) this.plugin.getGame()).getWorld()) != 2) {
 

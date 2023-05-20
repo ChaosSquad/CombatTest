@@ -20,6 +20,7 @@ public class PlayerData {
     private double potionTimer;
     private int tridentTimer;
     private boolean hasUsedTrident;
+    private int shieldTimer;
     private int team;
     private Scoreboard scoreboard;
     private int noPvpTimer;
@@ -42,6 +43,7 @@ public class PlayerData {
         this.potionTimer = 0;
         this.tridentTimer = 0;
         this.hasUsedTrident = false;
+        this.shieldTimer = 0;
 
         this.team = 0;
 
@@ -188,6 +190,14 @@ public class PlayerData {
 
     public void setHasUsedTrident(boolean hasUsedTrident) {
         this.hasUsedTrident = hasUsedTrident;
+    }
+
+    public int getShieldTimer() {
+        return shieldTimer;
+    }
+
+    public void setShieldTimer(int shieldTimer) {
+        this.shieldTimer = shieldTimer;
     }
 
     public static int getEqupmentCompareLevel(int level) {

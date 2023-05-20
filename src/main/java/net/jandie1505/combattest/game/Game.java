@@ -230,11 +230,26 @@ public class Game implements GamePart {
                 player.getInventory().remove(Material.BUCKET);
             }
 
+            // Offhand ID
+
+            int offhandEquipment = 0;
+
+            if (playerData.getRangedEquipment() == 1300) {
+                offhandEquipment = 9000;
+            } else if (playerData.getRangedEquipment() == 1301) {
+                offhandEquipment = 9001;
+            } else if (playerData.getRangedEquipment() == 1302) {
+                offhandEquipment = 9002;
+            } else {
+                offhandEquipment = playerData.getArmorEquipment();
+            }
+
             // Player inventory handling (give and remove equipment)
 
             boolean meleeItemMissing = true;
             boolean rangedItemMissing = true;
             boolean armorItemMissing = true;
+            boolean offhandItemMissing = true;
 
             for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
 
@@ -262,13 +277,6 @@ public class Game implements GamePart {
                         continue;
                     }
 
-                    // remove firework rocket
-                    if (!(playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && ItemStorage.getIdPrefix(item).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(item) == 9000) {
-                        player.getInventory().remove(item);
-                        player.getInventory().setItem(40, new ItemStack(Material.AIR));
-                        continue;
-                    }
-
                     // Armor item
                     Integer armorId = ItemStorage.getArmorReverse(item);
                     if (armorId != null) {
@@ -280,6 +288,18 @@ public class Game implements GamePart {
                             player.getInventory().setItem(38, new ItemStack(Material.AIR));
                             player.getInventory().setItem(37, new ItemStack(Material.AIR));
                             player.getInventory().setItem(36, new ItemStack(Material.AIR));
+                        }
+                        continue;
+                    }
+
+                    // Offhand item
+                    Integer offhandId = ItemStorage.getOffhandEquipmentReverse(item);
+                    if (offhandId != null) {
+                        if (offhandId == offhandEquipment) {
+                            offhandItemMissing = false;
+                        } else {
+                            player.getInventory().remove(item);
+                            player.getInventory().setItem(40, new ItemStack(Material.AIR));
                         }
                         continue;
                     }
@@ -377,10 +397,6 @@ public class Game implements GamePart {
 
             }
 
-            if ((playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) && (player.getInventory().getItem(40) == null || !player.getInventory().getItem(40).isSimilar(ItemStorage.getRocketLauncherAmmo()))) {
-                player.getInventory().setItem(40, ItemStorage.getRocketLauncherAmmo());
-            }
-
             // Give armor equipment
 
             ItemStack armorItem = ItemStorage.getArmor(playerData.getArmorEquipment());
@@ -398,6 +414,24 @@ public class Game implements GamePart {
 
             if (player.getInventory().getItem(36) == null || !(ItemStorage.getIdPrefix(player.getInventory().getItem(36)).equals(ItemStorage.EQUIPMENT_ARMOR) && ItemStorage.getId(player.getInventory().getItem(36)) == 10)) {
                 player.getInventory().setItem(36, ItemStorage.getArmorBoots());
+            }
+
+            // Give offhand equipment
+
+            ItemStack offhandItem = ItemStorage.getOffhandEquipment(offhandEquipment);
+            if (offhandItem != null && offhandItemMissing) {
+                if (offhandEquipment >= 100 && offhandEquipment <= 2999) {
+
+                    if (playerData.getShieldTimer() >= 20) {
+                        player.getInventory().setItem(40, offhandItem);
+                        playerData.setShieldTimer(0);
+                    } else {
+                        playerData.setShieldTimer(playerData.getShieldTimer() + 1);
+                    }
+
+                } else {
+                    player.getInventory().setItem(40, offhandItem);
+                }
             }
 
             // Saturation

@@ -27,9 +27,11 @@ public class ItemStorage {
     public static final String EQUIPMENT_RANGED = "ER";
     public static final String EQUIPMENT_ARMOR = "EA";
     public static final String SHOP_ITEM = "EU";
+    public static final String EQUIPMENT_OFFHAND = "EO";
     private static final Map<Integer, ItemStack> MELEE_ITEMS;
     private static final Map<Integer, ItemStack> RANGED_ITEMS;
     private static final Map<Integer, ItemStack> ARMOR_ITEMS;
+    private static final Map<Integer, ItemStack> OFFHAND_ITEMS;
     private static final Map<Integer, ItemStack> SHOP_ITEMS;
 
     static {
@@ -687,6 +689,28 @@ public class ItemStorage {
 
         ARMOR_ITEMS = Map.copyOf(armorItemsInit);
 
+        // OFFHAND ITEMS
+
+        Map<Integer, ItemStack> offhandItemsInit = new HashMap<>();
+
+        offhandItemsInit.put(9000, getRocketLauncherAmmo(1, 9000));
+        offhandItemsInit.put(9001, getRocketLauncherAmmo(3, 9001));
+        offhandItemsInit.put(9002, getRocketLauncherAmmo(5, 9002));
+
+        offhandItemsInit.put(100, shieldBuilder("Chainmail Armor Shield", 6, 100));
+        offhandItemsInit.put(101, shieldBuilder("Chainmail Armor + Shield", 13, 101));
+        offhandItemsInit.put(102, shieldBuilder("Chainmail Armor ++ Shield", 20, 102));
+        offhandItemsInit.put(1100, shieldBuilder("Heavy Armor Shield", 24, 1100));
+        offhandItemsInit.put(1101, shieldBuilder("Heavy Armor + Shield", 28, 1101));
+        offhandItemsInit.put(1102, shieldBuilder("Heavy Armor ++ Shield", 33, 1102));
+        offhandItemsInit.put(1103, shieldBuilder("Heavy Armor +++ Shield", 38, 1103));
+        offhandItemsInit.put(1200, shieldBuilder("Multi-Defense Armor Shield", 28, 1200));
+        offhandItemsInit.put(1201, shieldBuilder("Multi-Defense Armor + Shield", 36, 1201));
+        offhandItemsInit.put(1202, shieldBuilder("Multi-Defense Armor ++ Shield", 45, 1202));
+        offhandItemsInit.put(1203, shieldBuilder("Multi-Defense Armor +++ Shield", 55, 1203));
+
+        OFFHAND_ITEMS = Map.copyOf(offhandItemsInit);
+
         // SHOP ITEMS
 
         Map<Integer, ItemStack> shopItemsInit = new HashMap<>();
@@ -1167,6 +1191,31 @@ public class ItemStorage {
         return armorBuilder("Armor Part (SEE HELMET)", Material.LEATHER_BOOTS, 0, 0, 0, 10);
     }
 
+    public static ItemStack getOffhandEquipment(int id) {
+        return OFFHAND_ITEMS.get(id);
+    }
+
+    public static Integer getOffhandEquipmentReverse(ItemStack item) {
+
+        if(item.getItemMeta() == null || item.getItemMeta().getLore() == null) {
+            return null;
+        }
+
+        for (Integer id : Map.copyOf(OFFHAND_ITEMS).keySet()) {
+            ItemStack itemStack = OFFHAND_ITEMS.get(id);
+
+            if (itemStack.getItemMeta() == null || itemStack.getItemMeta().getLore() == null) {
+                continue;
+            }
+
+            if (itemStack.getItemMeta().getLore().get(0).equals(item.getItemMeta().getLore().get(0))) {
+                return id;
+            }
+        }
+
+        return null;
+    }
+
     public static ItemStack getShopItem(int id) {
         return SHOP_ITEMS.get(id);
     }
@@ -1288,21 +1337,19 @@ public class ItemStorage {
 
     }
 
-    public static ItemStack getRocketLauncherAmmo() {
+    public static ItemStack getRocketLauncherAmmo(int tier, int id) {
 
         ItemStack item = new ItemStack(Material.FIREWORK_ROCKET);
 
         FireworkMeta meta = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK_ROCKET);
 
         meta.setDisplayName("Ammunition for Rocket Launcher Crossbow");
-        meta.setLore(List.of("ER9000"));
+        meta.setLore(List.of(EQUIPMENT_OFFHAND + id));
         meta.addItemFlags(ItemFlag.values());
 
-        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
-        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
-        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
-        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
-        meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
+        for (int i = 0; i < tier; i++) {
+            meta.addEffect(FireworkEffect.builder().withColor(Color.BLACK).with(FireworkEffect.Type.BALL).build());
+        }
 
         item.setItemMeta(meta);
 
@@ -1318,6 +1365,25 @@ public class ItemStorage {
 
         String typeNameString = itemStack.getType().name();
         return typeNameString.contains("HELMET") || typeNameString.contains("CHESTPLATE") || typeNameString.contains("LEGGINGS") || typeNameString.contains("BOOTS");
+
+    }
+
+    public static ItemStack shieldBuilder(String name, int durability, int id) {
+
+        ItemStack item = new ItemStack(Material.SHIELD);
+
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.SHIELD);
+
+        meta.setDisplayName(name);
+        meta.setLore(List.of(EQUIPMENT_OFFHAND + id));
+
+        item.setItemMeta(meta);
+
+        if (durability < 336) {
+            item.setDurability((short) (336 - durability));
+        }
+
+        return item;
 
     }
 

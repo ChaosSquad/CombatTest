@@ -2,7 +2,10 @@ package net.jandie1505.combattest.commands;
 
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.*;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
@@ -115,6 +118,10 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 break;
             case "pay":
                 this.paySubcommand(sender, args);
+                break;
+            case "world":
+            case "worlds":
+                this.worldsSubcommand(sender, args);
                 break;
             default:
                 sender.sendMessage("§cUnknown command");
@@ -810,6 +817,151 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void worldsSubcommand(CommandSender sender, String[] args) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (args.length < 2) {
+            sender.sendMessage("§cUsage: /bedwars world list/load/unload");
+            return;
+        }
+
+        switch (args[1]) {
+            case "list": {
+
+                String message = "§7Loaded worlds:\n";
+
+                int i = 0;
+                for (World world : List.copyOf(this.plugin.getServer().getWorlds())) {
+
+                    message = message + "§7[" + i + "] " + world.getName() + " (" + world.getUID() + ");\n";
+                    i++;
+
+                }
+
+                sender.sendMessage(message);
+
+                return;
+            }
+            case "load": {
+
+                if (args.length < 3) {
+                    sender.sendMessage("§cYou need to specify a world name");
+                    return;
+                }
+
+                if (this.plugin.getServer().getWorld(args[2]) != null) {
+                    sender.sendMessage("§cWorld already loaded");
+                    return;
+                }
+
+                sender.sendMessage("§eLoading/creating world...");
+                this.plugin.getServer().createWorld(new WorldCreator(args[2]));
+                sender.sendMessage("§aWorld successfully loaded/created");
+
+                return;
+            }
+            case "unload": {
+
+                if (args.length < 3) {
+                    sender.sendMessage("§cYou need to specify a world name/uid/index");
+                    return;
+                }
+
+                World world = null;
+
+                try {
+                    world = this.plugin.getServer().getWorld(UUID.fromString(args[2]));
+                } catch (IllegalArgumentException e) {
+
+                    try {
+                        world = this.plugin.getServer().getWorlds().get(Integer.parseInt(args[2]));
+                    } catch (IllegalArgumentException e2) {
+                        world = this.plugin.getServer().getWorld(args[2]);
+                    }
+
+                }
+
+                if (world == null) {
+                    sender.sendMessage("§cWorld is not loaded");
+                    return;
+                }
+
+                boolean save = false;
+
+                if (args.length >= 4) {
+                    save = Boolean.parseBoolean(args[3]);
+                }
+
+                this.plugin.getServer().unloadWorld(world, save);
+                sender.sendMessage("§aUnloaded world (save=" + save + ")");
+
+                return;
+            }
+            case "teleport": {
+
+                if (args.length < 3) {
+                    sender.sendMessage("§cYou need to specify a world name/uid/index");
+                    return;
+                }
+
+                World world = null;
+
+                try {
+                    world = this.plugin.getServer().getWorld(UUID.fromString(args[2]));
+                } catch (IllegalArgumentException e) {
+
+                    try {
+                        world = this.plugin.getServer().getWorlds().get(Integer.parseInt(args[2]));
+                    } catch (IllegalArgumentException e2) {
+                        world = this.plugin.getServer().getWorld(args[2]);
+                    }
+
+                }
+
+                if (world == null) {
+                    sender.sendMessage("§cWorld is not loaded");
+                    return;
+                }
+
+                Location location = new Location(world, 0, 0, 0, 0, 0);
+
+                if (args.length >= 4) {
+
+                    Player player = this.plugin.getPlayerFromString(args[3]);
+
+                    if (player == null) {
+                        sender.sendMessage("§cPlayer not online");
+                        return;
+                    }
+
+                    player.teleport(location);
+                    sender.sendMessage("§aTeleporting " + player.getName() + " to " + world.getName());
+
+                } else {
+
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage("§cYou need to be a player to teleport yourself");
+                        return;
+                    }
+
+                    ((Player) sender).teleport(location);
+                    sender.sendMessage("§aTeleporting yourself to " + world.getName());
+
+                }
+
+                return;
+            }
+            default:
+                sender.sendMessage("§cUnknown subcommand");
+                return;
+        }
+
+    }
+
     public boolean hasPermissionAdmin(CommandSender sender) {
         return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
     }
@@ -845,6 +997,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("setautostart");
                 tabComplete.add("givepoints");
                 tabComplete.add("reload");
+                tabComplete.add("world");
 
             }
 

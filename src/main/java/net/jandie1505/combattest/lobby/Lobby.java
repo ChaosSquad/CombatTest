@@ -17,10 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Lobby implements GamePart {
     private final CombatTest plugin;
@@ -130,19 +127,29 @@ public class Lobby implements GamePart {
             this.timeStep++;
         }
 
+        if (this.selectedMap == null && this.time <= 10 && !this.maps.isEmpty()) {
+            this.selectedMap = this.maps.get(new Random().nextInt(this.maps.size()));
+        }
+
         // PLAYER MANAGEMENT
 
         for (UUID playerId : this.getPlayers()) {
             Player player = this.plugin.getServer().getPlayer(playerId);
+
+            // Cleanup
 
             if (player == null) {
                 this.players.remove(playerId);
                 continue;
             }
 
+            // Force adventure mode
+
             if ((player.getGameMode() != GameMode.ADVENTURE) && !this.plugin.isPlayerBypassing(playerId)) {
                 player.setGameMode(GameMode.ADVENTURE);
             }
+
+            // Actionbar
 
             if (this.players.size() >= 2) {
 
@@ -152,6 +159,16 @@ public class Lobby implements GamePart {
 
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cNot enough players (" + this.players.size() + " / 2)"));
 
+            }
+
+            // Messages
+
+            if ((this.time <= 5 || (this.time % 10 == 0)) && players.size() >= 2 && this.timeStep >= 1) {
+                player.sendMessage("§7The game starts in " + this.time + " seconds");
+            }
+
+            if (this.time == 10 && this.selectedMap != null && players.size() >= 2 && this.timeStep >= 1) {
+                player.sendMessage("§bSelected Map: " + this.selectedMap.getName());
             }
 
             if (this.plugin.isSingleServer()) {
@@ -170,25 +187,32 @@ public class Lobby implements GamePart {
 
                 // Scoreboard
 
+                String mapName = "---";
+
+                if (this.selectedMap != null) {
+                    mapName = this.selectedMap.getName();
+                }
+
                 Scoreboard scoreboard = this.plugin.getServer().getScoreboardManager().getNewScoreboard();
                 Objective objective = scoreboard.registerNewObjective("lobby", Criteria.DUMMY, "");
 
                 objective.setDisplayName("§6§lCOMBAT TEST");
 
-                objective.getScore("§§§").setScore(4);
+                objective.getScore("§§§").setScore(5);
 
                 if (this.players.size() >= 2) {
 
-                    objective.getScore("§bStarting in " + this.time).setScore(3);
-                    objective.getScore("§§").setScore(2);
-                    objective.getScore("§7Players: §a" + this.players.size() + " / 2").setScore(1);
+                    objective.getScore("§bStarting in " + this.time).setScore(4);
+                    objective.getScore("§§").setScore(3);
+                    objective.getScore("§7Players: §a" + this.players.size() + " / 2").setScore(2);
+                    objective.getScore("§7Map: §a" + mapName).setScore(1);
 
                 } else {
 
-
-                    objective.getScore("§cNot enough players").setScore(3);
-                    objective.getScore("§§").setScore(2);
-                    objective.getScore(" §7Players: §c" + this.players.size() + " / 2").setScore(1);
+                    objective.getScore("§cNot enough players").setScore(4);
+                    objective.getScore("§§").setScore(3);
+                    objective.getScore("§7Players: §c" + this.players.size() + " / 2").setScore(2);
+                    objective.getScore("§7Map: §a" + mapName).setScore(1);
 
                 }
 

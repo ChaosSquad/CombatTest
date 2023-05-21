@@ -21,7 +21,7 @@ public class Game implements GamePart {
     private boolean killswitch;
     private int timeStep;
     private int time;
-    World world;
+    private World world;
     private Map<UUID, PlayerData> players;
     private List<Spawnpoint> spawnpoints;
     private boolean enableBorder;

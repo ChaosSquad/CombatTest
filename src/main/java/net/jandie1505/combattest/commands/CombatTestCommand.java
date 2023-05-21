@@ -967,6 +967,45 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
                 return;
             }
+            case "clear": {
+
+                if (args.length < 3) {
+                    sender.sendMessage("§cYou need to specify a world name/uid/index");
+                    return;
+                }
+
+                World world = null;
+
+                try {
+                    world = this.plugin.getServer().getWorld(UUID.fromString(args[2]));
+                } catch (IllegalArgumentException e) {
+
+                    try {
+                        world = this.plugin.getServer().getWorlds().get(Integer.parseInt(args[2]));
+                    } catch (IllegalArgumentException e2) {
+                        world = this.plugin.getServer().getWorld(args[2]);
+                    }
+
+                }
+
+                if (world == null) {
+                    sender.sendMessage("§cWorld is not loaded");
+                    return;
+                }
+
+                if (world == this.plugin.getServer().getWorlds().get(0)) {
+                    sender.sendMessage("§cCannot clear default world");
+                    return;
+                }
+
+                for (Player player : world.getPlayers()) {
+                    player.teleport(new Location(this.plugin.getServer().getWorlds().get(0), 0, 0, 0));
+                }
+
+                sender.sendMessage("§aMap successfully cleared");
+
+                break;
+            }
             default:
                 sender.sendMessage("§cUnknown subcommand");
                 return;

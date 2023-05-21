@@ -662,6 +662,10 @@ public class Game implements GamePart {
                     player.setGameMode(GameMode.SPECTATOR);
                 }
 
+                if (player.getLocation().getWorld() != this.world && !this.plugin.isPlayerBypassing(player.getUniqueId())) {
+                    player.teleport(new Location(this.world, 0, 0, 0));
+                }
+
                 if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
                     player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
                 }

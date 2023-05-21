@@ -3,9 +3,7 @@ package net.jandie1505.combattest;
 import net.jandie1505.combattest.commands.CombatTestCommand;
 import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
-import net.jandie1505.combattest.game.GamePart;
-import net.jandie1505.combattest.game.GameStatus;
-import net.jandie1505.combattest.game.Lobby;
+import net.jandie1505.combattest.lobby.Lobby;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -18,6 +16,7 @@ import java.util.*;
 
 public class CombatTest extends JavaPlugin {
     private ConfigManager configManager;
+    private ConfigManager mapConfig;
     private GamePart game;
     private List<UUID> bypassingPlayers;
     private String permissionPrefix;
@@ -29,7 +28,9 @@ public class CombatTest extends JavaPlugin {
     @Override
     public void onEnable() {
         this.configManager = new ConfigManager(this, DefaultConfigValues.getGeneralConfig(), false, "config.json");
+        this.mapConfig = new ConfigManager(this, DefaultConfigValues.getWorldConfig(), true, "maps.json");
         this.configManager.reloadConfig();
+        this.mapConfig.reloadConfig();
         this.game = null;
         this.bypassingPlayers = Collections.synchronizedList(new ArrayList<>());
         this.permissionPrefix = this.configManager.getConfig().optString("permissionsPrefix", "combattest");
@@ -153,6 +154,10 @@ public class CombatTest extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return this.configManager;
+    }
+
+    public ConfigManager getMapConfig() {
+        return this.mapConfig;
     }
 
     public String getPermissionPrefix() {

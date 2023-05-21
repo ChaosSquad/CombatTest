@@ -1,10 +1,17 @@
-package net.jandie1505.combattest.game;
+package net.jandie1505.combattest.endlobby;
 
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.GameStatus;
+import net.jandie1505.combattest.game.PlayerData;
+import net.jandie1505.combattest.game.TeamData;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +22,10 @@ public class Endlobby implements GamePart {
     private final CombatTest plugin;
     private boolean timeStep;
     private int time;
+    private World world;
+    private boolean lobbyBorderEnabled;
+    private int[] lobbyBorder;
+    private Location lobbySpawn;
     private final Map<UUID, PlayerData> playerMap;
     private final List<PlayerData> playerKillsRanking;
     private final List<PlayerData> playerDeathsRanking;
@@ -28,6 +39,26 @@ public class Endlobby implements GamePart {
         this.plugin = plugin;
         this.timeStep = false;
         this.time = 60;
+
+        this.world = this.plugin.getServer().getWorlds().get(0);
+        this.lobbyBorderEnabled = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optBoolean("enable", false);
+        this.lobbyBorder = new int[]{
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x1", -10),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("y1", -10),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("z1", -10),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x2", 10),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("y2", 10),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("z2", 10)
+        };
+        this.lobbySpawn = new Location(
+                this.world,
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("x", 0),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("y", 0),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("z", 0),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("yaw", 0.0F),
+                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("pitch", 0.0F)
+        );
+
         this.playerMap = playerMap;
 
         this.playerKillsRanking = new ArrayList<>(playerMap.values());
@@ -47,6 +78,8 @@ public class Endlobby implements GamePart {
                 this.playerMap.remove(playerId);
                 continue;
             }
+
+            player.teleport(this.lobbySpawn);
 
             PlayerData playerData = this.getPlayerMap().get(playerId);
 
@@ -192,15 +225,30 @@ public class Endlobby implements GamePart {
             player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 
             if (!this.plugin.isPlayerBypassing(player.getUniqueId())) {
-                player.getInventory().clear();
-            }
 
+                // Clear Inventory
+
+                player.getInventory().clear();
+
+                // Lobby location
+
+                if (this.lobbyBorderEnabled) {
+
+                    Location location = player.getLocation();
+
+                    if (!(location.getBlockX() >= this.lobbyBorder[0] && location.getBlockY() >= this.lobbyBorder[1] && location.getBlockZ() >= this.lobbyBorder[2] && location.getBlockX() <= this.lobbyBorder[3] && location.getBlockY() <= this.lobbyBorder[4] && location.getBlockZ() <= this.lobbyBorder[5])) {
+                        player.teleport(this.lobbySpawn);
+                    }
+
+                }
+
+            }
         }
 
         if (this.time >= 0) {
             return GameStatus.NORMAL;
         } else {
-            return GameStatus.ABORT;
+            return GameStatus.NEXT;
         }
     }
 

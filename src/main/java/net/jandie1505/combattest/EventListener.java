@@ -1,6 +1,8 @@
 package net.jandie1505.combattest;
 
+import net.jandie1505.combattest.endlobby.Endlobby;
 import net.jandie1505.combattest.game.*;
+import net.jandie1505.combattest.lobby.Lobby;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

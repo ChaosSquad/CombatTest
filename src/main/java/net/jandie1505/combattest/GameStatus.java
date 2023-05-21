@@ -1,4 +1,4 @@
-package net.jandie1505.combattest.game;
+package net.jandie1505.combattest;
 
 public final class GameStatus {
     public static final int ABORT = -1;

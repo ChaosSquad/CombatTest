@@ -1,6 +1,9 @@
 package net.jandie1505.combattest.game;
 
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.GameStatus;
+import net.jandie1505.combattest.endlobby.Endlobby;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -867,6 +870,12 @@ public class Game implements GamePart {
 
     @Override
     public GamePart getNextStatus() {
+        for (Player player : this.world.getPlayers()) {
+            player.teleport(new Location(this.plugin.getServer().getWorlds().get(0), 0, 0, 0));
+        }
+
+        this.plugin.getServer().unloadWorld(this.world, false);
+
         return new Endlobby(this.plugin, this.players);
     }
 }

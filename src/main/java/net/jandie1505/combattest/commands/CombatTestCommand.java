@@ -1,7 +1,11 @@
 package net.jandie1505.combattest.commands;
 
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.GameStatus;
 import net.jandie1505.combattest.game.*;
+import net.jandie1505.combattest.lobby.Lobby;
+import net.jandie1505.combattest.lobby.MapData;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -122,6 +126,13 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "world":
             case "worlds":
                 this.worldsSubcommand(sender, args);
+                break;
+            case "map":
+            case "maps":
+                this.mapsSubcommand(sender);
+                break;
+            case "forcemap":
+                this.forcemapSubcommand(sender, args);
                 break;
             default:
                 sender.sendMessage("§cUnknown command");
@@ -725,6 +736,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         }
 
         this.plugin.getConfigManager().reloadConfig();
+        this.plugin.getMapConfig().reloadConfig();
         sender.sendMessage("§aReloading config...");
 
     }
@@ -962,6 +974,76 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void mapsSubcommand(CommandSender sender) {
+
+        if (!(this.plugin.getGame() instanceof Lobby)) {
+            sender.sendMessage("§cNo lobby running");
+            return;
+        }
+
+        MapData mapData = ((Lobby) this.plugin.getGame()).getSelectedMap();
+
+        if (mapData == null) {
+            sender.sendMessage("§7No map selected");
+        } else {
+            sender.sendMessage("§7Selected map: " + mapData.getName() + " (" + mapData.getWorld() + ")");
+        }
+
+        sender.sendMessage("§7Available Maps:");
+
+        for (MapData map : List.copyOf(((Lobby) this.plugin.getGame()).getMaps())) {
+            sender.sendMessage("§7" + map.getName() + " (" + map.getWorld() + ")");
+        }
+
+    }
+
+    public void forcemapSubcommand(CommandSender sender, String[] args) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Lobby)) {
+            sender.sendMessage("§cNo lobby running");
+            return;
+        }
+
+        if (args.length != 2) {
+            sender.sendMessage("§cUsage: /combattest forcemap <mapName/w:worldName>");
+            return;
+        }
+
+        MapData mapData = null;
+
+        for (MapData map : List.copyOf(((Lobby) this.plugin.getGame()).getMaps())) {
+
+            if (args[1].startsWith("w:")) {
+
+                if (map.getWorld().equals(args[1].substring(2))) {
+                    mapData = map;
+                }
+
+            } else {
+
+                if (map.getName().equals(args[1])) {
+                    mapData = map;
+                }
+
+            }
+
+        }
+
+        if (mapData == null) {
+            sender.sendMessage("§cMap does not exist");
+            return;
+        }
+
+        ((Lobby) this.plugin.getGame()).selectMap(mapData);
+        sender.sendMessage("§aMap successfully selected");
+
+    }
+
     public boolean hasPermissionAdmin(CommandSender sender) {
         return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
     }
@@ -998,6 +1080,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("givepoints");
                 tabComplete.add("reload");
                 tabComplete.add("world");
+                tabComplete.add("forcemap");
 
             }
 
@@ -1007,6 +1090,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             tabComplete.add("stats");
             tabComplete.add("disableweather");
             tabComplete.add("pay");
+            tabComplete.add("maps");
 
         }
 

@@ -1048,24 +1048,32 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        if (args.length != 2) {
+        if (args.length < 2) {
             sender.sendMessage("§cUsage: /combattest forcemap <mapName/w:worldName>");
             return;
+        }
+
+        String mapName = args[1];
+
+        for (int i = 2; i < args.length; i++) {
+
+            mapName = mapName + " " + args[i];
+
         }
 
         MapData mapData = null;
 
         for (MapData map : List.copyOf(((Lobby) this.plugin.getGame()).getMaps())) {
 
-            if (args[1].startsWith("w:")) {
+            if (mapName.startsWith("w:")) {
 
-                if (map.getWorld().equals(args[1].substring(2))) {
+                if (map.getWorld().equals(mapName.substring(2))) {
                     mapData = map;
                 }
 
             } else {
 
-                if (map.getName().equals(args[1])) {
+                if (map.getName().equals(mapName)) {
                     mapData = map;
                 }
 
@@ -1118,7 +1126,6 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("setautostart");
                 tabComplete.add("givepoints");
                 tabComplete.add("reload");
-                tabComplete.add("world");
                 tabComplete.add("forcemap");
 
             }
@@ -1131,8 +1138,76 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             tabComplete.add("pay");
             tabComplete.add("maps");
 
+        } else if (args.length == 2) {
+
+            switch (args[0]) {
+                case "stats":
+                case "pay":
+                    tabComplete.addAll(this.getIngamePlayerNames());
+                    break;
+                case "forcemap":
+                    if (hasPermissionAdmin(sender) && this.plugin.getGame() instanceof Lobby) {
+                        for (MapData mapData : ((Lobby) this.plugin.getGame()).getMaps()) {
+                            tabComplete.add(mapData.getName());
+                        }
+                    }
+                    break;
+                case "addplayer":
+                    if (this.plugin.getGame() instanceof Game) {
+                        for (Player player : this.plugin.getServer().getOnlinePlayers()) {
+
+                            if (!((Game) this.plugin.getGame()).getPlayerMap().containsKey(player.getUniqueId())) {
+                                tabComplete.add(player.getName());
+                            }
+
+                        }
+                    }
+                    break;
+                case "removeplayer":
+                case "getpoints":
+                case "setpoints":
+                case "getmelee":
+                case "setmelee":
+                case "getranged":
+                case "setranged":
+                case "getarmor":
+                case "setarmor":
+                case "getteam":
+                case "setteam":
+                case "givepoints":
+                    if (hasPermissionAdmin(sender)) {
+                        tabComplete.addAll(this.getIngamePlayerNames());
+                    }
+                    break;
+                case "setautostart":
+                case "bypass":
+                    tabComplete.add("true");
+                    tabComplete.add("false");
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         return List.copyOf(tabComplete);
+    }
+
+    private List<String> getIngamePlayerNames() {
+        List<String> returnList = new ArrayList<>();
+
+        if (this.plugin.getGame() instanceof Game) {
+            for (UUID playerId : ((Game) this.plugin.getGame()).getPlayerMap().keySet()) {
+
+                Player player = this.plugin.getServer().getPlayer(playerId);
+
+                if (player != null) {
+                    returnList.add(player.getName());
+                }
+
+            }
+        }
+
+        return List.copyOf(returnList);
     }
 }

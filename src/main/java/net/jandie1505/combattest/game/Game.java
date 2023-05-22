@@ -874,12 +874,7 @@ public class Game implements GamePart {
 
     @Override
     public GamePart getNextStatus() {
-        for (Player player : this.world.getPlayers()) {
-            player.teleport(new Location(this.plugin.getServer().getWorlds().get(0), 0, 0, 0));
-        }
-
-        this.plugin.getServer().unloadWorld(this.world, false);
-
+        this.plugin.unloadWorld(this.world);
         return new Endlobby(this.plugin, this.players);
     }
 }

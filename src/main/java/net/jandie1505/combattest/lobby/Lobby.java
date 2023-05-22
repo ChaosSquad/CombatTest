@@ -301,7 +301,7 @@ public class Lobby implements GamePart {
             return null;
         }
 
-        World world = this.plugin.getServer().createWorld(new WorldCreator(selectedMap.getWorld()));
+        World world = this.plugin.loadWorld(selectedMap.getWorld());
 
         if (world == null || !this.plugin.getServer().getWorlds().contains(world)) {
             this.plugin.getLogger().warning("Game stopped because world does not exist");

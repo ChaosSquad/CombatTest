@@ -3,12 +3,11 @@ package net.jandie1505.combattest;
 import net.jandie1505.combattest.commands.CombatTestCommand;
 import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
+import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.lobby.Lobby;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,6 +23,7 @@ public class CombatTest extends JavaPlugin {
     private boolean autostartNewGame;
     private int timeStep;
     private int autostartNewGameTimer;
+    private List<World> managedWorlds;
 
     @Override
     public void onEnable() {
@@ -38,6 +38,7 @@ public class CombatTest extends JavaPlugin {
         this.autostartNewGame = this.configManager.getConfig().optBoolean("autostartNewGame", false);
         this.timeStep = 0;
         this.autostartNewGameTimer = 30;
+        this.managedWorlds = Collections.synchronizedList(new ArrayList<>());
 
         this.getCommand("combattest").setExecutor(new CombatTestCommand(this));
         this.getCommand("combattest").setTabCompleter(new CombatTestCommand(this));
@@ -59,6 +60,8 @@ public class CombatTest extends JavaPlugin {
 
                 } else {
 
+                    // Player management
+
                     for (Player player : List.copyOf(this.getServer().getOnlinePlayers())) {
 
                         if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
@@ -71,6 +74,8 @@ public class CombatTest extends JavaPlugin {
 
                     }
 
+                    // Autostart new game
+
                     if (this.autostartNewGame && this.timeStep == 1) {
 
                         if (this.autostartNewGameTimer <= 0) {
@@ -80,6 +85,21 @@ public class CombatTest extends JavaPlugin {
                             this.autostartNewGameTimer--;
                         }
 
+                    }
+
+                }
+
+                // Manage worlds
+
+                for (World world : List.copyOf(this.managedWorlds)) {
+
+                    if (world == null || !this.getServer().getWorlds().contains(world) || this.getServer().getWorlds().get(0) == world) {
+                        this.managedWorlds.remove(world);
+                        continue;
+                    }
+
+                    if (!(this.game instanceof Lobby || this.game instanceof Game) || (this.game instanceof Game && ((Game) this.game).getWorld() != world)) {
+                        this.unloadWorld(world);
                     }
 
                 }
@@ -95,6 +115,17 @@ public class CombatTest extends JavaPlugin {
                 this.stopGame();
             }
         }, 0, 10);
+    }
+
+    @Override
+    public void onDisable() {
+
+        this.game = null;
+
+        for (World world : List.copyOf(this.managedWorlds)) {
+            this.unloadWorld(world);
+        }
+
     }
 
     public boolean startGame() {
@@ -174,6 +205,62 @@ public class CombatTest extends JavaPlugin {
 
     public void setAutostartNewGame(boolean autostartNewGame) {
         this.autostartNewGame = autostartNewGame;
+    }
+
+    public World loadWorld(String name) {
+
+        World world = this.getServer().getWorld(name);
+
+        if (world != null) {
+            this.managedWorlds.add(world);
+            world.setAutoSave(false);
+            this.getLogger().info("World [" + this.getServer().getWorlds().indexOf(world) + "] " + world.getUID() + " (" + world.getName() + ") is already loaded and was added to managed worlds");
+            return world;
+        }
+
+        world = this.getServer().createWorld(new WorldCreator(name));
+
+        if (world != null) {
+            this.managedWorlds.add(world);
+            world.setAutoSave(false);
+            this.getLogger().info("Loaded world [" + this.getServer().getWorlds().indexOf(world) + "] " + world.getUID() + " (" + world.getName() + ")");
+        } else {
+            this.getLogger().warning("Error while loading world " + name);
+        }
+
+        return world;
+
+    }
+
+    public boolean unloadWorld(World world) {
+
+        if (world == null || this.getServer().getWorlds().get(0) == world || !this.managedWorlds.contains(world) || !this.getServer().getWorlds().contains(world)) {
+            return false;
+        }
+
+        UUID uid = world.getUID();
+        int index = this.getServer().getWorlds().indexOf(world);
+        String name = world.getName();
+
+        for (Player player : world.getPlayers()) {
+            player.teleport(new Location(this.getServer().getWorlds().get(0), 0, 0, 0));
+        }
+
+        boolean success = this.getServer().unloadWorld(world, false);
+
+        if (success) {
+            this.managedWorlds.remove(world);
+            this.getLogger().info("Unloaded world [" + index + "] " + uid + " (" + name + ")");
+        } else {
+            this.getLogger().warning("Error white unloading world [" + index + "] " + uid + " (" + name + ")");
+        }
+
+        return success;
+
+    }
+
+    public List<World> getManagedWorlds() {
+        return List.copyOf(this.managedWorlds);
     }
 
     public static int getWeather(World world) {

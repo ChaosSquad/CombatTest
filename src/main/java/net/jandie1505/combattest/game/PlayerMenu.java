@@ -1,5 +1,6 @@
 package net.jandie1505.combattest.game;
 
+import net.jandie1505.combattest.ItemStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

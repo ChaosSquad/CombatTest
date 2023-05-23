@@ -2,9 +2,10 @@ package net.jandie1505.combattest.commands;
 
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
-import net.jandie1505.combattest.GameStatus;
 import net.jandie1505.combattest.game.*;
 import net.jandie1505.combattest.lobby.Lobby;
+import net.jandie1505.combattest.lobby.LobbyMenu;
+import net.jandie1505.combattest.lobby.LobbyPlayerData;
 import net.jandie1505.combattest.lobby.MapData;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -130,6 +131,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "map":
             case "maps":
                 this.mapsSubcommand(sender);
+                break;
+            case "votemap":
+                this.votemapCommand(sender, args);
                 break;
             case "forcemap":
                 this.forcemapSubcommand(sender, args);
@@ -555,20 +559,38 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        if (!(this.plugin.getGame() instanceof Game)) {
-            sender.sendMessage("§cNo game running");
+        if (this.plugin.getGame() instanceof Lobby) {
+
+            LobbyMenu menu = ((Lobby) this.plugin.getGame()).getLobbyMenu(((Player) sender).getUniqueId());
+
+            if (menu == null) {
+                sender.sendMessage("§cYou are not ingame");
+                return;
+            }
+
+            menu.setPage(0);
+            ((Player) sender).openInventory(menu.getInventory());
+
+            return;
+
+        } else if (this.plugin.getGame() instanceof Game) {
+
+            PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(((Player) sender).getUniqueId());
+
+            if (menu == null) {
+                sender.sendMessage("§cYou are not ingame");
+                return;
+            }
+
+            menu.setPage(0);
+            ((Player) sender).openInventory(menu.getInventory());
+
+            return;
+
+        } else {
+            sender.sendMessage("§cNo lobby or game running");
             return;
         }
-
-        PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(((Player) sender).getUniqueId());
-
-        if (menu == null) {
-            sender.sendMessage("§cYou are not ingame");
-            return;
-        }
-
-        menu.setPage(0);
-        ((Player) sender).openInventory(menu.getInventory());
 
     }
 
@@ -1091,6 +1113,65 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void votemapCommand(CommandSender sender, String[] args) {
+
+        if (!(this.plugin.getGame() instanceof Lobby)) {
+            sender.sendMessage("§cNo lobby running");
+            return;
+        }
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("§cThe command needs to be executed by a player");
+            return;
+        }
+
+        LobbyPlayerData playerData = ((Lobby) this.plugin.getGame()).getPlayerMap().get(((Player) sender).getUniqueId());
+
+        if (playerData == null) {
+            sender.sendMessage("§cYou are not in the lobby");
+            return;
+        }
+
+        if (!((Lobby) this.plugin.getGame()).isMapVoting() || ((Lobby) this.plugin.getGame()).getSelectedMap() != null) {
+            sender.sendMessage("§cMap voting is already over");
+            return;
+        }
+
+        if (args.length < 2) {
+            playerData.setVote(null);
+            sender.sendMessage("§aYou successfully removed your vote");
+            return;
+        }
+
+        String mapName = args[1];
+
+        for (int i = 2; i < args.length; i++) {
+
+            mapName = mapName + " " + args[i];
+
+        }
+
+        MapData mapData = null;
+
+        for (MapData map : ((Lobby) this.plugin.getGame()).getMaps()) {
+
+            if (map.getName().equals(mapName)) {
+                mapData = map;
+                break;
+            }
+
+        }
+
+        if (mapData == null) {
+            sender.sendMessage("§cMap does not exist");
+            return;
+        }
+
+        playerData.setVote(mapData);
+        sender.sendMessage("§aYou voted for " + mapData.getName());
+
+    }
+
     public boolean hasPermissionAdmin(CommandSender sender) {
         return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
     }
@@ -1137,6 +1218,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             tabComplete.add("disableweather");
             tabComplete.add("pay");
             tabComplete.add("maps");
+            tabComplete.add("votemap");
 
         } else if (args.length == 2) {
 
@@ -1145,11 +1227,12 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 case "pay":
                     tabComplete.addAll(this.getIngamePlayerNames());
                     break;
+                case "votemap":
+                    tabComplete.addAll(this.getMapStrings());
+                    break;
                 case "forcemap":
-                    if (hasPermissionAdmin(sender) && this.plugin.getGame() instanceof Lobby) {
-                        for (MapData mapData : ((Lobby) this.plugin.getGame()).getMaps()) {
-                            tabComplete.add(mapData.getName());
-                        }
+                    if (hasPermissionAdmin(sender)) {
+                        tabComplete.addAll(this.getMapStrings());
                     }
                     break;
                 case "addplayer":
@@ -1206,6 +1289,20 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 }
 
             }
+        }
+
+        return List.copyOf(returnList);
+    }
+
+    private List<String> getMapStrings() {
+        List<String> returnList = new ArrayList<>();
+
+        if (this.plugin.getGame() instanceof Lobby) {
+
+            for (MapData mapData : ((Lobby) this.plugin.getGame()).getMaps()) {
+                returnList.add(mapData.getName());
+            }
+
         }
 
         return List.copyOf(returnList);

@@ -1,4 +1,4 @@
-package net.jandie1505.combattest.game;
+package net.jandie1505.combattest;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -976,6 +976,41 @@ public class ItemStorage {
 
     public static ItemStack getResetButton() {
         return buildInventoryButton(Material.TNT, "§4§lReset", List.of("Price: 10000"), 6);
+    }
+
+    public static ItemStack getLobbyVoteButton() {
+        return buildInventoryButton(Material.FILLED_MAP, "§r§6Map voting", null, 7);
+    }
+
+    public static ItemStack getLobbyTeamsButton() {
+        return buildInventoryButton(Material.PLAYER_HEAD, "§r§6Team Selection", null, 8);
+    }
+
+    public static ItemStack getLobbyVoteMapButton(String mapName, String worldName, boolean selected) {
+        String colorCode;
+
+        if (selected) {
+            colorCode = "§r§a";
+        } else {
+            colorCode = "§r§6";
+        }
+
+        ItemStack itemStack = buildInventoryButton(Material.GREEN_TERRACOTTA, colorCode + mapName, null, 9);
+
+        ItemMeta meta = itemStack.getItemMeta();
+
+        List<String> lore = meta.getLore();
+        lore.add(worldName);
+        meta.setLore(lore);
+
+        if (selected) {
+            meta.addEnchant(Enchantment.LUCK, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+
+        itemStack.setItemMeta(meta);
+
+        return itemStack;
     }
 
     public static ItemStack getMelee(int id) {

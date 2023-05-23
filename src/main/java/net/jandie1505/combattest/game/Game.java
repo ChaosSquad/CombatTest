@@ -3,7 +3,9 @@ package net.jandie1505.combattest.game;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.GameStatus;
+import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.endlobby.Endlobby;
+import net.jandie1505.combattest.lobby.LobbyPlayerData;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -32,7 +34,7 @@ public class Game implements GamePart {
     private Map<UUID, PlayerMenu> playerMenus;
     private boolean enforcePvp;
 
-    public Game(CombatTest plugin, int time, World world, List<UUID> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border, boolean enforcePvp) {
+    public Game(CombatTest plugin, int time, World world, Map<UUID, LobbyPlayerData> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border, boolean enforcePvp) {
         this.plugin = plugin;
         this.killswitch = false;
         this.timeStep = 0;
@@ -45,14 +47,21 @@ public class Game implements GamePart {
 
         this.players = Collections.synchronizedMap(new HashMap<>());
 
-        for (UUID playerId : players) {
+        for (UUID playerId : Map.copyOf(players).keySet()) {
+            LobbyPlayerData lobbyPlayerData = players.get(playerId);
             Player player = this.plugin.getServer().getPlayer(playerId);
 
             if (player == null) {
                 continue;
             }
 
-            this.players.put(playerId, new PlayerData(playerId));
+            PlayerData playerData = new PlayerData(playerId);
+
+            if (lobbyPlayerData != null) {
+                playerData.setTeam(lobbyPlayerData.getTeam());
+            }
+
+            this.players.put(playerId, playerData);
 
             player.getInventory().clear();
         }

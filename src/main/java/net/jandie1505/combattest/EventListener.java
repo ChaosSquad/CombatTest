@@ -3,6 +3,9 @@ package net.jandie1505.combattest;
 import net.jandie1505.combattest.endlobby.Endlobby;
 import net.jandie1505.combattest.game.*;
 import net.jandie1505.combattest.lobby.Lobby;
+import net.jandie1505.combattest.lobby.LobbyMenu;
+import net.jandie1505.combattest.lobby.LobbyPlayerData;
+import net.jandie1505.combattest.lobby.MapData;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,6 +23,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -457,6 +461,89 @@ public class EventListener implements Listener {
             }
 
             return;
+        }
+
+        // Lobby Menu
+        if (event.getClickedInventory() != null && event.getClickedInventory().getHolder() instanceof LobbyMenu) {
+
+            event.setCancelled(true);
+
+            if (this.plugin.getGame() instanceof Lobby && event.getWhoClicked() instanceof Player && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getCurrentItem() != null) {
+
+                LobbyMenu menu = ((Lobby) this.plugin.getGame()).getLobbyMenu(event.getWhoClicked().getUniqueId());
+
+                if (menu.getPage() == 0) {
+
+                    if (event.getCurrentItem().isSimilar(ItemStorage.getLobbyVoteButton())) {
+
+                        if (!((Lobby) this.plugin.getGame()).isMapVoting() || ((Lobby) this.plugin.getGame()).getSelectedMap() != null) {
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§cMap voting is already over");
+                            return;
+                        }
+
+                        menu.setPage(1);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
+                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getLobbyTeamsButton())) {
+
+                        menu.setPage(2);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
+                    }
+
+                } else if (menu.getPage() == 1) {
+
+                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
+
+                        menu.setPage(0);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
+                    } else if (ItemStorage.getIdPrefix(event.getCurrentItem()).equals(ItemStorage.MENU_ITEM) && ItemStorage.getId(event.getCurrentItem()) == 9) {
+
+                        if (!((Lobby) this.plugin.getGame()).isMapVoting() || ((Lobby) this.plugin.getGame()).getSelectedMap() != null) {
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§cMap voting is already over");
+                            return;
+                        }
+
+                        List<String> lore = event.getCurrentItem().getItemMeta().getLore();
+
+                        if (lore.size() < 2) {
+                            return;
+                        }
+
+                        LobbyPlayerData playerData = ((Lobby) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                        for (MapData map : ((Lobby) this.plugin.getGame()).getMaps()) {
+
+                            if (map.getWorld().equals(lore.get(1))) {
+
+                                event.getWhoClicked().closeInventory();
+
+                                if (playerData.getVote() == map) {
+
+                                    playerData.setVote(null);
+                                    event.getWhoClicked().sendMessage("§aYou removed your vote");
+
+                                } else {
+
+                                    playerData.setVote(map);
+                                    event.getWhoClicked().sendMessage("§aYou changed your vote to " + map.getName());
+
+                                }
+
+                                return;
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
         }
     }
 

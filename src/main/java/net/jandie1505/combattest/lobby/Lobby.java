@@ -24,7 +24,7 @@ public class Lobby implements GamePart {
     private boolean killswitch;
     private int timeStep;
     private int time;
-    private List<UUID> players;
+    private Map<UUID, LobbyPlayerData> players;
     private boolean forcestart;
     private List<MapData> maps;
     private MapData selectedMap;
@@ -32,13 +32,15 @@ public class Lobby implements GamePart {
     private boolean lobbyBorderEnabled;
     private int[] lobbyBorder;
     private Location lobbySpawn;
+    private Map<UUID, LobbyMenu> lobbyMenus;
+    private boolean mapVoting;
 
     public Lobby(CombatTest plugin) {
         this.plugin = plugin;
         this.killswitch = false;
         this.timeStep = 0;
         this.time = 60;
-        this.players = Collections.synchronizedList(new ArrayList<>());
+        this.players = Collections.synchronizedMap(new HashMap<>());
         this.forcestart = false;
         this.maps = new ArrayList<>();
         this.selectedMap = null;
@@ -60,6 +62,8 @@ public class Lobby implements GamePart {
                 this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("yaw", 0.0F),
                 this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("pitch", 0.0F)
         );
+        this.lobbyMenus = Collections.synchronizedMap(new HashMap<>());
+        this.mapVoting = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("mapVoting", false);
 
         for (String world : List.copyOf(this.plugin.getMapConfig().getConfig().keySet())) {
             try {
@@ -127,8 +131,9 @@ public class Lobby implements GamePart {
             this.timeStep++;
         }
 
-        if (this.selectedMap == null && this.time <= 10 && !this.maps.isEmpty()) {
-            this.selectedMap = this.maps.get(new Random().nextInt(this.maps.size()));
+        if (this.selectedMap == null && this.time <= 10) {
+            this.autoSelectMap();
+            this.displayMap();
         }
 
         // PLAYER MANAGEMENT
@@ -167,9 +172,13 @@ public class Lobby implements GamePart {
                 player.sendMessage("§7The game starts in " + this.time + " seconds");
             }
 
-            if (this.time == 10 && this.selectedMap != null && players.size() >= 2 && this.timeStep >= 1) {
-                player.sendMessage("§bSelected Map: " + this.selectedMap.getName());
+            // Player Menu
+
+            if (!this.lobbyMenus.containsKey(playerId)) {
+                this.lobbyMenus.put(playerId, new LobbyMenu(this, playerId));
             }
+
+            // Single Server stuff
 
             if (this.plugin.isSingleServer()) {
 
@@ -229,14 +238,24 @@ public class Lobby implements GamePart {
 
         }
 
+        // PLAYER MENUS
+
+        for (UUID playerId : Map.copyOf(this.lobbyMenus).keySet()) {
+
+            if (!this.players.containsKey(playerId)) {
+                this.lobbyMenus.remove(playerId);
+            }
+
+        }
+
         // SINGLE SERVER MODE
 
         if (this.plugin.isSingleServer()) {
 
             for (Player player : this.plugin.getServer().getOnlinePlayers()) {
 
-                if (!this.players.contains(player.getUniqueId()) && !(this.plugin.isPlayerBypassing(player.getUniqueId()))) {
-                    this.players.add(player.getUniqueId());
+                if (!this.players.containsKey(player.getUniqueId()) && !(this.plugin.isPlayerBypassing(player.getUniqueId()))) {
+                    this.addPlayer(player);
                 }
 
             }
@@ -260,22 +279,26 @@ public class Lobby implements GamePart {
             return false;
         }
 
-        if (this.players.contains(player.getUniqueId())) {
+        if (this.players.containsKey(player.getUniqueId())) {
             return false;
         }
 
-        this.players.add(player.getUniqueId());
+        this.players.put(player.getUniqueId(), new LobbyPlayerData());
         return true;
     }
 
     @Override
     public boolean removePlayer(UUID playerId) {
-        return this.players.remove(playerId);
+        return this.players.remove(playerId) != null;
+    }
+
+    public Map<UUID, LobbyPlayerData> getPlayerMap() {
+        return Map.copyOf(this.players);
     }
 
     @Override
     public List<UUID> getPlayers() {
-        return List.copyOf(this.players);
+        return List.copyOf(this.getPlayerMap().keySet());
     }
 
     @Override
@@ -293,8 +316,103 @@ public class Lobby implements GamePart {
         return List.copyOf(returnList);
     }
 
+    private List<MapData> getHighestVotedMaps() {
+
+        // Get map votes
+
+        Map<MapData, Integer> mapVotes = new HashMap<>();
+
+        for (UUID playerId : this.getPlayerMap().keySet()) {
+            LobbyPlayerData playerData = this.players.get(playerId);
+
+            if (playerData.getVote() == null) {
+                continue;
+            }
+
+            if (mapVotes.containsKey(playerData.getVote())) {
+                mapVotes.put(playerData.getVote(), mapVotes.get(playerData.getVote()) + 1);
+            } else {
+                mapVotes.put(playerData.getVote(), 1);
+            }
+
+        }
+
+        // Get list of maps with the highest vote count
+
+        List<MapData> highestVotedMaps = new ArrayList<>();
+        int maxVotes = Integer.MIN_VALUE;
+
+        for (Map.Entry<MapData, Integer> entry : mapVotes.entrySet()) {
+            int votes = entry.getValue();
+            if (votes > maxVotes) {
+                maxVotes = votes;
+                highestVotedMaps.clear();
+                highestVotedMaps.add(entry.getKey());
+            } else if (votes == maxVotes) {
+                highestVotedMaps.add(entry.getKey());
+            }
+        }
+
+        return highestVotedMaps;
+
+    }
+
+    private void autoSelectMap() {
+
+        MapData selectedMap = null;
+
+        if (this.mapVoting) {
+
+            List<MapData> highestVotedMaps = this.getHighestVotedMaps();
+
+            if (!highestVotedMaps.isEmpty()) {
+
+                selectedMap = highestVotedMaps.get(new Random().nextInt(highestVotedMaps.size()));
+
+            }
+
+        }
+
+        if (selectedMap == null) {
+
+            if (!this.maps.isEmpty()) {
+
+                selectedMap = this.maps.get(new Random().nextInt(this.maps.size()));
+
+            }
+
+        }
+
+        this.selectedMap = selectedMap;
+
+    }
+
+    private void displayMap() {
+
+        for (UUID playerId : this.getPlayerMap().keySet()) {
+            Player player = this.plugin.getServer().getPlayer(playerId);
+
+            if (player == null) {
+                continue;
+            }
+
+            if (this.selectedMap == null) {
+                return;
+            }
+
+            player.sendMessage("§bThe map has been set to " + this.selectedMap.getName());
+
+        }
+
+    }
+
     @Override
     public GamePart getNextStatus() {
+
+        if (this.selectedMap == null) {
+            this.autoSelectMap();
+            this.displayMap();
+        }
 
         if (selectedMap == null) {
             this.plugin.getLogger().warning("Game stopped because no world was selected");
@@ -318,7 +436,8 @@ public class Lobby implements GamePart {
         return new Game(
                 this.plugin,
                 selectedMap.getTime(),
-                world, players,
+                world,
+                players,
                 selectedMap.getSpawnpoints(),
                 selectedMap.isEnableBorder(),
                 selectedMap.getBorder(),
@@ -336,9 +455,26 @@ public class Lobby implements GamePart {
 
     public void selectMap(MapData mapData) {
         this.selectedMap = mapData;
+        this.displayMap();
     }
 
     public List<MapData> getMaps() {
         return List.copyOf(this.maps);
+    }
+
+    public LobbyMenu getLobbyMenu(UUID playerId) {
+        return this.lobbyMenus.get(playerId);
+    }
+
+    public boolean isMapVoting() {
+        return this.mapVoting;
+    }
+
+    public void setMapVoting(boolean mapVoting) {
+        this.mapVoting = mapVoting;
+    }
+
+    public int getTime() {
+        return this.time;
     }
 }

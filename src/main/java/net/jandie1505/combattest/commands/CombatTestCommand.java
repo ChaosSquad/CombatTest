@@ -31,7 +31,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         if (args.length < 1) {
 
             if (this.hasPermissionAdmin(sender)) {
-                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/getteam/setteam/isautostart/setautostart/getmaxtime/setmaxtime/reload/menu/points/leave/stats");
+                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/getteam/setteam/isautostart/setautostart/getmaxtime/setmaxtime/reload/getvote/setvote/getlobbyteam/setlobbyteam/forcemap/menu/points/leave/stats/votemap/maps");
             } else {
                 sender.sendMessage("§7Usage: /combattest menu/points/leave/stats");
             }
@@ -137,6 +137,18 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 break;
             case "forcemap":
                 this.forcemapSubcommand(sender, args);
+                break;
+            case "getlobbyteam":
+                this.getLobbyScoreSubcommand(sender, args, 0);
+                break;
+            case "setlobbyteam":
+                this.setLobbyScoreSubcommand(sender, args, 0);
+                break;
+            case "getvote":
+                this.getLobbyScoreSubcommand(sender, args, 1);
+                break;
+            case "setvote":
+                this.setLobbyScoreSubcommand(sender, args, 1);
                 break;
             default:
                 sender.sendMessage("§cUnknown command");
@@ -1172,6 +1184,153 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void getLobbyScoreSubcommand(CommandSender sender, String[] args, int score) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Lobby)) {
+            sender.sendMessage("§cNo lobby running");
+            return;
+        }
+
+        if (args.length < 2) {
+            sender.sendMessage("§cUsage: /combattest get<score> <Player>");
+            return;
+        }
+
+        Player player = this.plugin.getPlayerFromString(args[1]);
+
+        if (player == null) {
+            sender.sendMessage("§cPlayer not online");
+            return;
+        }
+
+        LobbyPlayerData playerData = ((Lobby) this.plugin.getGame()).getPlayerMap().get(player.getUniqueId());
+
+        if (playerData == null) {
+            sender.sendMessage("§cPlayer not in lobby");
+            return;
+        }
+
+        switch (score) {
+            case 0:
+                sender.sendMessage("§7Lobby team: " + playerData.getTeam());
+                break;
+            case 1:
+                if (playerData.getVote() == null) {
+                    sender.sendMessage("§7Map vote: ---");
+                } else {
+                    sender.sendMessage("§7Map vote: " + playerData.getVote().getName() + " (" + playerData.getVote().getWorld() + ")");
+                }
+                break;
+            default:
+                sender.sendMessage("§cUnknown error");
+                break;
+        }
+
+    }
+
+    public void setLobbyScoreSubcommand(CommandSender sender, String[] args, int score) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo permission");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Lobby)) {
+            sender.sendMessage("§cNo lobby running");
+            return;
+        }
+
+        if (args.length < 3) {
+            sender.sendMessage("§cUsage: /combattest set<score> <Player> <score>");
+            return;
+        }
+
+        Player player = this.plugin.getPlayerFromString(args[1]);
+
+        if (player == null) {
+            sender.sendMessage("§cPlayer not online");
+            return;
+        }
+
+        LobbyPlayerData playerData = ((Lobby) this.plugin.getGame()).getPlayerMap().get(player.getUniqueId());
+
+        if (playerData == null) {
+            sender.sendMessage("§cPlayer not in lobby");
+            return;
+        }
+
+        try {
+
+            switch (score) {
+                case 0:
+                    if (Integer.parseInt(args[2]) < 0) {
+                        sender.sendMessage("§cTeam must be higher or equal than 0");
+                        return;
+                    }
+                    playerData.setTeam(Integer.parseInt(args[2]));
+                    sender.sendMessage("§ateam set");
+                    break;
+                case 1:
+                    if (args[2].equalsIgnoreCase("null")) {
+                        playerData.setVote(null);
+                        sender.sendMessage("§aCleared map vote");
+                    } else {
+
+                        String mapName = args[2];
+
+                        for (int i = 3; i < args.length; i++) {
+
+                            mapName = mapName + " " + args[i];
+
+                        }
+
+                        MapData mapData = null;
+
+                        for (MapData map : List.copyOf(((Lobby) this.plugin.getGame()).getMaps())) {
+
+                            if (mapName.startsWith("w:")) {
+
+                                if (map.getWorld().equals(mapName.substring(2))) {
+                                    mapData = map;
+                                }
+
+                            } else {
+
+                                if (map.getName().equals(mapName)) {
+                                    mapData = map;
+                                }
+
+                            }
+
+                        }
+
+                        if (mapData == null) {
+                            sender.sendMessage("§cMap does not exist (Set map to null if you want to clear vote)");
+                            return;
+                        }
+
+                        playerData.setVote(mapData);
+                        sender.sendMessage("§aMap vote set");
+
+                    }
+                    break;
+                default:
+                    sender.sendMessage("§cUnknown error");
+                    break;
+            }
+
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage("§cIllegal argument");
+            return;
+        }
+
+    }
+
     public boolean hasPermissionAdmin(CommandSender sender) {
         return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
     }
@@ -1208,6 +1367,10 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("givepoints");
                 tabComplete.add("reload");
                 tabComplete.add("forcemap");
+                tabComplete.add("getvote");
+                tabComplete.add("setvote");
+                tabComplete.add("getlobbyteam");
+                tabComplete.add("setlobbyteam");
 
             }
 

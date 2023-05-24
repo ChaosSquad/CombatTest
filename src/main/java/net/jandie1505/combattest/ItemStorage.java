@@ -1013,6 +1013,36 @@ public class ItemStorage {
         return itemStack;
     }
 
+    public static ItemStack getLobbyVoteHotbarButton() {
+
+        ItemStack item = new ItemStack(Material.FILLED_MAP);
+
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.FILLED_MAP);
+
+        meta.setDisplayName("§a§lMap Voting §r§a(right click)");
+        meta.setLore(List.of("H1"));
+
+        item.setItemMeta(meta);
+
+        return item;
+
+    }
+
+    public static ItemStack getLobbyTeamSelectionHotbarButton() {
+
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);
+
+        meta.setDisplayName("§a§lTeam Selection §r§a(right click)");
+        meta.setLore(List.of("H2"));
+
+        item.setItemMeta(meta);
+
+        return item;
+
+    }
+
     public static ItemStack getMelee(int id) {
         return MELEE_ITEMS.get(id);
     }

@@ -168,6 +168,13 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        if (this.plugin.getGame() instanceof Lobby && event.getWhoClicked() instanceof Player && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getClickedInventory() != null && event.getClickedInventory().getHolder() == event.getWhoClicked()) {
+
+            event.setCancelled(true);
+
+            return;
+        }
+
         if (this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getClickedInventory() != null && event.getClickedInventory().getHolder() == event.getWhoClicked()) {
 
             // Block player menu slot
@@ -549,6 +556,11 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
+        if (this.plugin.getGame() instanceof Lobby && event.getWhoClicked() instanceof Player && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getInventory().getHolder() == event.getWhoClicked()) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getInventory() != null && event.getInventory().getHolder() == event.getWhoClicked()) {
 
             if (event.getInventorySlots().contains(8)) {
@@ -563,7 +575,7 @@ public class EventListener implements Listener {
 
         }
 
-        if (event.getInventory() != null && event.getInventory().getHolder() instanceof PlayerMenu) {
+        if (event.getInventory() != null && (event.getInventory().getHolder() instanceof PlayerMenu || event.getInventory().getHolder() instanceof LobbyMenu)) {
             event.setCancelled(true);
             return;
         }
@@ -571,6 +583,13 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
+
+        if (this.plugin.getGame() instanceof Lobby && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
+
+            event.setCancelled(true);
+
+            return;
+        }
 
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 
@@ -590,6 +609,7 @@ public class EventListener implements Listener {
                 event.setCancelled(true);
             }
 
+            return;
         }
     }
 
@@ -623,12 +643,65 @@ public class EventListener implements Listener {
 
             }
 
+            return;
+        }
+
+        if (this.plugin.getGame() instanceof Lobby && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
+
+            if (event.getItem() == null) {
+                return;
+            }
+
+            if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+                return;
+            }
+
+            if (ItemStorage.getLobbyVoteHotbarButton().isSimilar(event.getItem())) {
+
+                event.setCancelled(true);
+
+                LobbyMenu lobbyMenu = ((Lobby) this.plugin.getGame()).getLobbyMenu(event.getPlayer().getUniqueId());
+
+                if (lobbyMenu == null) {
+                    return;
+                }
+
+                lobbyMenu.setPage(1);
+                event.getPlayer().openInventory(lobbyMenu.getInventory());
+
+                return;
+            }
+
+            if (ItemStorage.getLobbyTeamSelectionHotbarButton().isSimilar(event.getItem())) {
+
+                event.setCancelled(true);
+
+                LobbyMenu lobbyMenu = ((Lobby) this.plugin.getGame()).getLobbyMenu(event.getPlayer().getUniqueId());
+
+                if (lobbyMenu == null) {
+                    return;
+                }
+
+                lobbyMenu.setPage(2);
+                event.getPlayer().openInventory(lobbyMenu.getInventory());
+
+                return;
+            }
+
+            return;
         }
 
     }
 
     @EventHandler
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        if (this.plugin.getGame() instanceof Lobby && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
+
+            event.setCancelled(true);
+
+            return;
+        }
+
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 
             event.setCancelled(true);
@@ -673,6 +746,14 @@ public class EventListener implements Listener {
                 ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId()).setRegenerationCooldown(0);
                 ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId()).setNoPvpTimer(0);
                 ((Player) event.getEntity()).removePotionEffect(PotionEffectType.REGENERATION);
+
+            }
+
+        } else if (this.plugin.getGame() instanceof Lobby) {
+
+            if (event.getEntity() instanceof Player && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
+
+                event.setCancelled(true);
 
             }
 

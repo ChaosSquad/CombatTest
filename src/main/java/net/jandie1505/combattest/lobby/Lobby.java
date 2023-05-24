@@ -2,6 +2,7 @@ package net.jandie1505.combattest.lobby;
 
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.GameStatus;
 import net.jandie1505.combattest.game.Spawnpoint;
@@ -9,6 +10,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -232,7 +234,27 @@ public class Lobby implements GamePart {
                 player.setScoreboard(scoreboard);
 
                 if (!this.plugin.isPlayerBypassing(player.getUniqueId())) {
-                    player.getInventory().clear();
+
+                    for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
+
+                        if (item == null || item.getType() == Material.AIR) {
+                            continue;
+                        }
+
+                        if (!item.isSimilar(ItemStorage.getLobbyVoteHotbarButton()) && !item.isSimilar(ItemStorage.getLobbyTeamSelectionHotbarButton())) {
+                            player.getInventory().clear();
+                        }
+
+                    }
+
+                    if (!player.getInventory().contains(ItemStorage.getLobbyVoteHotbarButton())) {
+                        player.getInventory().setItem(3, ItemStorage.getLobbyVoteHotbarButton());
+                    }
+
+                    if (!player.getInventory().contains(ItemStorage.getLobbyTeamSelectionHotbarButton())) {
+                        player.getInventory().setItem(5, ItemStorage.getLobbyTeamSelectionHotbarButton());
+                    }
+
                 }
             }
 

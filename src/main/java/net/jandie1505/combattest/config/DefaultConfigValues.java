@@ -39,6 +39,13 @@ public final class DefaultConfigValues {
 
         config.put("lobby", lobbyConfig);
 
+        JSONObject cloudSystemConfig = new JSONObject();
+
+        cloudSystemConfig.put("enable", false);
+        cloudSystemConfig.put("switchToIngameCommand", "");
+
+        config.put("cloudSystemMode", cloudSystemConfig);
+
         return config;
     }
 

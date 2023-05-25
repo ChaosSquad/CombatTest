@@ -31,7 +31,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
         if (args.length < 1) {
 
             if (this.hasPermissionAdmin(sender)) {
-                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/getteam/setteam/isautostart/setautostart/getmaxtime/setmaxtime/reload/getvote/setvote/getlobbyteam/setlobbyteam/forcemap/menu/points/leave/stats/votemap/maps");
+                sender.sendMessage("§7Usage: /combattest stop/start/status/addplayer/removeplayer/getplayers/bypass/settime/getpoints/setpoints/getmelee/setmelee/getranged/setranged/getarmor/setarmor/getteam/setteam/isautostart/setautostart/getmaxtime/setmaxtime/reload/getvote/setvote/getlobbyteam/setlobbyteam/forcemap/getserverstatus/menu/points/leave/stats/votemap/maps");
             } else {
                 sender.sendMessage("§7Usage: /combattest menu/points/leave/stats");
             }
@@ -149,6 +149,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 break;
             case "setvote":
                 this.setLobbyScoreSubcommand(sender, args, 1);
+                break;
+            case "getserverstatus":
+                this.getServerStatusCommand(sender);
                 break;
             default:
                 sender.sendMessage("§cUnknown command");
@@ -728,6 +731,18 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
         this.plugin.setAutostartNewGame(Boolean.parseBoolean(args[1]));
         sender.sendMessage("§aAutostart of new games set to: " + this.plugin.isAutostartNewGame());
+
+    }
+
+    public void getServerStatusCommand(CommandSender sender) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo Permission");
+            return;
+        }
+
+        sender.sendMessage("§6Single Server Mode: " + this.plugin.isSingleServer());
+        sender.sendMessage("§6Cloud System Mode status: " + this.plugin.isCloudSystemMode());
 
     }
 
@@ -1371,6 +1386,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("setvote");
                 tabComplete.add("getlobbyteam");
                 tabComplete.add("setlobbyteam");
+                tabComplete.add("getserverstatus");
 
             }
 

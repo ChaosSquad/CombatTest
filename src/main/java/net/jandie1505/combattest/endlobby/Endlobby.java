@@ -245,6 +245,8 @@ public class Endlobby implements GamePart {
             }
         }
 
+        // TIME
+
         if (this.time >= 0) {
             return GameStatus.NORMAL;
         } else {
@@ -254,6 +256,11 @@ public class Endlobby implements GamePart {
 
     @Override
     public GamePart getNextStatus() {
+
+        if (this.plugin.isCloudSystemMode()) {
+            this.plugin.getServer().shutdown();
+        }
+
         return null;
     }
 

@@ -1,5 +1,6 @@
 package net.jandie1505.combattest.game;
 
+import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.GameStatus;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -81,6 +83,33 @@ public class Game implements GamePart {
 
         if (world != null) {
             world.setTime(6000);
+        }
+
+        if (this.plugin.isCloudSystemMode()) {
+
+            // Custom command
+
+            String customCommand = this.plugin.getConfigManager().getConfig().optJSONObject("cloudSystemMode", new JSONObject()).optString("switchToIngameCommand", "");
+
+            if (!customCommand.equalsIgnoreCase("")) {
+                this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), customCommand);
+            }
+
+            // CloudNet ingame state
+
+            boolean isBukkitCloudNetHelperLoaded = false;
+            try {
+                Class.forName("de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper");
+                isBukkitCloudNetHelperLoaded = true;
+            } catch (ClassNotFoundException ignored) {
+                // Die Klasse wurde nicht gefunden
+            }
+
+            if (isBukkitCloudNetHelperLoaded) {
+                BukkitCloudNetHelper.changeToIngame();
+                this.plugin.getLogger().info("Changed server to ingame state (CloudNet)");
+            }
+
         }
     }
 

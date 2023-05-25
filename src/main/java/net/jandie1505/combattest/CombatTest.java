@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -24,6 +25,7 @@ public class CombatTest extends JavaPlugin {
     private int timeStep;
     private int autostartNewGameTimer;
     private List<World> managedWorlds;
+    private boolean cloudSystemMode;
 
     @Override
     public void onEnable() {
@@ -39,6 +41,7 @@ public class CombatTest extends JavaPlugin {
         this.timeStep = 0;
         this.autostartNewGameTimer = 30;
         this.managedWorlds = Collections.synchronizedList(new ArrayList<>());
+        this.cloudSystemMode = this.singleServer && this.configManager.getConfig().optJSONObject("cloudSystemMode", new JSONObject()).optBoolean("enable", false);
 
         this.getCommand("combattest").setExecutor(new CombatTestCommand(this));
         this.getCommand("combattest").setTabCompleter(new CombatTestCommand(this));
@@ -115,6 +118,13 @@ public class CombatTest extends JavaPlugin {
                 this.stopGame();
             }
         }, 0, 10);
+
+        this.getLogger().info("CombatTest Plugin was successfully enabled");
+
+        if (this.isCloudSystemMode()) {
+            this.getLogger().info("Cloud System Mode enabled (autostart game + switch to ingame + shutdown on end)");
+            this.startGame();
+        }
     }
 
     @Override
@@ -261,6 +271,10 @@ public class CombatTest extends JavaPlugin {
 
     public List<World> getManagedWorlds() {
         return List.copyOf(this.managedWorlds);
+    }
+
+    public boolean isCloudSystemMode() {
+        return this.singleServer && this.cloudSystemMode;
     }
 
     public static int getWeather(World world) {

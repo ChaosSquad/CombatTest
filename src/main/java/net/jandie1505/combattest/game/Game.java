@@ -152,8 +152,6 @@ public class Game implements GamePart {
 
                 }
 
-                System.out.println(trident.getDamage());
-
                 if (this.players.containsKey(((Player) trident.getShooter()).getUniqueId())) {
                     tridentList.add((Player) trident.getShooter());
                 } else {

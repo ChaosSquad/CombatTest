@@ -7,6 +7,7 @@ import net.jandie1505.combattest.lobby.LobbyMenu;
 import net.jandie1505.combattest.lobby.LobbyPlayerData;
 import net.jandie1505.combattest.lobby.MapData;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -162,7 +163,15 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
-            event.setRespawnLocation(event.getPlayer().getLocation());
+
+            Location location = event.getPlayer().getLocation();
+
+            if (location.getY() < -65) {
+                location.setY(-65);
+            }
+
+            event.setRespawnLocation(location);
+
         }
     }
 

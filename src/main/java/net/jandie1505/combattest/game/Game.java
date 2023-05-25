@@ -142,6 +142,18 @@ public class Game implements GamePart {
                     continue;
                 }
 
+                if (ItemStorage.getIdPrefix(trident.getItem()).equalsIgnoreCase(ItemStorage.EQUIPMENT_RANGED)) {
+
+                    if (ItemStorage.getId(trident.getItem()) == 300) {
+                        trident.setDamage(1.5);
+                    } else if (ItemStorage.getId(trident.getItem()) == 301) {
+                        trident.setDamage(1.75);
+                    }
+
+                }
+
+                System.out.println(trident.getDamage());
+
                 if (this.players.containsKey(((Player) trident.getShooter()).getUniqueId())) {
                     tridentList.add((Player) trident.getShooter());
                 } else {

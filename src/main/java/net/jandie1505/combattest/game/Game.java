@@ -565,15 +565,16 @@ public class Game implements GamePart {
                 }
                 Objective sidebarObjective = scoreboard.getObjective("sidebar");
 
-                sidebarObjective.getScore("§§§§").setScore(11);
-                sidebarObjective.getScore("Kills: §a" + playerData.getKills()).setScore(10);
-                sidebarObjective.getScore("Deaths: §a" + playerData.getDeaths()).setScore(9);
-                sidebarObjective.getScore("K/D: §a" + PlayerData.getKD(playerData.getKills(), playerData.getDeaths())).setScore(8);
-                sidebarObjective.getScore("Points: §a" + playerData.getPoints()).setScore(7);
+                sidebarObjective.getScore("§§§§").setScore(12);
+                sidebarObjective.getScore("Kills: §a" + playerData.getKills()).setScore(11);
+                sidebarObjective.getScore("Deaths: §a" + playerData.getDeaths()).setScore(10);
+                sidebarObjective.getScore("K/D: §a" + PlayerData.getKD(playerData.getKills(), playerData.getDeaths())).setScore(9);
+                sidebarObjective.getScore("Points: §a" + playerData.getPoints()).setScore(8);
 
                 if (playerData.getTeam() > 0) {
 
-                    sidebarObjective.getScore("§§§").setScore(6);
+                    sidebarObjective.getScore("§§§").setScore(7);
+                    sidebarObjective.getScore("Team: §a" + playerData.getTeam()).setScore(6);
                     sidebarObjective.getScore("Team Kills: §a" + this.getTeamKills(playerData.getTeam())).setScore(5);
                     sidebarObjective.getScore("Team Deaths: §a" + this.getTeamDeaths(playerData.getTeam())).setScore(4);
                     sidebarObjective.getScore("Team K/D: §a" + PlayerData.getKD(this.getTeamKills(playerData.getTeam()), this.getTeamDeaths(playerData.getTeam()))).setScore(3);

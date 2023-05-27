@@ -1015,9 +1015,9 @@ public class ItemStorage {
 
     public static ItemStack getLobbyVoteHotbarButton() {
 
-        ItemStack item = new ItemStack(Material.FILLED_MAP);
+        ItemStack item = new ItemStack(Material.MAP);
 
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.FILLED_MAP);
+        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.MAP);
 
         meta.setDisplayName("§a§lMap Voting §r§a(right click)");
         meta.setLore(List.of("H1"));

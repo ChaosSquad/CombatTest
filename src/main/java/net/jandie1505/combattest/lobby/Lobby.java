@@ -5,6 +5,7 @@ import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.GameStatus;
+import net.jandie1505.combattest.game.PlayerData;
 import net.jandie1505.combattest.game.Spawnpoint;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -140,7 +141,7 @@ public class Lobby implements GamePart {
 
         // PLAYER MANAGEMENT
 
-        for (UUID playerId : this.getPlayers()) {
+        for (UUID playerId : this.getPlayerMap().keySet()) {
             Player player = this.plugin.getServer().getPlayer(playerId);
 
             // Cleanup
@@ -149,6 +150,10 @@ public class Lobby implements GamePart {
                 this.players.remove(playerId);
                 continue;
             }
+
+            // Get Player Data
+
+            LobbyPlayerData playerData = this.players.get(playerId);
 
             // Force adventure mode
 
@@ -209,25 +214,32 @@ public class Lobby implements GamePart {
 
                 objective.setDisplayName("§6§lCOMBAT TEST");
 
-                objective.getScore("§§§").setScore(5);
+                objective.getScore("§§§§").setScore(7);
 
                 if (this.players.size() >= 2) {
 
-                    objective.getScore("§bStarting in " + this.time).setScore(4);
-                    objective.getScore("§§").setScore(3);
-                    objective.getScore("§7Players: §a" + this.players.size() + " / 2").setScore(2);
-                    objective.getScore("§7Map: §a" + mapName).setScore(1);
+                    objective.getScore("§bStarting in " + this.time).setScore(6);
+                    objective.getScore("§§§").setScore(5);
+                    objective.getScore("§7Players: §a" + this.players.size() + " / 2").setScore(4);
 
                 } else {
 
-                    objective.getScore("§cNot enough players").setScore(4);
-                    objective.getScore("§§").setScore(3);
-                    objective.getScore("§7Players: §c" + this.players.size() + " / 2").setScore(2);
-                    objective.getScore("§7Map: §a" + mapName).setScore(1);
+                    objective.getScore("§cNot enough players").setScore(6);
+                    objective.getScore("§§§").setScore(5);
+                    objective.getScore("§7Players: §c" + this.players.size() + " / 2").setScore(4);
 
                 }
 
+                objective.getScore("§§").setScore(3);
+                objective.getScore("§7Map: §a" + mapName).setScore(2);
+
                 objective.getScore("§").setScore(0);
+
+                if (playerData.getTeam() > 0) {
+                    objective.getScore("§7Team: §a" + playerData.getTeam()).setScore(1);
+                } else {
+                    objective.getScore("§7Team: §a" + "---").setScore(1);
+                }
 
                 objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 

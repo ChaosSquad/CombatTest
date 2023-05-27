@@ -37,6 +37,7 @@ public class Lobby implements GamePart {
     private Location lobbySpawn;
     private Map<UUID, LobbyMenu> lobbyMenus;
     private boolean mapVoting;
+    private boolean teamSelection;
 
     public Lobby(CombatTest plugin) {
         this.plugin = plugin;
@@ -67,6 +68,7 @@ public class Lobby implements GamePart {
         );
         this.lobbyMenus = Collections.synchronizedMap(new HashMap<>());
         this.mapVoting = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("mapVoting", false);
+        this.teamSelection = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("teamSelection", false);;
 
         for (String world : List.copyOf(this.plugin.getMapConfig().getConfig().keySet())) {
             try {
@@ -510,5 +512,41 @@ public class Lobby implements GamePart {
 
     public int getTime() {
         return this.time;
+    }
+
+    public boolean isTeamSelection() {
+        return this.teamSelection;
+    }
+
+    public void setTeamSelection(boolean teamSelection) {
+        this.teamSelection = teamSelection;
+    }
+
+    public List<Integer> getTeams() {
+        List<Integer> teamList = new ArrayList<>();
+
+        for (UUID p : this.getPlayerMap().keySet()) {
+            LobbyPlayerData playerData = this.getPlayerMap().get(p);
+
+            if (playerData.getTeam() > 0 && !teamList.contains(playerData.getTeam())) {
+                teamList.add(playerData.getTeam());
+            }
+        }
+
+        return List.copyOf(teamList);
+    }
+
+    public List<UUID> getTeamMembers(int teamId) {
+        List<UUID> teamMembers = new ArrayList<>();
+
+        for (UUID p : this.getPlayerMap().keySet()) {
+
+            if (this.getPlayerMap().get(p).getTeam() == teamId) {
+                teamMembers.add(p);
+            }
+
+        }
+
+        return List.copyOf(teamMembers);
     }
 }

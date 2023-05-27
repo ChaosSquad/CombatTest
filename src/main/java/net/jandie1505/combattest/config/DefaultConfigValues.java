@@ -36,6 +36,7 @@ public final class DefaultConfigValues {
         lobbyConfig.put("time", 90);
         lobbyConfig.put("requiredPlayers", 2);
         lobbyConfig.put("mapVoting", true);
+        lobbyConfig.put("teamSelection", true);
 
         config.put("lobby", lobbyConfig);
 

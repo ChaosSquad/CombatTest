@@ -24,6 +24,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -552,6 +553,93 @@ public class EventListener implements Listener {
                                 return;
                             }
 
+                        }
+
+                    }
+
+                } else if (menu.getPage() == 2) {
+
+                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
+
+                        menu.setPage(0);
+                        event.getWhoClicked().openInventory(menu.getInventory());
+
+                    } else {
+
+                        if (!((Lobby) this.plugin.getGame()).isTeamSelection()) {
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§cTeam selection is disabled");
+                            return;
+                        }
+
+                        LobbyPlayerData playerData = ((Lobby) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
+
+                        if (event.getCurrentItem().isSimilar(ItemStorage.getLobbyTeamSelectionLeaveTeamButton())) {
+
+                            playerData.setTeam(0);
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§aLeft team successfully");
+
+                        } else if (event.getCurrentItem().isSimilar(ItemStorage.getLobbyTeamSelectionCreateTeamButton())) {
+
+                            List<Integer> teams = ((Lobby) this.plugin.getGame()).getTeams();
+
+                            int nextTeamId = 0;
+
+                            if (teams.isEmpty()) {
+
+                                nextTeamId = 1;
+
+                            } else {
+
+                                for (int i = 1; i < Integer.MAX_VALUE; i++) {
+
+                                    if (teams.contains(i)) {
+                                        continue;
+                                    }
+
+                                    nextTeamId = i;
+                                    break;
+                                }
+
+                            }
+
+                            if (nextTeamId <= 0) {
+                                event.getWhoClicked().closeInventory();
+                                event.getWhoClicked().sendMessage("§cError while creating team");
+                                return;
+                            }
+
+                            playerData.setTeam(nextTeamId);
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§aTeam created successfully");
+
+                            return;
+                        } else if (ItemStorage.getIdPrefix(event.getCurrentItem()).equals(ItemStorage.MENU_ITEM) && ItemStorage.getId(event.getCurrentItem()) == 10) {
+
+                            List<String> lore = event.getCurrentItem().getItemMeta().getLore();
+
+                            if (lore.size() < 2) {
+                                return;
+                            }
+
+                            int teamId;
+
+                            try {
+                                teamId = Integer.parseInt(lore.get(1));
+                            } catch (IllegalArgumentException e) {
+                                teamId = 0;
+                            }
+
+                            if (teamId <= 0) {
+                                return;
+                            }
+
+                            playerData.setTeam(teamId);
+                            event.getWhoClicked().closeInventory();
+                            event.getWhoClicked().sendMessage("§aSuccessfully joined team " + teamId);
+
+                            return;
                         }
 
                     }

@@ -4,8 +4,8 @@ import net.jandie1505.combattest.ItemStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.UUID;
 
 public class LobbyMenu implements InventoryHolder {
@@ -26,6 +26,8 @@ public class LobbyMenu implements InventoryHolder {
                 return this.getSelectionMenu();
             case 1:
                 return this.getVotingMenu();
+            case 2:
+                return this.getTeamMenu();
             default:
                 return Bukkit.createInventory(this, 27, "§c§mLobby Menu");
         }
@@ -69,6 +71,49 @@ public class LobbyMenu implements InventoryHolder {
             }
 
             inventory.setItem(slot, ItemStorage.getLobbyVoteMapButton(map.getName(), map.getWorld(), map == playerData.getVote()));
+
+            slot++;
+        }
+
+        return inventory;
+    }
+
+    public Inventory getTeamMenu() {
+        List<Integer> teams = this.lobby.getTeams();
+
+        int inventorySize = ((teams.size() / 9) + 1) * 9;
+
+        if (inventorySize > 54) {
+            inventorySize = 54;
+        }
+
+        if (inventorySize < 27) {
+            inventorySize = 27;
+        }
+
+        Inventory inventory = Bukkit.createInventory(this, inventorySize, "§6§lMap Voting");
+        LobbyPlayerData playerData = this.lobby.getPlayerMap().get(this.playerId);
+
+        inventory.setItem(0, ItemStorage.getBackButton());
+
+        if (playerData == null) {
+            return inventory;
+        }
+
+        if (playerData.getTeam() > 0) {
+            inventory.setItem(1, ItemStorage.getLobbyTeamSelectionLeaveTeamButton());
+        } else {
+            inventory.setItem(1, ItemStorage.getLobbyTeamSelectionCreateTeamButton());
+        }
+
+        int slot = 2;
+        for (Integer teamId : teams) {
+
+            if (slot >= inventory.getSize()) {
+                break;
+            }
+
+            inventory.setItem(slot, ItemStorage.getLobbyTeamSelectionButton(teamId, playerData.getTeam() == teamId));
 
             slot++;
         }

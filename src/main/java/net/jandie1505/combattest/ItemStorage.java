@@ -1013,6 +1013,41 @@ public class ItemStorage {
         return itemStack;
     }
 
+    public static ItemStack getLobbyTeamSelectionButton(int teamId, boolean selected) {
+        String colorCode;
+
+        if (selected) {
+            colorCode = "§r§a";
+        } else {
+            colorCode = "§r§6";
+        }
+
+        ItemStack itemStack = buildInventoryButton(Material.BLUE_TERRACOTTA, colorCode + "Team " + teamId, null, 10);
+
+        ItemMeta meta = itemStack.getItemMeta();
+
+        List<String> lore = meta.getLore();
+        lore.add(String.valueOf(teamId));
+        meta.setLore(lore);
+
+        if (selected) {
+            meta.addEnchant(Enchantment.LUCK, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+
+        itemStack.setItemMeta(meta);
+
+        return itemStack;
+    }
+
+    public static ItemStack getLobbyTeamSelectionCreateTeamButton() {
+        return buildInventoryButton(Material.EMERALD, "§r§b§lCreate Team", null, 11);
+    }
+
+    public static ItemStack getLobbyTeamSelectionLeaveTeamButton() {
+        return buildInventoryButton(Material.LAVA_BUCKET, "§r§c§lLeave Team", null, 12);
+    }
+
     public static ItemStack getLobbyVoteHotbarButton() {
 
         ItemStack item = new ItemStack(Material.MAP);

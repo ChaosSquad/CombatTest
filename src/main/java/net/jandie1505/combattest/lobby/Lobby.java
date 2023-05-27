@@ -43,7 +43,7 @@ public class Lobby implements GamePart {
         this.plugin = plugin;
         this.killswitch = false;
         this.timeStep = 0;
-        this.time = 60;
+        this.time = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optInt("time", 90);
         this.players = Collections.synchronizedMap(new HashMap<>());
         this.forcestart = false;
         this.maps = new ArrayList<>();

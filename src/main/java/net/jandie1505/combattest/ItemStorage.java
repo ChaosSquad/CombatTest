@@ -694,8 +694,8 @@ public class ItemStorage {
         Map<Integer, ItemStack> offhandItemsInit = new HashMap<>();
 
         offhandItemsInit.put(9000, getRocketLauncherAmmo("Rocket Tier 1", 1, 9000));
-        offhandItemsInit.put(9001, getRocketLauncherAmmo("Rocket Tier 2", 3, 9001));
-        offhandItemsInit.put(9002, getRocketLauncherAmmo("Rocket Tier 3", 5, 9002));
+        offhandItemsInit.put(9001, getRocketLauncherAmmo("Rocket Tier 2", 2, 9001));
+        offhandItemsInit.put(9002, getRocketLauncherAmmo("Rocket Tier 3", 4, 9002));
 
         offhandItemsInit.put(100, shieldBuilder("Chainmail Armor Shield", 6, 100));
         offhandItemsInit.put(101, shieldBuilder("Chainmail Armor + Shield", 13, 101));

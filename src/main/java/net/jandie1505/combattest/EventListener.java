@@ -156,6 +156,46 @@ public class EventListener implements Listener {
 
                 }
 
+            } else if (event.getEntity().getKiller() != null) {
+
+                Player damager = event.getEntity().getKiller();
+
+                if (damager != null && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(damager.getUniqueId())) {
+
+                    PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(damager.getUniqueId());
+
+                    damagerData.setPoints(damagerData.getPoints() + 1000);
+                    damager.sendMessage("§bIndirect Player Kill: + 1000 Points");
+
+                    double comparedEquipmentLevels = PlayerData.compareEquipmentLevels(damagerData, victimData);
+
+                    System.out.println(comparedEquipmentLevels);
+
+                    if (comparedEquipmentLevels < 0) {
+                        int receivedPoints = ((int) (500.0 * comparedEquipmentLevels * (-1.0)));
+                        damagerData.setPoints(damagerData.getPoints() + receivedPoints);
+                        damager.sendMessage("§bIndirect Player Kill (Low Equipment Bonus): + " + receivedPoints);
+                    } else if (comparedEquipmentLevels > 0) {
+                        int receivedPoints = ((int) (250.0 * comparedEquipmentLevels));
+                        victimData.setPoints(victimData.getPoints() + receivedPoints);
+                        event.getEntity().sendMessage("§bYou were killed by a player indirectly with significantly higher equipment: + " + receivedPoints + " Points");
+                    }
+
+                    damagerData.setKills(damagerData.getKills() + 1);
+
+                    if (damagerData.getTeam() > 0) {
+
+                        for (UUID playerId : ((Game) this.plugin.getGame()).getTeamMembers(damagerData.getTeam())) {
+                            if (!damager.getUniqueId().equals(playerId) && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(playerId)) {
+                                PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(playerId);
+                                playerData.setPoints((playerData.getPoints() + 250));
+                            }
+                        }
+
+                    }
+
+                }
+
             }
 
         }

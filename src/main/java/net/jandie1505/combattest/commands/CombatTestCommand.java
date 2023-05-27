@@ -150,6 +150,9 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "setvote":
                 this.setLobbyScoreSubcommand(sender, args, 1);
                 break;
+            case "randomteams":
+                this.randomTeamsSubcommand(sender);
+                break;
             case "getserverstatus":
                 this.getServerStatusCommand(sender);
                 break;
@@ -1346,6 +1349,23 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
     }
 
+    public void randomTeamsSubcommand(CommandSender sender) {
+
+        if (!this.hasPermissionAdmin(sender)) {
+            sender.sendMessage("§cNo Permission");
+            return;
+        }
+
+        if (!(this.plugin.getGame() instanceof Lobby)) {
+            sender.sendMessage("§cNo lobby running");
+            return;
+        }
+
+        ((Lobby) this.plugin.getGame()).randomTeams();
+        sender.sendMessage("§aAll players were assigned to random teams");
+
+    }
+
     public boolean hasPermissionAdmin(CommandSender sender) {
         return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
     }
@@ -1386,6 +1406,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 tabComplete.add("setvote");
                 tabComplete.add("getlobbyteam");
                 tabComplete.add("setlobbyteam");
+                tabComplete.add("randomteams");
                 tabComplete.add("getserverstatus");
 
             }

@@ -442,6 +442,34 @@ public class Lobby implements GamePart {
 
     }
 
+    public void randomTeams() {
+
+        for (UUID playerId : this.getPlayerMap().keySet()) {
+
+            LobbyPlayerData playerData = this.players.get(playerId);
+
+            if (playerData == null || playerData.getTeam() == 1 || playerData.getTeam() == 2) {
+                continue;
+            }
+
+            if (this.getTeamMembers(1).size() == this.getTeamMembers(2).size()) {
+
+                playerData.setTeam(new Random().nextInt(3));
+
+            } else if (this.getTeamMembers(1).size() < this.getTeamMembers(2).size()) {
+
+                playerData.setTeam(1);
+
+            } else if (this.getTeamMembers(1).size() > this.getTeamMembers(2).size()) {
+
+                playerData.setTeam(2);
+
+            }
+
+        }
+
+    }
+
     @Override
     public GamePart getNextStatus() {
 

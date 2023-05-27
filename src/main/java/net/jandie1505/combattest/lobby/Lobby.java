@@ -163,6 +163,12 @@ public class Lobby implements GamePart {
                 player.setGameMode(GameMode.ADVENTURE);
             }
 
+            // Saturation
+
+            if (player.getFoodLevel() < 20) {
+                player.setFoodLevel(20);
+            }
+
             // Actionbar
 
             if (this.players.size() >= 2) {

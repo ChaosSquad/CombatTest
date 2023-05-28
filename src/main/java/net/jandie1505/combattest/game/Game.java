@@ -57,6 +57,10 @@ public class Game implements GamePart {
                 continue;
             }
 
+            player.setHealth(20);
+            player.setFoodLevel(20);
+            player.setSaturation(20);
+
             PlayerData playerData = new PlayerData(playerId);
 
             if (lobbyPlayerData != null) {

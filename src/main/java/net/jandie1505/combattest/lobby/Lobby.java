@@ -163,6 +163,12 @@ public class Lobby implements GamePart {
                 player.setGameMode(GameMode.ADVENTURE);
             }
 
+            // Health
+
+            if (player.getHealth() < 20) {
+                player.setHealth(20);
+            }
+
             // Saturation
 
             if (player.getFoodLevel() < 20) {

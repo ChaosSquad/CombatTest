@@ -886,15 +886,16 @@ public class EventListener implements Listener {
 
             }
 
-        } else if (this.plugin.getGame() instanceof Lobby) {
+        } else if (this.plugin.getGame() instanceof Lobby || this.plugin.getGame() instanceof Endlobby) {
 
-            if (event.getEntity() instanceof Player && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
+            if (event.getEntity() instanceof Player && this.plugin.getGame().getPlayers().contains(event.getEntity().getUniqueId())) {
 
                 event.setCancelled(true);
 
             }
 
         }
+
     }
 
     @EventHandler

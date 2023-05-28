@@ -8,6 +8,7 @@ import net.jandie1505.combattest.game.TeamData;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -158,6 +159,26 @@ public class Endlobby implements GamePart {
             }
 
             PlayerData playerData = this.playerMap.get(playerId);
+
+            // Gamemode
+
+            if (player.getGameMode() != GameMode.ADVENTURE && !this.plugin.isPlayerBypassing(player.getUniqueId())) {
+                player.setGameMode(GameMode.ADVENTURE);
+            }
+
+            // Health
+
+            if (player.getHealthScale() < 20) {
+                player.setHealth(20);
+            }
+
+            // Saturation
+
+            if (player.getFoodLevel() < 20) {
+                player.setFoodLevel(20);
+            }
+
+            // Messages
 
             if (this.time >= 55 && this.time <= 59) {
                 if (mostKillsPlayerData != null && mostKillsPlayer != null) {

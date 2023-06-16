@@ -502,7 +502,6 @@ public class ItemStorage {
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 3, true);
             meta.addEnchant(Enchantment.PIERCING, 3, true);
-            meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 
             item.setItemMeta(meta);
 

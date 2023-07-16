@@ -1,6 +1,7 @@
 package net.jandie1505.combattest.game;
 
-import de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper;
+import eu.cloudnetservice.driver.inject.InjectionLayer;
+import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.GameStatus;
@@ -101,17 +102,25 @@ public class Game implements GamePart {
 
             // CloudNet ingame state
 
-            boolean isBukkitCloudNetHelperLoaded = false;
             try {
-                Class.forName("de.dytanic.cloudnet.ext.bridge.bukkit.BukkitCloudNetHelper");
-                isBukkitCloudNetHelperLoaded = true;
-            } catch (ClassNotFoundException ignored) {
-                // Die Klasse wurde nicht gefunden
-            }
 
-            if (isBukkitCloudNetHelperLoaded) {
-                BukkitCloudNetHelper.changeToIngame();
-                this.plugin.getLogger().info("Changed server to ingame state (CloudNet)");
+                boolean isBridgeServiceHelperFound = false;
+                try {
+                    Class.forName("eu.cloudnetservice.driver.inject.InjectionLayer");
+                    Class.forName("eu.cloudnetservice.modules.bridge.BridgeServiceHelper");
+
+                    BridgeServiceHelper bridgeServiceHelper = InjectionLayer.ext().instance(BridgeServiceHelper.class);
+
+                    if (bridgeServiceHelper != null) {
+                        bridgeServiceHelper.changeToIngame();
+                        this.plugin.getLogger().info("Changed server to ingame state (CloudNet)");
+                    }
+                } catch (ClassNotFoundException ignored) {
+                    // ignored (cloudnet not installed)
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         }

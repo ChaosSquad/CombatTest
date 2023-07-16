@@ -19,10 +19,6 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <repository>
-            <id>cloudnet-releases</id>
-            <url>https://repo.cloudnetservice.eu/repository/releases/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -39,10 +35,39 @@
             <version>20230227</version>
         </dependency>
         <dependency>
-            <groupId>de.dytanic.cloudnet</groupId>
-            <artifactId>cloudnet-bridge</artifactId>
-            <version>3.4.5-RELEASE</version>
+            <groupId>eu.cloudnetservice.cloudnet</groupId>
+            <artifactId>bridge</artifactId>
+            <version>4.0.0-RC9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>eu.cloudnetservice.cloudnet</groupId>
+            <artifactId>platform-inject-api</artifactId>
+            <version>4.0.0-RC9</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"/>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

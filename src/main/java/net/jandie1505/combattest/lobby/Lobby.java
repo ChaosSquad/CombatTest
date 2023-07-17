@@ -562,6 +562,10 @@ public class Lobby implements GamePart {
         this.teamSelection = teamSelection;
     }
 
+    public Location getLobbySpawn() {
+        return this.lobbySpawn.clone();
+    }
+
     public List<Integer> getTeams() {
         List<Integer> teamList = new ArrayList<>();
 

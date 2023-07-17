@@ -1,5 +1,6 @@
 package net.jandie1505.combattest;
 
+import de.myzelyam.api.vanish.VanishAPI;
 import net.jandie1505.combattest.commands.CombatTestCommand;
 import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
@@ -26,6 +27,7 @@ public class CombatTest extends JavaPlugin {
     private int autostartNewGameTimer;
     private List<World> managedWorlds;
     private boolean cloudSystemMode;
+    private boolean svLoaded;
 
     @Override
     public void onEnable() {
@@ -42,6 +44,14 @@ public class CombatTest extends JavaPlugin {
         this.autostartNewGameTimer = 30;
         this.managedWorlds = Collections.synchronizedList(new ArrayList<>());
         this.cloudSystemMode = this.singleServer && this.configManager.getConfig().optJSONObject("cloudSystemMode", new JSONObject()).optBoolean("enable", false);
+
+        try {
+            Class.forName("de.myzelyam.api.vanish.VanishAPI");
+            this.svLoaded = true;
+            this.getLogger().info("SuperVanish/PremiumVanish integration enabled (auto-bypass when vanished)");
+        } catch (ClassNotFoundException ignored) {
+            this.svLoaded = false;
+        }
 
         this.getCommand("combattest").setExecutor(new CombatTestCommand(this));
         this.getCommand("combattest").setTabCompleter(new CombatTestCommand(this));
@@ -190,7 +200,24 @@ public class CombatTest extends JavaPlugin {
     }
 
     public boolean isPlayerBypassing(UUID playerId) {
-        return this.getBypassingPlayers().contains(playerId);
+
+        if (this.getBypassingPlayers().contains(playerId)) {
+            return true;
+        }
+
+        if (this.svLoaded) {
+
+            Player player = this.getServer().getPlayer(playerId);
+
+            if (player == null) {
+                return false;
+            }
+
+            return VanishAPI.isInvisible(player);
+
+        }
+
+        return false;
     }
 
     public ConfigManager getConfigManager() {

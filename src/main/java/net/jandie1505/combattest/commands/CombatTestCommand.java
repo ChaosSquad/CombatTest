@@ -334,7 +334,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 1 && sender instanceof Player) {
 
-            sender.sendMessage("§7Your bypass status: " + this.plugin.isPlayerBypassing(((Player) sender).getUniqueId()));
+            sender.sendMessage("§7Your bypass status: " + this.plugin.isPlayerBypassing(((Player) sender).getUniqueId()) + " " + this.plugin.getBypassingPlayers().contains(((Player) sender).getUniqueId()));
 
         } else {
 
@@ -372,7 +372,7 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                         playerId = player.getUniqueId();
                     }
 
-                    sender.sendMessage("§7Bypassing status of the player: " + this.plugin.isPlayerBypassing(playerId));
+                    sender.sendMessage("§7Bypassing status of the player: " + this.plugin.isPlayerBypassing(playerId) + " " + this.plugin.getBypassingPlayers().contains(playerId));
 
                 }
 

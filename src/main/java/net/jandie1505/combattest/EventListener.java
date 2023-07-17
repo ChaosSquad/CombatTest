@@ -1004,4 +1004,17 @@ public class EventListener implements Listener {
 
         }
     }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+
+        // teleport
+
+        if (this.plugin.getGame() instanceof Lobby) {
+
+            event.getPlayer().teleport(((Lobby) this.plugin.getGame()).getLobbySpawn());
+
+        }
+
+    }
 }

@@ -104,7 +104,6 @@ public class Game implements GamePart {
 
             try {
 
-                boolean isBridgeServiceHelperFound = false;
                 try {
                     Class.forName("eu.cloudnetservice.driver.inject.InjectionLayer");
                     Class.forName("eu.cloudnetservice.modules.bridge.BridgeServiceHelper");

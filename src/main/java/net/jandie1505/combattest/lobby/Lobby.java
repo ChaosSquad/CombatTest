@@ -543,7 +543,7 @@ public class Lobby implements GamePart {
                         continue;
                     }
 
-                    for (PAFPlayer pafPlayer : List.copyOf(party.getPlayers())) {
+                    for (PAFPlayer pafPlayer : List.copyOf(party.getAllPlayers())) {
                         Player player = this.plugin.getServer().getPlayer(pafPlayer.getUniqueId());
                         LobbyPlayerData playerData = this.players.get(pafPlayer.getUniqueId());
 

@@ -205,7 +205,7 @@ public class CombatTest extends JavaPlugin {
             return true;
         }
 
-        if (this.svLoaded) {
+        if (this.configManager.getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("supervanish-premiumvanish", false) && this.svLoaded) {
 
             Player player = this.getServer().getPlayer(playerId);
 

@@ -47,6 +47,14 @@ public final class DefaultConfigValues {
 
         config.put("cloudSystemMode", cloudSystemConfig);
 
+        JSONObject integrationsConfig = new JSONObject();
+
+        integrationsConfig.put("cloudnet", true);
+        integrationsConfig.put("partyandfriends", true);
+        integrationsConfig.put("supervanish-premiumvanish", true);
+
+        config.put("integrations", integrationsConfig);
+
         return config;
     }
 

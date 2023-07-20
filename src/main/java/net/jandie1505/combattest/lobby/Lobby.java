@@ -1,5 +1,10 @@
 package net.jandie1505.combattest.lobby;
 
+import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayer;
+import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager;
+import de.simonsator.partyandfriends.spigot.api.party.PartyManager;
+import de.simonsator.partyandfriends.spigot.api.party.PlayerParty;
+import de.simonsator.partyandfriends.spigot.pafplayers.mysql.PAFPlayerMySQL;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
@@ -482,6 +487,89 @@ public class Lobby implements GamePart {
 
     }
 
+    private void setPartyTeams() {
+
+        if (this.plugin.getConfigManager().getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("partyandfriends", false)) {
+
+            try {
+                Class.forName("de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager");
+                Class.forName("de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayer");
+                Class.forName("de.simonsator.partyandfriends.spigot.api.party.PartyManager");
+                Class.forName("de.simonsator.partyandfriends.spigot.api.party.PlayerParty");
+
+                List<PlayerParty> parties = new ArrayList<>();
+
+                for (UUID playerId : this.getPlayers()) {
+                    Player player = this.plugin.getServer().getPlayer(playerId);
+
+                    if (player == null) {
+                        continue;
+                    }
+
+                    PAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(playerId);
+
+                    if (pafPlayer == null) {
+                        continue;
+                    }
+
+                    PlayerParty playerParty = PartyManager.getInstance().getParty(pafPlayer);
+
+                    if (playerParty == null) {
+                        continue;
+                    }
+
+                    if (!parties.contains(playerParty)) {
+                        parties.add(playerParty);
+                    }
+
+                }
+
+                for (PlayerParty party : List.copyOf(parties)) {
+
+                    int teamId = -1;
+
+                    for (int i = 1; i <= 100; i++) {
+
+                        if (!this.getTeamMembers(teamId).isEmpty()) {
+                            continue;
+                        }
+
+                        teamId = i;
+
+                        break;
+                    }
+
+                    if (teamId <= 0) {
+                        continue;
+                    }
+
+                    for (PAFPlayer pafPlayer : List.copyOf(party.getPlayers())) {
+                        Player player = this.plugin.getServer().getPlayer(pafPlayer.getUniqueId());
+                        LobbyPlayerData playerData = this.players.get(pafPlayer.getUniqueId());
+
+                        if (player == null || playerData == null) {
+                            continue;
+                        }
+
+                        if (this.plugin.isPlayerBypassing(pafPlayer.getUniqueId())) {
+                            continue;
+                        }
+
+                        playerData.setTeam(teamId);
+                        player.sendMessage("§bYou have been placed on a team with your party, regardless of your team selection");
+
+                    }
+
+                }
+
+            } catch (ClassNotFoundException e) {
+                // ignored
+            }
+
+        }
+
+    }
+
     @Override
     public GamePart getNextStatus() {
 
@@ -508,6 +596,8 @@ public class Lobby implements GamePart {
         }
 
         world.setAutoSave(false);
+
+        this.setPartyTeams();
 
         return new Game(
                 this.plugin,

@@ -23,6 +23,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>simonsators-repo</id>
+            <url>https://simonsator.de/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -54,6 +58,18 @@
             <groupId>com.github.LeonMangler</groupId>
             <artifactId>SuperVanish</artifactId>
             <version>6.2.17</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.simonsator</groupId>
+            <artifactId>Party-and-Friends-MySQL-Edition-Spigot-API</artifactId>
+            <version>1.5.4-RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.simonsator</groupId>
+            <artifactId>spigot-party-api-for-party-and-friends</artifactId>
+            <version>1.0.5-RELEASE</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

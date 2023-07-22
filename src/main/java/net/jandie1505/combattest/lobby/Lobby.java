@@ -556,7 +556,7 @@ public class Lobby implements GamePart {
                         }
 
                         playerData.setTeam(teamId);
-                        player.sendMessage("§bYou have been placed on a team with your party, regardless of your team selection");
+                        player.sendMessage("§bYou have been placed on team " + teamId + " with your party, regardless of your team selection");
 
                     }
 

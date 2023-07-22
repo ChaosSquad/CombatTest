@@ -172,9 +172,9 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Fire Sword");
-            meta.setLore(List.of("EM1200", "Damage: 7", "Fire Aspect I"));
+            meta.setLore(List.of("EM1200", "Damage: 7"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addEnchant(Enchantment.FIRE_ASPECT, 1, true);
             meta.setUnbreakable(true);
 
@@ -189,10 +189,11 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Fire Sword +");
-            meta.setLore(List.of("EM1201", "Damage: 7", "Fire Aspect II"));
+            meta.setLore(List.of("EM1201", "Damage: 7"));
             meta.addItemFlags(ItemFlag.values());
+            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
+            meta.addEnchant(Enchantment.FIRE_ASPECT, 1, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -206,10 +207,11 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
 
             meta.setDisplayName("Fire Sword ++");
-            meta.setLore(List.of("EM1202", "Damage: 7", "Fire Aspect III"));
+            meta.setLore(List.of("EM1202", "Damage: 7"));
             meta.addItemFlags(ItemFlag.values());
+            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 3, true);
+            meta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -223,10 +225,11 @@ public class ItemStorage {
             ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
 
             meta.setDisplayName("Fire Sword +++");
-            meta.setLore(List.of("EM1203", "Damage: 8", "Fire Aspect III"));
+            meta.setLore(List.of("EM1203", "Damage: 8"));
             meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 3, true);
+            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
+            meta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
             meta.setUnbreakable(true);
 
             item.setItemMeta(meta);
@@ -484,7 +487,7 @@ public class ItemStorage {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 2, true);
-            meta.addEnchant(Enchantment.PIERCING, 2, true);
+            meta.addEnchant(Enchantment.PIERCING, 1, true);
 
             item.setItemMeta(meta);
 
@@ -500,8 +503,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1401"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.QUICK_CHARGE, 3, true);
-            meta.addEnchant(Enchantment.PIERCING, 3, true);
+            meta.addEnchant(Enchantment.QUICK_CHARGE, 2, true);
+            meta.addEnchant(Enchantment.PIERCING, 2, true);
 
             item.setItemMeta(meta);
 
@@ -518,7 +521,7 @@ public class ItemStorage {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.QUICK_CHARGE, 2, true);
-            meta.addEnchant(Enchantment.PIERCING, 4, true);
+            meta.addEnchant(Enchantment.PIERCING, 3, true);
             meta.addEnchant(Enchantment.MULTISHOT, 1, true);
 
             item.setItemMeta(meta);

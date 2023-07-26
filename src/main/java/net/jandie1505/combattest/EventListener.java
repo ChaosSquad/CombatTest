@@ -23,6 +23,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.List;
@@ -125,6 +126,7 @@ public class EventListener implements Listener {
 
                     PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(damager.getUniqueId());
                     damagerData.setPoints(damagerData.getPoints() + 2000);
+                    damagerData.setRewardPoints(damagerData.getRewardPoints() + this.plugin.getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("playerKill", 0));
                     damager.sendMessage("§bPlayer Kill: + 2000 Points");
 
                     double comparedEquipmentLevels = PlayerData.compareEquipmentLevels(damagerData, victimData);
@@ -165,6 +167,7 @@ public class EventListener implements Listener {
                     PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(damager.getUniqueId());
 
                     damagerData.setPoints(damagerData.getPoints() + 1000);
+                    damagerData.setRewardPoints(damagerData.getRewardPoints() + this.plugin.getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("indirectPlayerKill", 0));
                     damager.sendMessage("§bIndirect Player Kill: + 1000 Points");
 
                     double comparedEquipmentLevels = PlayerData.compareEquipmentLevels(damagerData, victimData);
@@ -356,6 +359,7 @@ public class EventListener implements Listener {
 
                                 playerData.setMeleeEquipment(itemId);
                                 playerData.setPoints(playerData.getPoints() - ItemStorage.getMeleePrice(itemId));
+                                playerData.setRewardPoints(playerData.getRewardPoints() + this.plugin.getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("upgradePurchased", 0));
                                 event.getWhoClicked().closeInventory();
                                 event.getWhoClicked().sendMessage("§aItem successfully upgraded");
 
@@ -411,6 +415,7 @@ public class EventListener implements Listener {
 
                                 playerData.setRangedEquipment(itemId);
                                 playerData.setPoints(playerData.getPoints() - ItemStorage.getRangedPrice(itemId));
+                                playerData.setRewardPoints(playerData.getRewardPoints() + this.plugin.getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("upgradePurchased", 0));
                                 event.getWhoClicked().closeInventory();
                                 event.getWhoClicked().sendMessage("§aItem successfully upgraded");
 
@@ -466,6 +471,7 @@ public class EventListener implements Listener {
 
                                 playerData.setArmorEquipment(itemId);
                                 playerData.setPoints(playerData.getPoints() - ItemStorage.getArmorPrice(itemId));
+                                playerData.setRewardPoints(playerData.getRewardPoints() + this.plugin.getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("upgradePurchased", 0));
                                 event.getWhoClicked().closeInventory();
                                 event.getWhoClicked().sendMessage("§aItem successfully upgraded");
 

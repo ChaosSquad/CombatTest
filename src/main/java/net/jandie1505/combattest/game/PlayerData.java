@@ -25,6 +25,7 @@ public class PlayerData {
     private Scoreboard scoreboard;
     private int noPvpTimer;
     private boolean weatherDisabled;
+    private int rewardPoints;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
@@ -52,6 +53,8 @@ public class PlayerData {
         this.noPvpTimer = 0;
 
         this.weatherDisabled = false;
+
+        this.rewardPoints = 0;
     }
 
     public UUID getPlayerId() {
@@ -200,7 +203,15 @@ public class PlayerData {
         this.shieldTimer = shieldTimer;
     }
 
-    public static int getEqupmentCompareLevel(int level) {
+    public int getRewardPoints() {
+        return rewardPoints;
+    }
+
+    public void setRewardPoints(int rewardPoints) {
+        this.rewardPoints = rewardPoints;
+    }
+
+    public static int getEquipmentCompareLevel(int level) {
 
         if (level > 1000) {
 
@@ -220,12 +231,12 @@ public class PlayerData {
 
     public static double compareEquipmentLevels(PlayerData data, PlayerData compareData) {
 
-        double p1Melee = getEqupmentCompareLevel(data.getMeleeEquipment());
-        double p2Melee = getEqupmentCompareLevel(compareData.getMeleeEquipment());
-        double p1Ranged = getEqupmentCompareLevel(data.getRangedEquipment());
-        double p2Ranged = getEqupmentCompareLevel(compareData.getRangedEquipment());
-        double p1Armor = getEqupmentCompareLevel(data.getArmorEquipment());
-        double p2Armor = getEqupmentCompareLevel(compareData.getArmorEquipment());
+        double p1Melee = getEquipmentCompareLevel(data.getMeleeEquipment());
+        double p2Melee = getEquipmentCompareLevel(compareData.getMeleeEquipment());
+        double p1Ranged = getEquipmentCompareLevel(data.getRangedEquipment());
+        double p2Ranged = getEquipmentCompareLevel(compareData.getRangedEquipment());
+        double p1Armor = getEquipmentCompareLevel(data.getArmorEquipment());
+        double p2Armor = getEquipmentCompareLevel(compareData.getArmorEquipment());
 
         double p1All = p1Melee + p1Ranged + p1Armor;
         p1All = p1All / 3;

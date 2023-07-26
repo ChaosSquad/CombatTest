@@ -90,6 +90,8 @@ public class Endlobby implements GamePart {
                 player.sendMessage("§7 Team: §9Team " + playerData.getTeam());
             }
 
+            this.plugin.givePointsToPlayer(player, playerData.getRewardPoints(), "§6Rewards for this game: + {points} points");
+
         }
 
         this.teams = new ArrayList<>();

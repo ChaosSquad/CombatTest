@@ -27,6 +27,10 @@
             <id>simonsators-repo</id>
             <url>https://simonsator.de/repo/</url>
         </repository>
+        <repository>
+            <id>rosewood-repo</id>
+            <url>https://repo.rosewooddev.io/repository/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -70,6 +74,12 @@
             <groupId>de.simonsator</groupId>
             <artifactId>spigot-party-api-for-party-and-friends</artifactId>
             <version>1.0.5-RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>playerpoints</artifactId>
+            <version>3.2.6</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

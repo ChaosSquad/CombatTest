@@ -8,6 +8,8 @@ import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.lobby.Lobby;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -302,6 +304,38 @@ public class CombatTest extends JavaPlugin {
 
     public boolean isCloudSystemMode() {
         return this.singleServer && this.cloudSystemMode;
+    }
+
+    public void givePointsToPlayer(Player player, int amount, String message) {
+
+        if (this.configManager.getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("playerpoints", false)) {
+
+            try {
+                Class.forName("org.black_ixx.playerpoints.PlayerPoints");
+                Class.forName("org.black_ixx.playerpoints.PlayerPointsAPI");
+
+                PlayerPointsAPI pointsAPI = PlayerPoints.getInstance().getAPI();
+
+                if (amount <= 0) {
+                    return;
+                }
+
+                if (amount > this.configManager.getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("maxRewardsAmount", 5000)) {
+                    amount = this.configManager.getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("maxRewardsAmount", 5000);
+                }
+
+                pointsAPI.give(player.getUniqueId(), amount);
+
+                if (message != null) {
+                    player.sendMessage(message.replace("{points}", String.valueOf(amount)));
+                }
+
+            } catch (ClassNotFoundException e) {
+
+            }
+
+        }
+
     }
 
     public static int getWeather(World world) {

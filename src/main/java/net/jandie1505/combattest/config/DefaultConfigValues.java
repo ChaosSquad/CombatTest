@@ -52,8 +52,18 @@ public final class DefaultConfigValues {
         integrationsConfig.put("cloudnet", true);
         integrationsConfig.put("partyandfriends", true);
         integrationsConfig.put("supervanish-premiumvanish", true);
+        integrationsConfig.put("playerpoints", true);
 
         config.put("integrations", integrationsConfig);
+
+        JSONObject rewardsConfig = new JSONObject();
+
+        rewardsConfig.put("playerKill", 20);
+        rewardsConfig.put("indirectPlayerKill", 10);
+        rewardsConfig.put("upgradePurchased", 5);
+        rewardsConfig.put("maxRewardsAmount", 5000);
+
+        config.put("playerPointsRewards", rewardsConfig);
 
         return config;
     }

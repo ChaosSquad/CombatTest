@@ -55,200 +55,29 @@ public class ItemStorage {
             meleeItemsInit.put(0, item);
         }
 
-        {
-            ItemStack item = new ItemStack(Material.IRON_SWORD);
+        meleeItemsInit.put(100, meleeWeaponBuilder("Iron Sword", Material.IRON_SWORD, 6, -1, Map.of(), 100));
+        meleeItemsInit.put(101, meleeWeaponBuilder("Iron Sword +", Material.IRON_SWORD, 7, -1, Map.of(), 101));
+        meleeItemsInit.put(102, meleeWeaponBuilder("Iron Sword ++", Material.IRON_SWORD, 7.5, -1, Map.of(), 102));
+        meleeItemsInit.put(1100, meleeWeaponBuilder("Diamond Sword", Material.DIAMOND_SWORD, 8, -1, Map.of(), 1100));
+        meleeItemsInit.put(1101, meleeWeaponBuilder("Diamond Sword +", Material.DIAMOND_SWORD, 8.5, -1, Map.of(), 1101));
+        meleeItemsInit.put(1102, meleeWeaponBuilder("Diamond Sword ++", Material.DIAMOND_SWORD, 9, -1, Map.of(), 1102));
+        meleeItemsInit.put(1103, meleeWeaponBuilder("Netherite Sword", Material.NETHERITE_SWORD, 10, -1, Map.of(), 1103));
+        meleeItemsInit.put(1200, meleeWeaponBuilder("Fire Sword", Material.GOLDEN_SWORD, 5, -1, Map.of(Enchantment.FIRE_ASPECT, 1), 1200));
+        meleeItemsInit.put(1201, meleeWeaponBuilder("Fire Sword +", Material.GOLDEN_SWORD, 5.5, -1, Map.of(Enchantment.FIRE_ASPECT, 1), 1201));
+        meleeItemsInit.put(1202, meleeWeaponBuilder("Fire Sword ++", Material.GOLDEN_SWORD, 5.5, -1, Map.of(Enchantment.FIRE_ASPECT, 2), 1202));
+        meleeItemsInit.put(1203, meleeWeaponBuilder("Fire Sword +++", Material.GOLDEN_SWORD, 6, -1, Map.of(Enchantment.FIRE_ASPECT, 2), 1203));
 
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
-
-            meta.setDisplayName("Iron Sword");
-            meta.setLore(List.of("EM100", "Damage: 6"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(100, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.IRON_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
-
-            meta.setDisplayName("Iron Sword +");
-            meta.setLore(List.of("EM101", "Damage: 7"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(101, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.IRON_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
-
-            meta.setDisplayName("Iron Sword ++");
-            meta.setLore(List.of("EM102", "Damage: 7.5"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(102, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.DIAMOND_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
-
-            meta.setDisplayName("Diamond Sword");
-            meta.setLore(List.of("EM1100", "Damage: 8"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(1100, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.DIAMOND_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
-
-            meta.setDisplayName("Diamond Sword +");
-            meta.setLore(List.of("EM1101", "Damage: 8.5"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(1101, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.DIAMOND_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
-
-            meta.setDisplayName("Diamond Sword ++");
-            meta.setLore(List.of("EM1102", "Damage: 9"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 3, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(1102, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.NETHERITE_SWORD);
-
-            meta.setDisplayName("Netherite Sword");
-            meta.setLore(List.of("EM1103", "Damage: 10"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 3, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(1103, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.IRON_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
-
-            meta.setDisplayName("Fire Sword");
-            meta.setLore(List.of("EM1200", "Damage: 7"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 1, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(1200, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.IRON_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
-
-            meta.setDisplayName("Fire Sword +");
-            meta.setLore(List.of("EM1201", "Damage: 7"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 1, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(1201, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.IRON_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.IRON_SWORD);
-
-            meta.setDisplayName("Fire Sword ++");
-            meta.setLore(List.of("EM1202", "Damage: 7"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(1202, item);
-        }
-
-        {
-            ItemStack item = new ItemStack(Material.DIAMOND_SWORD);
-
-            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_SWORD);
-
-            meta.setDisplayName("Fire Sword +++");
-            meta.setLore(List.of("EM1203", "Damage: 8"));
-            meta.addItemFlags(ItemFlag.values());
-            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
-            meta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
-            meta.setUnbreakable(true);
-
-            item.setItemMeta(meta);
-
-            meleeItemsInit.put(1203, item);
-            
-        }
-
-        meleeItemsInit.put(200, axeBuilder("Iron Axe", Material.IRON_AXE, 8, 0.7, 200));
-        meleeItemsInit.put(201, axeBuilder("Iron Axe +", Material.IRON_AXE, 8, 0.9, 201));
-        meleeItemsInit.put(202, axeBuilder("Iron Axe ++", Material.IRON_AXE, 9, 0.9, 202));
-        meleeItemsInit.put(1300, axeBuilder("Heavy Axe", Material.DIAMOND_AXE, 10, 0.5, 1300));
-        meleeItemsInit.put(1301, axeBuilder("Heavy Axe +", Material.DIAMOND_AXE, 10.5, 0.5, 1301));
-        meleeItemsInit.put(1302, axeBuilder("Heavy Axe ++", Material.DIAMOND_AXE, 11, 0.5, 1302));
-        meleeItemsInit.put(1303, axeBuilder("Heavy Axe +++", Material.NETHERITE_AXE, 12, 0.5, 1303));
-        meleeItemsInit.put(1400, axeBuilder("Light Axe", Material.IRON_AXE, 9, 1, 1400));
-        meleeItemsInit.put(1401, axeBuilder("Light Axe +", Material.IRON_AXE, 9.5, 1, 1401));
-        meleeItemsInit.put(1402, axeBuilder("Light Axe ++", Material.IRON_AXE, 9.5, 1.1, 1402));
-        meleeItemsInit.put(1403, axeBuilder("Light Axe +++", Material.DIAMOND_AXE, 10, 1.1, 1403));
+        meleeItemsInit.put(200, meleeWeaponBuilder("Iron Axe", Material.IRON_AXE, 8, 0.7, Map.of(), 200));
+        meleeItemsInit.put(201, meleeWeaponBuilder("Iron Axe +", Material.IRON_AXE, 8, 0.9, Map.of(), 201));
+        meleeItemsInit.put(202, meleeWeaponBuilder("Iron Axe ++", Material.IRON_AXE, 9, 0.9, Map.of(), 202));
+        meleeItemsInit.put(1300, meleeWeaponBuilder("Heavy Axe", Material.DIAMOND_AXE, 10, 0.5, Map.of(), 1300));
+        meleeItemsInit.put(1301, meleeWeaponBuilder("Heavy Axe +", Material.DIAMOND_AXE, 10.5, 0.5, Map.of(), 1301));
+        meleeItemsInit.put(1302, meleeWeaponBuilder("Heavy Axe ++", Material.DIAMOND_AXE, 11, 0.5, Map.of(), 1302));
+        meleeItemsInit.put(1303, meleeWeaponBuilder("Heavy Axe +++", Material.NETHERITE_AXE, 12, 0.5, Map.of(), 1303));
+        meleeItemsInit.put(1400, meleeWeaponBuilder("Light Axe", Material.IRON_AXE, 9, 1, Map.of(), 1400));
+        meleeItemsInit.put(1401, meleeWeaponBuilder("Light Axe +", Material.IRON_AXE, 9.5, 1, Map.of(), 1401));
+        meleeItemsInit.put(1402, meleeWeaponBuilder("Light Axe ++", Material.IRON_AXE, 9.5, 1.1, Map.of(), 1402));
+        meleeItemsInit.put(1403, meleeWeaponBuilder("Light Axe +++", Material.DIAMOND_AXE, 10, 1.1, Map.of(), 1403));
 
         meleeItemsInit.put(300, potionBuilder("Damage Potion", 1, 4, 300));
         meleeItemsInit.put(301, potionBuilder("Damage Potion +", 1, 3.5, 301));
@@ -1366,20 +1195,41 @@ public class ItemStorage {
 
     }
 
-    private static ItemStack axeBuilder(String name, Material material, double attackDamage, double attackSpeed, int id) {
+    private static ItemStack meleeWeaponBuilder(String name, Material material, double attackDamage, double attackSpeed, Map<Enchantment, Integer> enchantments, int id) {
 
         ItemStack item = new ItemStack(material);
 
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
         meta.setDisplayName(name);
-        meta.setLore(List.of("EM" + id, "Damage: " + attackDamage, "Speed: " + attackSpeed));
+        List<String> lore = new ArrayList<>();
+        lore.add("EM" + id);
         meta.addItemFlags(ItemFlag.values());
+        meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        attackDamage = attackDamage - 1;
-        attackSpeed = attackSpeed - 3.5;
+        if (attackDamage >= 0) {
+            lore.add("§7Damage: " + attackDamage);
+            attackDamage = attackDamage - 1;
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", attackDamage, AttributeModifier.Operation.ADD_NUMBER));
+        }
 
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", attackDamage, AttributeModifier.Operation.ADD_NUMBER));
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier("generic.attack_speed", attackSpeed, AttributeModifier.Operation.ADD_NUMBER));
+        if (attackSpeed >= 0) {
+            lore.add("§7Speed: " + attackSpeed);
+            attackSpeed = attackSpeed - 3.5;
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier("generic.attack_speed", attackSpeed, AttributeModifier.Operation.ADD_NUMBER));
+        }
+
+        for (Enchantment enchantment : enchantments.keySet()) {
+            int level = enchantments.get(enchantment);
+
+            if (level < 0) {
+                continue;
+            }
+
+            meta.addEnchant(enchantment, level, true);
+
+        }
+
+        meta.setLore(lore);
 
         meta.setUnbreakable(true);
 

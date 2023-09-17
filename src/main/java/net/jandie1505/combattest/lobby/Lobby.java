@@ -461,6 +461,8 @@ public class Lobby implements GamePart {
 
     public void randomTeams() {
 
+        // do random teams
+
         for (UUID playerId : this.getPlayerMap().keySet()) {
 
             LobbyPlayerData playerData = this.players.get(playerId);
@@ -480,6 +482,38 @@ public class Lobby implements GamePart {
             } else if (this.getTeamMembers(1).size() > this.getTeamMembers(2).size()) {
 
                 playerData.setTeam(2);
+
+            }
+
+        }
+
+        // prevent jandie1505 and TheRainbowFox of being in the same team
+
+        for (int teamId : this.getTeams()) {
+
+            UUID jandie1505 = UUID.fromString("55eda3b4-f5bb-4155-8b9b-a16f09c57aa3");
+            UUID theRainbowFox = UUID.fromString("9be4b569-58f3-4580-bb81-2242f3f5ddcf");
+
+            List<UUID> teamMembers = this.getTeamMembers(teamId);
+
+            if (teamMembers.contains(jandie1505) && teamMembers.contains(theRainbowFox)) {
+                LobbyPlayerData playerData = this.getPlayerMap().get(theRainbowFox);
+
+                if (playerData == null) {
+                    continue;
+                }
+
+                for (int replacementTeamId : this.getTeams()) {
+                    List<UUID> replacementTeamMembers = this.getTeamMembers(replacementTeamId);
+
+                    if (replacementTeamMembers.contains(jandie1505)) {
+                        continue;
+                    }
+
+                    playerData.setTeam(replacementTeamId);
+                    break;
+
+                }
 
             }
 

@@ -14,5 +14,5 @@ permissions:
     children:
       - combattest.admin
 author: jandie1505
-api-version: 1.19
+api-version: 1.21
 softdepend: [SuperVanish,PremiumVanish,CloudNet-Bridge]

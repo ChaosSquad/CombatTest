@@ -121,7 +121,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER101"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, true);
+            meta.addEnchant(Enchantment.PUNCH, 1, true);
 
             item.setItemMeta(meta);
 
@@ -137,7 +137,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1100"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+            meta.addEnchant(Enchantment.POWER, 1, true);
 
             item.setItemMeta(meta);
 
@@ -153,7 +153,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1101"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 2, true);
+            meta.addEnchant(Enchantment.POWER, 2, true);
 
             item.setItemMeta(meta);
 
@@ -169,7 +169,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1102"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
+            meta.addEnchant(Enchantment.POWER, 3, true);
 
             item.setItemMeta(meta);
 
@@ -185,7 +185,7 @@ public class ItemStorage {
             meta.setLore(List.of("ER1200"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, true);
+            meta.addEnchant(Enchantment.PUNCH, 2, true);
 
             item.setItemMeta(meta);
 
@@ -201,8 +201,8 @@ public class ItemStorage {
             meta.setLore(List.of("ER1201"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, true);
-            meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
+            meta.addEnchant(Enchantment.PUNCH, 2, true);
+            meta.addEnchant(Enchantment.FLAME, 1, true);
 
             item.setItemMeta(meta);
 
@@ -218,9 +218,9 @@ public class ItemStorage {
             meta.setLore(List.of("ER1202"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 2, true);
-            meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
-            meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+            meta.addEnchant(Enchantment.PUNCH, 2, true);
+            meta.addEnchant(Enchantment.FLAME, 1, true);
+            meta.addEnchant(Enchantment.INFINITY, 1, true);
 
             item.setItemMeta(meta);
 
@@ -569,7 +569,7 @@ public class ItemStorage {
             meta.setLore(List.of("EU101", "For an extra bit of damage", "(Recommended to combine with Powerful", "Bow for mass destruction)", "Price: 2000"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setColor(Color.fromRGB(4459017));
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, 0), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, 1, 0), false);
 
             item.setItemMeta(meta);
 
@@ -601,7 +601,7 @@ public class ItemStorage {
             meta.setLore(List.of("EU103", "Price: 500"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setColor(Color.GRAY);
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 600, 0), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOWNESS, 600, 0), false);
 
             item.setItemMeta(meta);
 
@@ -617,7 +617,7 @@ public class ItemStorage {
             meta.setLore(List.of("EU104", "Small injury?", "Headache?", "Arm cut off?", "Medikit 2000 is there for you!", "Price: 250"));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setColor(Color.RED);
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.HEAL, 1, 0), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 0), false);
 
             item.setItemMeta(meta);
 
@@ -633,13 +633,13 @@ public class ItemStorage {
             meta.setLore(List.of("EU105", "No description needed :)", "100% alcohol", "Price: 20000"));
             meta.addItemFlags(ItemFlag.values());
             meta.setColor(Color.fromRGB(14737632));
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW, 1200, 1), false);
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.CONFUSION, 1200, 1), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOWNESS, 1200, 1), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.NAUSEA, 1200, 1), false);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.BLINDNESS, 1200, 0), false);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.DARKNESS, 2400, 0), false);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 200, 2), false);
             meta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 200, 0), false);
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, 0), false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, 1, 0), false);
 
             item.setItemMeta(meta);
 
@@ -835,7 +835,7 @@ public class ItemStorage {
         meta.setLore(lore);
 
         if (selected) {
-            meta.addEnchant(Enchantment.LUCK, 1, true);
+            meta.addEnchant(Enchantment.FORTUNE, 1, true);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 
@@ -862,7 +862,7 @@ public class ItemStorage {
         meta.setLore(lore);
 
         if (selected) {
-            meta.addEnchant(Enchantment.LUCK, 1, true);
+            meta.addEnchant(Enchantment.FORTUNE, 1, true);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 
@@ -1256,7 +1256,7 @@ public class ItemStorage {
 
             level = level - 1;
 
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 1, level), true);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, 1, level), true);
 
         }
 
@@ -1281,7 +1281,7 @@ public class ItemStorage {
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier("generic.armor_toughness", toughness, AttributeModifier.Operation.ADD_NUMBER));
 
         if (protection > 0) {
-            meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, protection, true);
+            meta.addEnchant(Enchantment.PROTECTION, protection, true);
         }
 
         item.setItemMeta(meta);

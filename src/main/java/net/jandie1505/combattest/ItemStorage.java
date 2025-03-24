@@ -368,7 +368,7 @@ public class ItemStorage {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 1, true);
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
 
@@ -385,7 +385,7 @@ public class ItemStorage {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 2, true);
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
 
@@ -403,7 +403,7 @@ public class ItemStorage {
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 2, true);
             meta.addEnchant(Enchantment.RIPTIDE, 2, true);
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
 
@@ -421,7 +421,7 @@ public class ItemStorage {
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 2, true);
             meta.addEnchant(Enchantment.RIPTIDE, 3, true);
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
 
@@ -439,7 +439,7 @@ public class ItemStorage {
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 2, true);
             meta.addEnchant(Enchantment.RIPTIDE, 4, true);
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
 
@@ -456,7 +456,7 @@ public class ItemStorage {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 3, true);
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
 
@@ -474,7 +474,7 @@ public class ItemStorage {
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 3, true);
             meta.addEnchant(Enchantment.CHANNELING, 1, true);
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
 
@@ -492,7 +492,7 @@ public class ItemStorage {
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.LOYALTY, 3, true);
             meta.addEnchant(Enchantment.CHANNELING, 1, true);
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", 0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER));
 
             item.setItemMeta(meta);
 
@@ -1209,13 +1209,13 @@ public class ItemStorage {
         if (attackDamage >= 0) {
             lore.add("§7Damage: " + attackDamage);
             attackDamage = attackDamage - 1;
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attack_damage", attackDamage, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), attackDamage, AttributeModifier.Operation.ADD_NUMBER));
         }
 
         if (attackSpeed >= 0) {
             lore.add("§7Speed: " + attackSpeed);
             attackSpeed = attackSpeed - 3.5;
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier("generic.attack_speed", attackSpeed, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_SPEED, new AttributeModifier(Attribute.ATTACK_SPEED.getKey(), attackSpeed, AttributeModifier.Operation.ADD_NUMBER));
         }
 
         for (Enchantment enchantment : enchantments.keySet()) {
@@ -1277,8 +1277,8 @@ public class ItemStorage {
         meta.addItemFlags(ItemFlag.values());
         meta.setUnbreakable(true);
 
-        meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier("generic.armor", armor, AttributeModifier.Operation.ADD_NUMBER));
-        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier("generic.armor_toughness", toughness, AttributeModifier.Operation.ADD_NUMBER));
+        meta.addAttributeModifier(Attribute.ARMOR, new AttributeModifier(Attribute.ARMOR.getKey(), armor, AttributeModifier.Operation.ADD_NUMBER));
+        meta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS, new AttributeModifier(Attribute.ARMOR_TOUGHNESS.getKey(), toughness, AttributeModifier.Operation.ADD_NUMBER));
 
         if (protection > 0) {
             meta.addEnchant(Enchantment.PROTECTION, protection, true);

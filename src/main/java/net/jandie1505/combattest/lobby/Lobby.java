@@ -109,7 +109,7 @@ public class Lobby extends GamePart {
             }
         }
 
-        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 1); // TODO: Set to 20 ticks when scheduler runs every tick
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10); // TODO: Set to 20 ticks when scheduler runs every tick
     }
 
     @Override

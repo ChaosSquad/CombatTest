@@ -114,7 +114,7 @@ public class Endlobby extends GamePart {
         this.teamKDRanking = new ArrayList<>(this.teams);
         this.teamKDRanking.sort(TeamData.getKDComparator());
 
-        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 1); // TODO: Change to 20 ticks after scheduler is executed every tick
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10); // TODO: Change to 20 ticks after scheduler is executed every tick
     }
 
     public void task() {

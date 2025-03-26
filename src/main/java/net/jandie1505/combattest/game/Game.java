@@ -27,12 +27,10 @@ import org.json.JSONObject;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class Game extends GamePart {
     private final CombatTest plugin;
     private boolean killswitch;
-    private int timeStep;
     private int time;
     private World world;
     private Map<UUID, PlayerData> players;
@@ -46,7 +44,6 @@ public class Game extends GamePart {
         super(plugin);
         this.plugin = plugin;
         this.killswitch = false;
-        this.timeStep = 0;
         this.time = time;
         this.world = world;
 
@@ -134,11 +131,11 @@ public class Game extends GamePart {
 
         }
 
-        this.getTaskScheduler().scheduleRepeatingTask(this::timeTask, 1, 1, "time");
-        this.getTaskScheduler().scheduleRepeatingTask(this::tridentCleanupTask, 1, 1, "trident_cleanup");
-        this.getTaskScheduler().scheduleRepeatingTask(this::playerRespawnTask, 1, 1, "player_respawn");
-        this.getTaskScheduler().scheduleRepeatingTask(this::offlineIngamePlayersTask, 1, 1, "offline_player");
-        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 1, "old_task"); // TODO: Change to 20 ticks when scheduler is executed every tick
+        this.getTaskScheduler().scheduleRepeatingTask(this::timeTask, 1, 20, "time");
+        this.getTaskScheduler().scheduleRepeatingTask(this::tridentCleanupTask, 1, 20, "trident_cleanup");
+        this.getTaskScheduler().scheduleRepeatingTask(this::playerRespawnTask, 1, 20, "player_respawn");
+        this.getTaskScheduler().scheduleRepeatingTask(this::offlineIngamePlayersTask, 1, 20, "offline_player");
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10, "old_task"); // TODO: Change to 20 ticks when scheduler is executed every tick
     }
 
     @Override
@@ -148,20 +145,12 @@ public class Game extends GamePart {
 
     private void timeTask() {
 
-        if (this.timeStep >= 1) {
-
-            if (this.time >= 0) {
-                this.time--;
-            } else {
-                this.finishGame();
-                this.killswitch = true;
-                return;
-            }
-
-            this.timeStep = 0;
-
+        if (this.time >= 0) {
+            this.time--;
         } else {
-            this.timeStep++;
+            this.finishGame();
+            this.killswitch = true;
+            return;
         }
 
     }
@@ -592,6 +581,8 @@ public class Game extends GamePart {
 
             if (this.enforcePvp) {
 
+                /*
+                TODO: Put this back into execute every second
                 if (this.timeStep >= 1) {
 
                     if (playerData.getNoPvpTimer() >= 45) {
@@ -603,14 +594,30 @@ public class Game extends GamePart {
                     }
 
                 }
+                 */
+
+                // see commit above
+                if (playerData.getNoPvpTimer() >= 45) {
+                    player.sendMessage("§bYour position was revealed because you were not in combat for too long");
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 0, true, true));
+                    playerData.setNoPvpTimer(0);
+                } else {
+                    playerData.setNoPvpTimer(playerData.getNoPvpTimer() + 1);
+                }
 
             }
 
             // Idle points
 
+            /*
+            TODO: Put this back into execute every second
             if (this.timeStep >= 1) {
                 playerData.setPoints(playerData.getPoints() + 2);
             }
+             */
+
+            // See comment above
+            playerData.setPoints(playerData.getPoints() + 2);
 
             // Actionbar
 

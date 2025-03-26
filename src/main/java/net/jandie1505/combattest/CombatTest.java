@@ -7,6 +7,8 @@ import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.lobby.Lobby;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.black_ixx.playerpoints.PlayerPoints;
@@ -21,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public class CombatTest extends JavaPlugin {
     private ConfigManager configManager;
@@ -31,7 +34,6 @@ public class CombatTest extends JavaPlugin {
     private String permissionPrefix;
     private boolean singleServer;
     private boolean autostartNewGame;
-    private int timeStep;
     private int autostartNewGameTimer;
     private List<World> managedWorlds;
     private boolean cloudSystemMode;
@@ -58,7 +60,6 @@ public class CombatTest extends JavaPlugin {
         this.permissionPrefix = this.configManager.getConfig().optString("permissionsPrefix", "combattest");
         this.singleServer = this.configManager.getConfig().optBoolean("singleServerMode", false);
         this.autostartNewGame = this.configManager.getConfig().optBoolean("autostartNewGame", false);
-        this.timeStep = 0;
         this.autostartNewGameTimer = 30;
         this.managedWorlds = Collections.synchronizedList(new ArrayList<>());
         this.cloudSystemMode = this.singleServer && this.configManager.getConfig().optJSONObject("cloudSystemMode", new JSONObject()).optBoolean("enable", false);
@@ -78,60 +79,75 @@ public class CombatTest extends JavaPlugin {
         this.listenerManager.addExceptedListener(listener);
         this.getServer().getPluginManager().registerEvents(listener, this);
 
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            try {
+        /*
+        Game tick task
+         */
+        new BukkitRunnable() {
+            @Override
+            public void run() {
 
-                if (this.game != null) {
+                if (CombatTest.this.game == null) return;
 
-                    /*
-                    int status = this.game.tick();
+                try {
 
-                    if (status == GameStatus.ABORT) {
-                        this.stopGame();
-                    } else if (status == GameStatus.NEXT) {
-                        this.game = this.game.getNextStatus();
-                    }
-
-                     */
-
-                    boolean success = this.game.tick();
-
+                    boolean success = CombatTest.this.game.tick();
                     if (!success) {
-                        this.stopGame();
+                        CombatTest.this.stopGame();
+                        CombatTest.this.getLogger().log(Level.WARNING, "Stopped game because of game stop request of the game instancec.");
                     }
 
-                } else {
+                } catch (Exception e) {
+                    CombatTest.this.getLogger().log(Level.SEVERE, "Exception in game. Stopping game.", e);
+                    CombatTest.this.stopGame();
+                }
 
-                    // Player management
+            }
+        }.runTaskTimer(CombatTest.this, 0L, 1L);
 
-                    for (Player player : List.copyOf(this.getServer().getOnlinePlayers())) {
+        /*
+        Autostart new game task
+         */
+        new BukkitRunnable() {
+            @Override
+            public void run() {
 
-                        if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
-                            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-                        }
+                if (CombatTest.this.game != null) return;
 
-                        if (this.autostartNewGame && this.singleServer) {
-                            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§b--- Starting new game in " + this.autostartNewGameTimer + " seconds ---"));
-                        }
+                // Player management
 
+                for (Player player : List.copyOf(CombatTest.this.getServer().getOnlinePlayers())) {
+
+                    if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
+                        player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
                     }
 
-                    // Autostart new game
-
-                    if (this.autostartNewGame && this.timeStep == 1) {
-
-                        if (this.autostartNewGameTimer <= 0) {
-                            this.autostartNewGameTimer = 30;
-                            this.startGame();
-                        } else {
-                            this.autostartNewGameTimer--;
-                        }
-
+                    if (CombatTest.this.autostartNewGame && CombatTest.this.singleServer) {
+                        player.sendActionBar(Component.text("--- Starting new game in " + CombatTest.this.autostartNewGameTimer + " seconds ---", NamedTextColor.AQUA));
                     }
 
                 }
 
-                // Manage worlds
+                // Autostart new game
+
+                if (CombatTest.this.autostartNewGame) {
+
+                    if (CombatTest.this.autostartNewGameTimer <= 0) {
+                        CombatTest.this.autostartNewGameTimer = 30;
+                        CombatTest.this.startGame();
+                    } else {
+                        CombatTest.this.autostartNewGameTimer--;
+                    }
+
+                }
+
+            }
+        }.runTaskTimer(CombatTest.this, 0L, 20L);
+
+        /*
+        Manage worlds task
+         */
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            try {
 
                 for (World world : List.copyOf(this.managedWorlds)) {
 
@@ -140,23 +156,17 @@ public class CombatTest extends JavaPlugin {
                         continue;
                     }
 
-                    if (!(this.game instanceof Lobby || this.game instanceof Game) || (this.game instanceof Game && ((Game) this.game).getWorld() != world)) {
+                    if (!(this.game instanceof Lobby || this.game instanceof Game) || (this.game instanceof Game g && (g).getWorld() != world)) {
                         this.unloadWorld(world);
                     }
 
-                }
-
-                if (this.timeStep != 0) {
-                    this.timeStep = 0;
-                } else {
-                    this.timeStep = 1;
                 }
 
             } catch (Exception e) {
                 this.getLogger().warning("Exception in game: " + e + "\nMessage: " + e.getMessage() + "\nStacktrace: " + Arrays.toString(e.getStackTrace()) + "--- END ---");
                 this.stopGame();
             }
-        }, 0, 10);
+        }, 0, 20L);
 
         this.getLogger().info("CombatTest Plugin was successfully enabled");
 

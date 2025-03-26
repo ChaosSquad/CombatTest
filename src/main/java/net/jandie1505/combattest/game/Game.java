@@ -136,9 +136,11 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::tridentCleanupTask, 1, 20, "trident_cleanup");
         this.getTaskScheduler().scheduleRepeatingTask(this::playerRespawnTask, 1, 20, "player_respawn");
         this.getTaskScheduler().scheduleRepeatingTask(this::offlineIngamePlayersTask, 1, 20, "offline_player");
-        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10, "old_task"); // TODO: Change to 20 ticks when scheduler is executed every tick
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10, "old_task");
         this.getTaskScheduler().scheduleRepeatingTask(this::weatherTask, 1, 20, "weather");
         this.getTaskScheduler().scheduleRepeatingTask(this::playerScoreboardTask, 1, 20, "player_scoreboard");
+        this.getTaskScheduler().scheduleRepeatingTask(this::playerMiscValuesTask, 1, 10, "player_misc_values");
+        this.getTaskScheduler().scheduleRepeatingTask(this::notIngamePlayersTask, 1, 20, "not_ingame_players");
     }
 
     @Override
@@ -146,6 +148,9 @@ public class Game extends GamePart {
         return super.shouldExecute() && !this.killswitch;
     }
 
+    /**
+     * Manages the time and finishes the game when expired.
+     */
     private void timeTask() {
 
         if (this.time >= 0) {
@@ -158,6 +163,9 @@ public class Game extends GamePart {
 
     }
 
+    /**
+     * Cleans up trident entities in the world and trident item entities.
+     */
     private void tridentCleanupTask() {
 
         List<Player> tridentList = new ArrayList<>();
@@ -292,6 +300,9 @@ public class Game extends GamePart {
 
     }
 
+    /**
+     * Changes the weather in specific intervals.
+     */
     private void weatherTask() {
 
         if ((this.time % 100) == 0) {
@@ -325,6 +336,48 @@ public class Game extends GamePart {
 
     }
 
+    /**
+     * Manages player stuff that does not fit into the other categories.
+     */
+    private void playerMiscValuesTask() {
+
+        for (Player player : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
+            PlayerData playerData = this.players.get(player.getUniqueId());
+            if (playerData == null) continue;
+
+            // Saturation
+
+            if (player.getFoodLevel() < 20) {
+                player.setFoodLevel(20);
+            }
+
+            if (player.getSaturation() < 20) {
+                player.setSaturation(20);
+            }
+
+            // Regeneration
+
+            if (!player.hasPotionEffect(PotionEffectType.REGENERATION) && playerData.getRegenerationCooldown() >= 10) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, false, false));
+            } else if (!player.hasPotionEffect(PotionEffectType.REGENERATION) && playerData.getRegenerationCooldown() < 10) {
+                playerData.setRegenerationCooldown(playerData.getRegenerationCooldown() + 1);
+            }
+
+            // Player weather
+
+            if (playerData.isWeatherDisabled() && player.getPlayerWeather() != WeatherType.CLEAR) {
+                player.setPlayerWeather(WeatherType.CLEAR);
+            } else if (!playerData.isWeatherDisabled() && ((WorldUtils.getWeather(this.world) != WorldUtils.WeatherType.CLEAR && player.getPlayerWeather() != WeatherType.DOWNFALL) || (WorldUtils.getWeather(this.world) == WorldUtils.WeatherType.CLEAR && player.getPlayerWeather() == WeatherType.DOWNFALL))){
+                player.resetPlayerWeather();
+            }
+
+        }
+
+    }
+
+    /**
+     * Handles the player scoreboards.
+     */
     private void playerScoreboardTask() {
         if (!this.plugin.isSingleServer()) return;
 
@@ -423,6 +476,35 @@ public class Game extends GamePart {
             // Set scoreboard
             if (player.getScoreboard() != scoreboard) {
                 player.setScoreboard(scoreboard);
+            }
+
+        }
+
+    }
+
+    private void notIngamePlayersTask() {
+        if (!this.plugin.isSingleServer()) return;
+
+        for (Player player : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
+
+            // Filter for non-ingame players only
+            if (this.players.containsKey(player.getUniqueId())) {
+                continue;
+            }
+
+            // Enforce spectator mode
+            if (player.getGameMode() != GameMode.SPECTATOR && !this.plugin.isPlayerBypassing(player.getUniqueId())) {
+                player.setGameMode(GameMode.SPECTATOR);
+            }
+
+            // Teleport to map world
+            if (player.getLocation().getWorld() != this.world && !this.plugin.isPlayerBypassing(player.getUniqueId())) {
+                player.teleport(new Location(this.world, 0, 0, 0));
+            }
+
+            // Reset the scoreboard to the main scoreboard
+            if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
+                player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
             }
 
         }
@@ -691,24 +773,6 @@ public class Game extends GamePart {
                 }
             }
 
-            // Saturation
-
-            if (player.getFoodLevel() < 20) {
-                player.setFoodLevel(20);
-            }
-
-            if (player.getSaturation() < 20) {
-                player.setSaturation(20);
-            }
-
-            // Regeneration
-
-            if (!player.hasPotionEffect(PotionEffectType.REGENERATION) && playerData.getRegenerationCooldown() >= 10) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, false, false));
-            } else if (!player.hasPotionEffect(PotionEffectType.REGENERATION) && playerData.getRegenerationCooldown() < 10) {
-                playerData.setRegenerationCooldown(playerData.getRegenerationCooldown() + 1);
-            }
-
             // Clear riptide trident after use
 
             if (!player.isRiptiding() && playerData.hasUsedTrident() && playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1599) {
@@ -763,14 +827,6 @@ public class Game extends GamePart {
 
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a" + playerData.getKills() + " kills §8§l|§r§c " + playerData.getDeaths() + " deaths §8§l|§r§6 Points: " + playerData.getPoints() + " §8§l|§r§6 " + this.time + "s"));
 
-            // Player weather
-
-            if (playerData.isWeatherDisabled() && player.getPlayerWeather() != WeatherType.CLEAR) {
-                player.setPlayerWeather(WeatherType.CLEAR);
-            } else if (!playerData.isWeatherDisabled() && ((WorldUtils.getWeather(this.world) != WorldUtils.WeatherType.CLEAR && player.getPlayerWeather() != WeatherType.DOWNFALL) || (WorldUtils.getWeather(this.world) == WorldUtils.WeatherType.CLEAR && player.getPlayerWeather() == WeatherType.DOWNFALL))){
-                player.resetPlayerWeather();
-            }
-
         }
 
         // HANDLE MENUS
@@ -782,36 +838,6 @@ public class Game extends GamePart {
             if (player == null || !this.players.containsKey(playerId)) {
 
                 this.playerMenus.remove(playerId);
-
-            }
-
-        }
-
-        // SINGLE SERVER MODE
-
-        if (this.plugin.isSingleServer()) {
-
-            for (Player player : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
-
-                if (player == null) {
-                    continue;
-                }
-
-                if (this.players.containsKey(player.getUniqueId())) {
-                    continue;
-                }
-
-                if (player.getGameMode() != GameMode.SPECTATOR && !this.plugin.isPlayerBypassing(player.getUniqueId())) {
-                    player.setGameMode(GameMode.SPECTATOR);
-                }
-
-                if (player.getLocation().getWorld() != this.world && !this.plugin.isPlayerBypassing(player.getUniqueId())) {
-                    player.teleport(new Location(this.world, 0, 0, 0));
-                }
-
-                if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
-                    player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-                }
 
             }
 

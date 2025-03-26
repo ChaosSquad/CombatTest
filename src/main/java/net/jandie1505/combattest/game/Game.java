@@ -2,6 +2,7 @@ package net.jandie1505.combattest.game;
 
 import eu.cloudnetservice.driver.inject.InjectionLayer;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
+import net.chaossquad.mclib.WorldUtils;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
@@ -136,6 +137,7 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::playerRespawnTask, 1, 20, "player_respawn");
         this.getTaskScheduler().scheduleRepeatingTask(this::offlineIngamePlayersTask, 1, 20, "offline_player");
         this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10, "old_task"); // TODO: Change to 20 ticks when scheduler is executed every tick
+        this.getTaskScheduler().scheduleRepeatingTask(this::weatherTask, 1, 20, "weather");
     }
 
     @Override
@@ -285,6 +287,39 @@ public class Game extends GamePart {
             Player player = this.plugin.getServer().getPlayer(entry.getKey());
             if (player != null) return;
             entry.getValue().setAlive(false);
+        }
+
+    }
+
+    private void weatherTask() {
+
+        if ((this.time % 100) == 0) {
+
+            if (this.time > 0) {
+                if (new Random().nextInt(2) == 1) {
+
+                    switch (new Random().nextInt(6)) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            WorldUtils.setWeather(this.world, WorldUtils.WeatherType.CLEAR);
+                            break;
+                        case 3:
+                        case 4:
+                            WorldUtils.setWeather(this.world, WorldUtils.WeatherType.RAIN);
+                            break;
+                        case 5:
+                            WorldUtils.setWeather(this.world, WorldUtils.WeatherType.THUNDER);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+            } else {
+                WorldUtils.setWeather(this.world, WorldUtils.WeatherType.CLEAR);
+            }
+
         }
 
     }
@@ -627,7 +662,7 @@ public class Game extends GamePart {
 
             if (playerData.isWeatherDisabled() && player.getPlayerWeather() != WeatherType.CLEAR) {
                 player.setPlayerWeather(WeatherType.CLEAR);
-            } else if (!playerData.isWeatherDisabled() && ((CombatTest.getWeather(this.world) != 0 && player.getPlayerWeather() != WeatherType.DOWNFALL) || (CombatTest.getWeather(this.world) == 0 && player.getPlayerWeather() == WeatherType.DOWNFALL))){
+            } else if (!playerData.isWeatherDisabled() && ((WorldUtils.getWeather(this.world) != WorldUtils.WeatherType.CLEAR && player.getPlayerWeather() != WeatherType.DOWNFALL) || (WorldUtils.getWeather(this.world) == WorldUtils.WeatherType.CLEAR && player.getPlayerWeather() == WeatherType.DOWNFALL))){
                 player.resetPlayerWeather();
             }
 
@@ -742,37 +777,6 @@ public class Game extends GamePart {
 
                 this.playerMenus.remove(playerId);
 
-            }
-
-        }
-
-        // WEATHER
-
-        if ((this.time % 100) == 0) {
-
-            if (time > 0) {
-                if (new Random().nextInt(2) == 1) {
-
-                    switch (new Random().nextInt(6)) {
-                        case 0:
-                        case 1:
-                        case 2:
-                            CombatTest.setClearWeather(this.world);
-                            break;
-                        case 3:
-                        case 4:
-                            CombatTest.setRainingWeather(this.world);
-                            break;
-                        case 5:
-                            CombatTest.setThunderingWeather(this.world);
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-            } else {
-                CombatTest.setClearWeather(this.world);
             }
 
         }

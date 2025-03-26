@@ -1,5 +1,6 @@
 package net.jandie1505.combattest;
 
+import net.chaossquad.mclib.WorldUtils;
 import net.jandie1505.combattest.endlobby.Endlobby;
 import net.jandie1505.combattest.game.*;
 import net.jandie1505.combattest.lobby.Lobby;
@@ -906,7 +907,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
-        if (this.plugin.getGame() instanceof Game) {
+        if (this.plugin.getGame() instanceof Game game) {
 
             if (event.getEntity() instanceof Trident && ItemStorage.getIdPrefix(((Trident) event.getEntity()).getItem()).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(((Trident) event.getEntity()).getItem()) == 1602) {
 
@@ -915,13 +916,13 @@ public class EventListener implements Listener {
 
                 if (number >= 8) {
 
-                    if (CombatTest.getWeather(((Game) this.plugin.getGame()).getWorld()) != 2) {
+                    if (WorldUtils.getWeather(game.getWorld()) != WorldUtils.WeatherType.THUNDER) {
 
-                        if (event.getEntity().getShooter() != null && event.getEntity().getShooter() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(((Player) event.getEntity().getShooter()).getUniqueId())) {
+                        if (event.getEntity().getShooter() != null && event.getEntity().getShooter() instanceof Player && (game).getPlayerMap().containsKey(((Player) event.getEntity().getShooter()).getUniqueId())) {
                             ((Player) event.getEntity().getShooter()).sendMessage("§bThe weather has been changed through your weather manipulation ability");
                         }
 
-                        CombatTest.setThunderingWeather(((Game) this.plugin.getGame()).getWorld());
+                        WorldUtils.setWeather(game.getWorld(), WorldUtils.WeatherType.THUNDER);
 
                     }
 

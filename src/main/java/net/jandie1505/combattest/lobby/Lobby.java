@@ -4,12 +4,10 @@ import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.spigot.api.party.PartyManager;
 import de.simonsator.partyandfriends.spigot.api.party.PlayerParty;
-import de.simonsator.partyandfriends.spigot.pafplayers.mysql.PAFPlayerMySQL;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.Game;
-import net.jandie1505.combattest.game.PlayerData;
 import net.jandie1505.combattest.game.Spawnpoint;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -28,7 +26,6 @@ import java.util.*;
 public class Lobby extends GamePart {
     private final CombatTest plugin;
     private boolean killswitch;
-    private int timeStep;
     private int time;
     private Map<UUID, LobbyPlayerData> players;
     private boolean forcestart;
@@ -46,7 +43,6 @@ public class Lobby extends GamePart {
         super(plugin);
         this.plugin = plugin;
         this.killswitch = false;
-        this.timeStep = 0;
         this.time = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optInt("time", 90);
         this.players = Collections.synchronizedMap(new HashMap<>());
         this.forcestart = false;
@@ -109,12 +105,44 @@ public class Lobby extends GamePart {
             }
         }
 
-        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10);
+        this.getTaskScheduler().scheduleRepeatingTask(this::timeTask, 1, 20, "time");
+        this.getTaskScheduler().scheduleRepeatingTask(this::autoSelectMapTask, 1, 20, "auto_select_map");
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 20); // TODO: Split into multiple tasks
     }
 
     @Override
     public boolean shouldExecute() {
         return super.shouldExecute() && !this.killswitch;
+    }
+
+    /**
+     * Counts down start timer and starts map.
+     */
+    private void timeTask() {
+
+        if (time > 0) {
+
+            if (players.size() >= 2) {
+                time--;
+            } else if(time < 60) {
+                time++;
+            }
+        } else {
+            this.start();
+        }
+
+    }
+
+    /**
+     * Automatically selects a map when the time is low.
+     */
+    private void autoSelectMapTask() {
+
+        if (this.selectedMap == null && this.time <= 10) {
+            this.autoSelectMap();
+            this.displayMap();
+        }
+
     }
 
     public void task() {
@@ -123,32 +151,7 @@ public class Lobby extends GamePart {
 
         if (killswitch) return;
 
-        // TIME MANAGEMENT
 
-        if (this.timeStep >= 1) {
-
-            if (time > 0) {
-
-                if (players.size() >= 2) {
-                    time--;
-                } else if(time < 60) {
-                    time++;
-                }
-            } else {
-                this.start();
-                return;
-            }
-
-            this.timeStep = 0;
-
-        } else {
-            this.timeStep++;
-        }
-
-        if (this.selectedMap == null && this.time <= 10) {
-            this.autoSelectMap();
-            this.displayMap();
-        }
 
         // PLAYER MANAGEMENT
 
@@ -198,7 +201,7 @@ public class Lobby extends GamePart {
 
             // Messages
 
-            if ((this.time <= 5 || (this.time % 10 == 0)) && players.size() >= 2 && this.timeStep >= 1) {
+            if ((this.time <= 5 || (this.time % 10 == 0)) && players.size() >= 2) {
                 player.sendMessage("§7The game starts in " + this.time + " seconds");
             }
 

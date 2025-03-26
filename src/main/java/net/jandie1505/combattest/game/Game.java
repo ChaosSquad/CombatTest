@@ -138,6 +138,7 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::offlineIngamePlayersTask, 1, 20, "offline_player");
         this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10, "old_task"); // TODO: Change to 20 ticks when scheduler is executed every tick
         this.getTaskScheduler().scheduleRepeatingTask(this::weatherTask, 1, 20, "weather");
+        this.getTaskScheduler().scheduleRepeatingTask(this::playerScoreboardTask, 1, 20, "player_scoreboard");
     }
 
     @Override
@@ -318,6 +319,110 @@ public class Game extends GamePart {
                 }
             } else {
                 WorldUtils.setWeather(this.world, WorldUtils.WeatherType.CLEAR);
+            }
+
+        }
+
+    }
+
+    private void playerScoreboardTask() {
+        if (!this.plugin.isSingleServer()) return;
+
+        for (Player player : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
+            PlayerData playerData = this.players.get(player.getUniqueId());
+            if (playerData == null) continue;
+
+            Scoreboard scoreboard = playerData.getScoreboard();
+
+            // Reset all scores
+            for (String playerString : scoreboard.getEntries()) {
+                scoreboard.resetScores(playerString);
+            }
+
+            // Sidebar
+            if (scoreboard.getObjective("sidebar") == null) {
+                Objective sidebarObjective = scoreboard.registerNewObjective("sidebar", Criteria.DUMMY, "§6§lCOMBAT TEST");
+                sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
+            }
+            Objective sidebarObjective = scoreboard.getObjective("sidebar");
+
+            sidebarObjective.getScore("§§§§").setScore(12);
+            sidebarObjective.getScore("Kills: §a" + playerData.getKills()).setScore(11);
+            sidebarObjective.getScore("Deaths: §a" + playerData.getDeaths()).setScore(10);
+            sidebarObjective.getScore("K/D: §a" + PlayerData.getKD(playerData.getKills(), playerData.getDeaths())).setScore(9);
+            sidebarObjective.getScore("Points: §a" + playerData.getPoints()).setScore(8);
+
+            if (playerData.getTeam() > 0) {
+
+                sidebarObjective.getScore("§§§").setScore(7);
+                sidebarObjective.getScore("Team: §a" + playerData.getTeam()).setScore(6);
+                sidebarObjective.getScore("Team Kills: §a" + this.getTeamKills(playerData.getTeam())).setScore(5);
+                sidebarObjective.getScore("Team Deaths: §a" + this.getTeamDeaths(playerData.getTeam())).setScore(4);
+                sidebarObjective.getScore("Team K/D: §a" + PlayerData.getKD(this.getTeamKills(playerData.getTeam()), this.getTeamDeaths(playerData.getTeam()))).setScore(3);
+
+            }
+
+            sidebarObjective.getScore("§§").setScore(2);
+            sidebarObjective.getScore("Time: §a" + this.time + "s").setScore(1);
+            sidebarObjective.getScore("§").setScore(0);
+
+            // Teams
+            if (scoreboard.getTeam("spectator") == null) {
+                scoreboard.registerNewTeam("spectator");
+            }
+            Team spectatorTeam = scoreboard.getTeam("spectator");
+
+            if (scoreboard.getTeam("own") == null) {
+                Team ownTeam = scoreboard.registerNewTeam("own");
+                ownTeam.setAllowFriendlyFire(false);
+                ownTeam.setColor(ChatColor.GREEN);
+                ownTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+            }
+            Team ownTeam = scoreboard.getTeam("own");
+
+            if (scoreboard.getTeam("enemy") == null) {
+                Team enemyTeam = scoreboard.registerNewTeam("enemy");
+                enemyTeam.setAllowFriendlyFire(true);
+                enemyTeam.setColor(ChatColor.RED);
+                enemyTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            }
+            Team enemyTeam = scoreboard.getTeam("enemy");
+
+            if (scoreboard.getObjective("tablist") == null) {
+                Objective tablistObjective = scoreboard.registerNewObjective("tablist", Criteria.DUMMY, "");
+                tablistObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+            }
+            Objective tablistObjective = scoreboard.getObjective("tablist");
+
+            ownTeam.addEntry(player.getName());
+            tablistObjective.getScore(player.getName()).setScore(playerData.getTeam());
+
+            for (Player p : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
+
+                if (p == player) {
+                    continue;
+                }
+
+                if (this.getPlayerMap().containsKey(p.getUniqueId())) {
+                    PlayerData pdata = this.getPlayerMap().get(p.getUniqueId());
+
+                    if (playerData.getTeam() > 0 && pdata.getTeam() == playerData.getTeam()) {
+                        ownTeam.addEntry(p.getName());
+                    } else {
+                        enemyTeam.addEntry(p.getName());
+                    }
+
+                    tablistObjective.getScore(p.getName()).setScore(pdata.getTeam());
+
+                } else {
+                    spectatorTeam.addEntry(p.getName());
+                }
+
+            }
+
+            // Set scoreboard
+            if (player.getScoreboard() != scoreboard) {
+                player.setScoreboard(scoreboard);
             }
 
         }
@@ -664,105 +769,6 @@ public class Game extends GamePart {
                 player.setPlayerWeather(WeatherType.CLEAR);
             } else if (!playerData.isWeatherDisabled() && ((WorldUtils.getWeather(this.world) != WorldUtils.WeatherType.CLEAR && player.getPlayerWeather() != WeatherType.DOWNFALL) || (WorldUtils.getWeather(this.world) == WorldUtils.WeatherType.CLEAR && player.getPlayerWeather() == WeatherType.DOWNFALL))){
                 player.resetPlayerWeather();
-            }
-
-            // Scoreboard
-
-            if (this.plugin.isSingleServer()) {
-
-                Scoreboard scoreboard = playerData.getScoreboard();
-
-                // Reset all scores
-                for (String playerString : scoreboard.getEntries()) {
-                    scoreboard.resetScores(playerString);
-                }
-
-                // Sidebar
-                if (scoreboard.getObjective("sidebar") == null) {
-                    Objective sidebarObjective = scoreboard.registerNewObjective("sidebar", Criteria.DUMMY, "§6§lCOMBAT TEST");
-                    sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
-                }
-                Objective sidebarObjective = scoreboard.getObjective("sidebar");
-
-                sidebarObjective.getScore("§§§§").setScore(12);
-                sidebarObjective.getScore("Kills: §a" + playerData.getKills()).setScore(11);
-                sidebarObjective.getScore("Deaths: §a" + playerData.getDeaths()).setScore(10);
-                sidebarObjective.getScore("K/D: §a" + PlayerData.getKD(playerData.getKills(), playerData.getDeaths())).setScore(9);
-                sidebarObjective.getScore("Points: §a" + playerData.getPoints()).setScore(8);
-
-                if (playerData.getTeam() > 0) {
-
-                    sidebarObjective.getScore("§§§").setScore(7);
-                    sidebarObjective.getScore("Team: §a" + playerData.getTeam()).setScore(6);
-                    sidebarObjective.getScore("Team Kills: §a" + this.getTeamKills(playerData.getTeam())).setScore(5);
-                    sidebarObjective.getScore("Team Deaths: §a" + this.getTeamDeaths(playerData.getTeam())).setScore(4);
-                    sidebarObjective.getScore("Team K/D: §a" + PlayerData.getKD(this.getTeamKills(playerData.getTeam()), this.getTeamDeaths(playerData.getTeam()))).setScore(3);
-
-                }
-
-                sidebarObjective.getScore("§§").setScore(2);
-                sidebarObjective.getScore("Time: §a" + this.time + "s").setScore(1);
-                sidebarObjective.getScore("§").setScore(0);
-
-                // Teams
-                if (scoreboard.getTeam("spectator") == null) {
-                    scoreboard.registerNewTeam("spectator");
-                }
-                Team spectatorTeam = scoreboard.getTeam("spectator");
-
-                if (scoreboard.getTeam("own") == null) {
-                    Team ownTeam = scoreboard.registerNewTeam("own");
-                    ownTeam.setAllowFriendlyFire(false);
-                    ownTeam.setColor(ChatColor.GREEN);
-                    ownTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
-                }
-                Team ownTeam = scoreboard.getTeam("own");
-
-                if (scoreboard.getTeam("enemy") == null) {
-                    Team enemyTeam = scoreboard.registerNewTeam("enemy");
-                    enemyTeam.setAllowFriendlyFire(true);
-                    enemyTeam.setColor(ChatColor.RED);
-                    enemyTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
-                }
-                Team enemyTeam = scoreboard.getTeam("enemy");
-
-                if (scoreboard.getObjective("tablist") == null) {
-                    Objective tablistObjective = scoreboard.registerNewObjective("tablist", Criteria.DUMMY, "");
-                    tablistObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-                }
-                Objective tablistObjective = scoreboard.getObjective("tablist");
-
-                ownTeam.addEntry(player.getName());
-                tablistObjective.getScore(player.getName()).setScore(playerData.getTeam());
-
-                for (Player p : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
-
-                    if (p == player) {
-                        continue;
-                    }
-
-                    if (this.getPlayerMap().containsKey(p.getUniqueId())) {
-                        PlayerData pdata = this.getPlayerMap().get(p.getUniqueId());
-
-                        if (playerData.getTeam() > 0 && pdata.getTeam() == playerData.getTeam()) {
-                            ownTeam.addEntry(p.getName());
-                        } else {
-                            enemyTeam.addEntry(p.getName());
-                        }
-
-                        tablistObjective.getScore(p.getName()).setScore(pdata.getTeam());
-
-                    } else {
-                        spectatorTeam.addEntry(p.getName());
-                    }
-
-                }
-
-                // Set scoreboard
-                if (player.getScoreboard() != scoreboard) {
-                    player.setScoreboard(scoreboard);
-                }
-
             }
 
         }

@@ -1,6 +1,7 @@
 package net.jandie1505.combattest;
 
 import de.myzelyam.api.vanish.VanishAPI;
+import net.chaossquad.mclib.dynamicevents.EventListenerManager;
 import net.jandie1505.combattest.commands.CombatTestCommand;
 import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
@@ -12,7 +13,11 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -20,6 +25,7 @@ import java.util.*;
 public class CombatTest extends JavaPlugin {
     private ConfigManager configManager;
     private ConfigManager mapConfig;
+    private EventListenerManager listenerManager;
     private GamePart game;
     private List<UUID> bypassingPlayers;
     private String permissionPrefix;
@@ -33,10 +39,20 @@ public class CombatTest extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
         this.configManager = new ConfigManager(this, DefaultConfigValues.getGeneralConfig(), false, "config.json");
         this.mapConfig = new ConfigManager(this, DefaultConfigValues.getWorldConfig(), true, "maps.json");
         this.configManager.reloadConfig();
         this.mapConfig.reloadConfig();
+
+        this.listenerManager = new EventListenerManager(this);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                CombatTest.this.listenerManager.manageListeners();
+            }
+        }.runTaskTimer(CombatTest.this, 0L, 10*20L);
+
         this.game = null;
         this.bypassingPlayers = Collections.synchronizedList(new ArrayList<>());
         this.permissionPrefix = this.configManager.getConfig().optString("permissionsPrefix", "combattest");
@@ -58,19 +74,30 @@ public class CombatTest extends JavaPlugin {
         this.getCommand("combattest").setExecutor(new CombatTestCommand(this));
         this.getCommand("combattest").setTabCompleter(new CombatTestCommand(this));
 
-        this.getServer().getPluginManager().registerEvents(new EventListener(this), this);
+        Listener listener = new EventListener(this);
+        this.listenerManager.addExceptedListener(listener);
+        this.getServer().getPluginManager().registerEvents(listener, this);
 
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
             try {
 
                 if (this.game != null) {
 
+                    /*
                     int status = this.game.tick();
 
                     if (status == GameStatus.ABORT) {
                         this.stopGame();
                     } else if (status == GameStatus.NEXT) {
                         this.game = this.game.getNextStatus();
+                    }
+
+                     */
+
+                    boolean success = this.game.tick();
+
+                    if (!success) {
+                        this.stopGame();
                     }
 
                 } else {
@@ -159,6 +186,15 @@ public class CombatTest extends JavaPlugin {
         }
     }
 
+    public boolean startGame(@NotNull GamePart game) {
+        if (this.game == null) {
+            this.game = game;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean stopGame() {
         boolean returnValue = this.game != null;
 
@@ -228,6 +264,10 @@ public class CombatTest extends JavaPlugin {
 
     public ConfigManager getMapConfig() {
         return this.mapConfig;
+    }
+
+    public EventListenerManager getListenerManager() {
+        return this.listenerManager;
     }
 
     public String getPermissionPrefix() {

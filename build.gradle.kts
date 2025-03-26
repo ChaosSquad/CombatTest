@@ -10,6 +10,9 @@ plugins {
     id("com.gradleup.shadow") version "8.3.5"
 }
 
+group = "net.jandie1505"
+version = "1.0-SNAPSHOT"
+
 repositories {
     mavenLocal()
     mavenCentral()

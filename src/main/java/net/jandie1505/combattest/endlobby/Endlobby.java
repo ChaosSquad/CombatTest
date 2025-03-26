@@ -2,7 +2,6 @@ package net.jandie1505.combattest.endlobby;
 
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
-import net.jandie1505.combattest.GameStatus;
 import net.jandie1505.combattest.game.PlayerData;
 import net.jandie1505.combattest.game.TeamData;
 import net.md_5.bungee.api.ChatMessageType;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Endlobby implements GamePart {
+public class Endlobby extends GamePart {
     private final CombatTest plugin;
     private boolean timeStep;
     private int time;
@@ -37,6 +36,7 @@ public class Endlobby implements GamePart {
     private final List<TeamData> teamKDRanking;
 
     public Endlobby(CombatTest plugin, Map<UUID, PlayerData> playerMap) {
+        super(plugin);
         this.plugin = plugin;
         this.timeStep = false;
         this.time = 60;
@@ -113,11 +113,11 @@ public class Endlobby implements GamePart {
 
         this.teamKDRanking = new ArrayList<>(this.teams);
         this.teamKDRanking.sort(TeamData.getKDComparator());
+
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 1); // TODO: Change to 20 ticks after scheduler is executed every tick
     }
 
-
-    @Override
-    public int tick() {
+    public void task() {
 
         // TIME
         if (timeStep) {
@@ -270,21 +270,16 @@ public class Endlobby implements GamePart {
 
         // TIME
 
-        if (this.time >= 0) {
-            return GameStatus.NORMAL;
-        } else {
-            return GameStatus.NEXT;
+        if (this.time < 0) {
+
+            this.plugin.stopGame();
+
+            if (this.plugin.isCloudSystemMode()) {
+                this.plugin.getServer().shutdown();
+
+            }
+
         }
-    }
-
-    @Override
-    public GamePart getNextStatus() {
-
-        if (this.plugin.isCloudSystemMode()) {
-            this.plugin.getServer().shutdown();
-        }
-
-        return null;
     }
 
     @Override

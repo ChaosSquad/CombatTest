@@ -4,7 +4,6 @@ import eu.cloudnetservice.driver.inject.InjectionLayer;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
-import net.jandie1505.combattest.GameStatus;
 import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.endlobby.Endlobby;
 import net.jandie1505.combattest.lobby.LobbyPlayerData;
@@ -24,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 
-public class Game implements GamePart {
+public class Game extends GamePart {
     private final CombatTest plugin;
     private boolean killswitch;
     private int timeStep;
@@ -38,6 +37,7 @@ public class Game implements GamePart {
     private boolean enforcePvp;
 
     public Game(CombatTest plugin, int time, World world, Map<UUID, LobbyPlayerData> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border, boolean enforcePvp) {
+        super(plugin);
         this.plugin = plugin;
         this.killswitch = false;
         this.timeStep = 0;
@@ -127,16 +127,20 @@ public class Game implements GamePart {
             }
 
         }
+
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 1); // TODO: Change to 20 ticks when scheduler is executed every tick
     }
 
     @Override
-    public int tick() {
+    public boolean shouldExecute() {
+        return super.shouldExecute() && !this.killswitch;
+    }
+
+    public void task() {
 
         // KILL SWITCH
 
-        if (this.killswitch) {
-            return GameStatus.ABORT;
-        }
+        if (this.killswitch) return;
 
         // TIME MANAGEMENT
 
@@ -145,7 +149,9 @@ public class Game implements GamePart {
             if (this.time >= 0) {
                 this.time--;
             } else {
-                return GameStatus.NEXT;
+                this.finishGame();
+                this.killswitch = true;
+                return;
             }
 
             this.timeStep = 0;
@@ -739,7 +745,6 @@ public class Game implements GamePart {
 
         }
 
-        return GameStatus.NORMAL;
     }
 
     @Override
@@ -937,9 +942,10 @@ public class Game implements GamePart {
         return teamDeaths;
     }
 
-    @Override
-    public GamePart getNextStatus() {
+    public void finishGame() {
         this.plugin.unloadWorld(this.world);
-        return new Endlobby(this.plugin, this.players);
+        this.plugin.stopGame();
+        this.plugin.startGame(new Endlobby(this.plugin, this.players));
     }
+
 }

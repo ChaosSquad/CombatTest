@@ -9,7 +9,6 @@ import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.Game;
-import net.jandie1505.combattest.GameStatus;
 import net.jandie1505.combattest.game.PlayerData;
 import net.jandie1505.combattest.game.Spawnpoint;
 import net.md_5.bungee.api.ChatMessageType;
@@ -21,13 +20,12 @@ import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
 
-public class Lobby implements GamePart {
+public class Lobby extends GamePart {
     private final CombatTest plugin;
     private boolean killswitch;
     private int timeStep;
@@ -45,6 +43,7 @@ public class Lobby implements GamePart {
     private boolean teamSelection;
 
     public Lobby(CombatTest plugin) {
+        super(plugin);
         this.plugin = plugin;
         this.killswitch = false;
         this.timeStep = 0;
@@ -109,16 +108,20 @@ public class Lobby implements GamePart {
                 this.plugin.getLogger().warning("Error while loading map config " + world + ". Please check your configuration.");
             }
         }
+
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 1); // TODO: Set to 20 ticks when scheduler runs every tick
     }
 
     @Override
-    public int tick() {
+    public boolean shouldExecute() {
+        return super.shouldExecute() && !this.killswitch;
+    }
+
+    public void task() {
 
         // KILLSWITCH
 
-        if (killswitch) {
-            return GameStatus.ABORT;
-        }
+        if (killswitch) return;
 
         // TIME MANAGEMENT
 
@@ -132,7 +135,8 @@ public class Lobby implements GamePart {
                     time++;
                 }
             } else {
-                return GameStatus.NEXT;
+                this.start();
+                return;
             }
 
             this.timeStep = 0;
@@ -318,12 +322,9 @@ public class Lobby implements GamePart {
         // FORCE START
 
         if (this.forcestart) {
-            return GameStatus.NEXT;
+            boolean success = this.start();
+            if (!success) this.killswitch = true;
         }
-
-        // DEFAULT RETURN
-
-        return GameStatus.NORMAL;
     }
 
     @Override
@@ -604,8 +605,8 @@ public class Lobby implements GamePart {
 
     }
 
-    @Override
-    public GamePart getNextStatus() {
+
+    public boolean start() {
 
         if (this.selectedMap == null) {
             this.autoSelectMap();
@@ -614,26 +615,27 @@ public class Lobby implements GamePart {
 
         if (selectedMap == null) {
             this.plugin.getLogger().warning("Game stopped because no world was selected");
-            return null;
+            return false;
         }
 
         World world = this.plugin.loadWorld(selectedMap.getWorld());
 
         if (world == null || !this.plugin.getServer().getWorlds().contains(world)) {
             this.plugin.getLogger().warning("Game stopped because world does not exist");
-            return null;
+            return false;
         }
 
         if (world == this.plugin.getServer().getWorlds().get(0)) {
             this.plugin.getLogger().warning("Game stopped because selected world is default world on server");
-            return null;
+            return false;
         }
 
         world.setAutoSave(false);
 
         this.setPartyTeams();
 
-        return new Game(
+        this.plugin.stopGame();
+        return this.plugin.startGame(new Game(
                 this.plugin,
                 selectedMap.getTime(),
                 world,
@@ -642,7 +644,7 @@ public class Lobby implements GamePart {
                 selectedMap.isEnableBorder(),
                 selectedMap.getBorder(),
                 selectedMap.isEnforcePvp()
-        );
+        ));
     }
 
     public void forcestart() {

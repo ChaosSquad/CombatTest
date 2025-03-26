@@ -7,6 +7,9 @@ import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.endlobby.Endlobby;
 import net.jandie1505.combattest.lobby.LobbyPlayerData;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -19,9 +22,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Game extends GamePart {
     private final CombatTest plugin;
@@ -128,7 +134,11 @@ public class Game extends GamePart {
 
         }
 
-        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 1); // TODO: Change to 20 ticks when scheduler is executed every tick
+        this.getTaskScheduler().scheduleRepeatingTask(this::timeTask, 1, 1, "time");
+        this.getTaskScheduler().scheduleRepeatingTask(this::tridentCleanupTask, 1, 1, "trident_cleanup");
+        this.getTaskScheduler().scheduleRepeatingTask(this::playerRespawnTask, 1, 1, "player_respawn");
+        this.getTaskScheduler().scheduleRepeatingTask(this::offlineIngamePlayersTask, 1, 1, "offline_player");
+        this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 1, "old_task"); // TODO: Change to 20 ticks when scheduler is executed every tick
     }
 
     @Override
@@ -136,13 +146,7 @@ public class Game extends GamePart {
         return super.shouldExecute() && !this.killswitch;
     }
 
-    public void task() {
-
-        // KILL SWITCH
-
-        if (this.killswitch) return;
-
-        // TIME MANAGEMENT
+    private void timeTask() {
 
         if (this.timeStep >= 1) {
 
@@ -160,58 +164,67 @@ public class Game extends GamePart {
             this.timeStep++;
         }
 
-        // TRIDENT ENTITIES
+    }
+
+    private void tridentCleanupTask() {
 
         List<Player> tridentList = new ArrayList<>();
         for (Entity entity : world.getEntities()) {
 
-            if (entity instanceof Trident) {
-                Trident trident = (Trident) entity;
+            if (entity instanceof Trident trident) {
 
+                // Remove when the trident is in the world for a specific time
                 if (trident.getTicksLived() > 600) {
                     trident.remove();
                     continue;
                 }
 
-                if (trident.getItem().getItemMeta() == null) {
+                // Remove trident when it has no data
+                if (trident.getItemStack().getItemMeta() == null) {
                     trident.remove();
                     continue;
                 }
 
-                if (!trident.getItem().getItemMeta().hasEnchant(Enchantment.LOYALTY)) {
+                // Remove trident when it has no loyalty
+                if (!trident.getItemStack().getItemMeta().hasEnchant(Enchantment.LOYALTY)) {
                     trident.remove();
                     continue;
                 }
 
+                // Remove trident when it has no shooter
                 if (trident.getShooter() == null) {
                     trident.remove();
                     continue;
                 }
 
-                if (!(trident.getShooter() instanceof Player)) {
+                // Remove trident if its shooter is not a player
+                if (!(trident.getShooter() instanceof Player shooter)) {
                     trident.remove();
                     continue;
                 }
 
-                if (ItemStorage.getIdPrefix(trident.getItem()).equalsIgnoreCase(ItemStorage.EQUIPMENT_RANGED)) {
+                // Sets a specific trident damage for specific equipments
+                if (ItemStorage.getIdPrefix(trident.getItemStack()).equalsIgnoreCase(ItemStorage.EQUIPMENT_RANGED)) {
 
-                    if (ItemStorage.getId(trident.getItem()) == 300) {
+                    if (ItemStorage.getId(trident.getItemStack()) == 300) {
                         trident.setDamage(1.5);
-                    } else if (ItemStorage.getId(trident.getItem()) == 301) {
+                    } else if (ItemStorage.getId(trident.getItemStack()) == 301) {
                         trident.setDamage(1.75);
                     }
 
                 }
 
-                if (this.players.containsKey(((Player) trident.getShooter()).getUniqueId())) {
-                    tridentList.add((Player) trident.getShooter());
+                // Removes the trident when the player is not ingame
+                if (this.players.containsKey(shooter.getUniqueId())) {
+                    tridentList.add(shooter);
                 } else {
                     trident.remove();
                     continue;
                 }
-            } else if (entity instanceof Item) {
+            } else if (entity instanceof Item itemEntity) {
 
-                if (((Item) entity).getItemStack().getType() == Material.TRIDENT) {
+                // Remove dropped tridents
+                if (itemEntity.getItemStack().getType() == Material.TRIDENT) {
                     entity.remove();
                     continue;
                 }
@@ -220,47 +233,89 @@ public class Game extends GamePart {
 
         }
 
+    }
+
+    /**
+     * Handles player respawns, gamemode and other basic values of players.
+     */
+    private void playerRespawnTask() {
+
+        for (Player player : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
+            PlayerData playerData = this.players.get(player.getUniqueId());
+            if (playerData == null) continue;
+
+            // Do actions for when the player is alive and when the player is not alive
+            if (playerData.isAlive()) { // PLAYER IS ALIVE
+
+                // Enforce adventure to adventure
+                if ((player.getGameMode() != GameMode.ADVENTURE) && !(this.plugin.isPlayerBypassing(player.getUniqueId()))) {
+                    player.setGameMode(GameMode.ADVENTURE);
+                }
+
+                // Reset respawn timer
+                if (playerData.getRespawntimer() < 5) {
+                    playerData.setRespawntimer(5);
+                }
+
+            } else { // PLAYER IS NOT ALIVE
+
+                // Enforce spectator gamemode
+                if (player.getGameMode() != GameMode.SPECTATOR && !this.plugin.isPlayerBypassing(player.getUniqueId())) {
+                    player.setGameMode(GameMode.SPECTATOR);
+                }
+
+                if (playerData.getRespawntimer() > 0) { // Respawn timer counting down
+
+                    // Sends the dead title
+                    player.showTitle(Title.title(
+                            Component.text("DEAD", NamedTextColor.RED),
+                            Component.text("You will respawn in "),
+                            Title.Times.times(Duration.ZERO, Duration.ofMillis(1250), Duration.ZERO)
+                    ));
+
+                    // Count down respawn timer
+                    playerData.setRespawntimer(playerData.getRespawntimer() - 1);
+
+                } else { // Respawn timer has expired
+                    this.respawnPlayer(player);  // Respawn the player
+                }
+
+            }
+
+
+        }
+
+    }
+
+    /**
+     * Set player to not alive when player is offline.
+     */
+    private void offlineIngamePlayersTask() {
+
+        for (Map.Entry<UUID, PlayerData> entry : this.players.entrySet()) {
+            Player player = this.plugin.getServer().getPlayer(entry.getKey());
+            if (player != null) return;
+            entry.getValue().setAlive(false);
+        }
+
+    }
+
+    public void task() {
+
+        // KILL SWITCH
+
+        if (this.killswitch) return;
+
         // PLAYER MANAGEMENT
 
         for (UUID playerId : this.getPlayerMap().keySet()) {
             Player player = this.plugin.getServer().getPlayer(playerId);
 
             if (player == null) {
-                this.removePlayer(playerId);
                 break;
             }
 
             PlayerData playerData = this.players.get(playerId);
-
-            // Respawn
-
-            if (!playerData.isAlive()) {
-
-                if ((player.getGameMode() != GameMode.SPECTATOR) && !(this.plugin.isPlayerBypassing(playerId))) {
-                    player.setGameMode(GameMode.SPECTATOR);
-                }
-
-                if (this.timeStep >= 1) {
-                    if (playerData.getRespawntimer() > 0) {
-                        player.sendTitle("§cDEAD", "§7Respawn in " + playerData.getRespawntimer() + " seconds", 0, 20, 0);
-                        player.sendMessage("§7You will respawn in " + playerData.getRespawntimer() + " seconds");
-                        playerData.setRespawntimer(playerData.getRespawntimer() - 1);
-                    } else {
-                        this.respawnPlayer(player);
-                    }
-                }
-
-            } else {
-
-                if ((player.getGameMode() != GameMode.ADVENTURE) && !(this.plugin.isPlayerBypassing(playerId))) {
-                    player.setGameMode(GameMode.ADVENTURE);
-                }
-
-                if (playerData.getRespawntimer() < 5) {
-                    playerData.setRespawntimer(5);
-                }
-
-            }
 
             // Player Menu Object
 
@@ -454,7 +509,7 @@ public class Game extends GamePart {
             if (rangedItem != null && rangedItemMissing && !(player.getItemOnCursor() != null && ItemStorage.getIdPrefix(player.getItemOnCursor()).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(player.getItemOnCursor()) == playerData.getRangedEquipment())) {
 
                 if ((playerData.getRangedEquipment() >= 300 && playerData.getRangedEquipment() <= 399) || (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1699)) {
-                    if (!tridentList.contains(player)) {
+                    if (!this.hasTrident(player)) {
 
                         if (playerData.getTridentTimer() >= 10) {
                             player.getInventory().addItem(rangedItem);
@@ -745,6 +800,37 @@ public class Game extends GamePart {
 
         }
 
+    }
+
+    /**
+     * Returns true if the player has a loyalty trident.
+     * @param player player
+     * @return true = has trident
+     */
+    private boolean hasTrident(@NotNull Player player) {
+
+        boolean tridentContinue = false;
+        for (Trident trident : this.world.getEntitiesByClass(Trident.class)) {
+
+            // I don' know why this is here
+            if (trident == null) {
+                continue;
+            }
+
+            // Check for the player
+            if (trident.getShooter() != player) {
+                continue;
+            }
+
+            // Skip non-loyalty tridents
+            if (trident.getLoyaltyLevel() <= 0) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override

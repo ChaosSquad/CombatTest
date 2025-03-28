@@ -70,3 +70,9 @@ tasks {
         dependsOn(shadowJar)
     }
 }
+
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("-Xlint:none")
+    options.compilerArgs.remove("-Werror")
+
+}

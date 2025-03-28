@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated(forRemoval = true)
 public class ItemStorage {
     public static final String MENU_ITEM = "M";
     public static final String HOTBAR_ITEM = "H";

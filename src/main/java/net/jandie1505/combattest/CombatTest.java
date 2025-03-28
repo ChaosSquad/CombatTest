@@ -3,6 +3,7 @@ package net.jandie1505.combattest;
 import de.myzelyam.api.vanish.VanishAPI;
 import net.chaossquad.mclib.dynamicevents.EventListenerManager;
 import net.jandie1505.combattest.commands.CombatTestCommand;
+import net.jandie1505.combattest.commands.CombatTestEquipmentSubcommand;
 import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
 import net.jandie1505.combattest.game.Game;
@@ -74,6 +75,10 @@ public class CombatTest extends JavaPlugin {
 
         this.getCommand("combattest").setExecutor(new CombatTestCommand(this));
         this.getCommand("combattest").setTabCompleter(new CombatTestCommand(this));
+
+        CombatTestEquipmentSubcommand equipmentSubcommand = new CombatTestEquipmentSubcommand(this);
+        this.getCommand("combattest-equipment").setExecutor(equipmentSubcommand);
+        this.getCommand("combattest-equipment").setTabCompleter(equipmentSubcommand);
 
         Listener listener = new EventListener(this);
         this.listenerManager.addExceptedListener(listener);
@@ -266,6 +271,11 @@ public class CombatTest extends JavaPlugin {
         }
 
         return false;
+    }
+
+    public boolean isPlayerBypassing(@Nullable OfflinePlayer player) {
+        if (player == null) return false;
+        return this.isPlayerBypassing(player.getUniqueId());
     }
 
     public ConfigManager getConfigManager() {

@@ -156,6 +156,8 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
             case "getserverstatus":
                 this.getServerStatusCommand(sender);
                 break;
+            case "equipments":
+
             default:
                 sender.sendMessage("§cUnknown command");
                 break;
@@ -452,13 +454,13 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage("§7Points: " + playerData.getPoints());
                 break;
             case 1:
-                sender.sendMessage("§7Melee score: " + playerData.getMeleeEquipment());
+                //sender.sendMessage("§7Melee score: " + playerData.getMeleeEquipment());
                 break;
             case 2:
-                sender.sendMessage("§7Ranged score: " + playerData.getRangedEquipment());
+                //sender.sendMessage("§7Ranged score: " + playerData.getRangedEquipment());
                 break;
             case 3:
-                sender.sendMessage("§7Armor score: " + playerData.getArmorEquipment());
+                //sender.sendMessage("§7Armor score: " + playerData.getArmorEquipment());
                 break;
             case 4:
                 sender.sendMessage("§7Team score: " + playerData.getTeam());
@@ -544,15 +546,15 @@ public class CombatTestCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage("§aPoints set");
                 break;
             case 1:
-                playerData.setMeleeEquipment(value);
+                //playerData.setMeleeEquipment(value);
                 sender.sendMessage("§aMelee score set");
                 break;
             case 2:
-                playerData.setRangedEquipment(value);
+                //playerData.setRangedEquipment(value);
                 sender.sendMessage("§aRanged score set");
                 break;
             case 3:
-                playerData.setArmorEquipment(value);
+                //playerData.setArmorEquipment(value);
                 sender.sendMessage("§aArmor score set");
                 break;
             case 4:

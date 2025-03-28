@@ -6,7 +6,10 @@ import net.chaossquad.mclib.WorldUtils;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
+import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.endlobby.Endlobby;
+import net.jandie1505.combattest.game.equipment.DefaultEquipment;
+import net.jandie1505.combattest.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -19,26 +22,29 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game extends GamePart {
-    private final CombatTest plugin;
-    private boolean killswitch;
+    @NotNull private final CombatTest plugin;
+    @NotNull private final World world;
+    @NotNull private final Map<UUID, PlayerData> players;
+    @NotNull private final EquipmentSystem equipmentSystem;
+    private final List<Spawnpoint> spawnpoints;
     private int time;
-    private World world;
-    private Map<UUID, PlayerData> players;
-    private List<Spawnpoint> spawnpoints;
+    private boolean killswitch;
     private boolean enableBorder;
     private int[] border;
-    private Map<UUID, PlayerMenu> playerMenus;
+    @Deprecated private Map<UUID, PlayerMenu> playerMenus;
     private boolean enforcePvp;
 
     public Game(CombatTest plugin, int time, World world, Map<UUID, LobbyPlayerData> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border, boolean enforcePvp) {
@@ -47,6 +53,8 @@ public class Game extends GamePart {
         this.killswitch = false;
         this.time = time;
         this.world = world;
+        this.equipmentSystem = new EquipmentSystem(this, () -> false);
+        this.equipmentSystem.getEquipmentMap().putAll(DefaultEquipment.getEquipment());
 
         if (world == null) {
             this.killswitch = true;
@@ -148,6 +156,8 @@ public class Game extends GamePart {
         return super.shouldExecute() && !this.killswitch;
     }
 
+    // ----- TASKS -----
+
     /**
      * Manages the time and finishes the game when expired.
      */
@@ -168,7 +178,6 @@ public class Game extends GamePart {
      */
     private void tridentCleanupTask() {
 
-        List<Player> tridentList = new ArrayList<>();
         for (Entity entity : world.getEntities()) {
 
             if (entity instanceof Trident trident) {
@@ -204,23 +213,17 @@ public class Game extends GamePart {
                 }
 
                 // Sets a specific trident damage for specific equipments
-                if (ItemStorage.getIdPrefix(trident.getItemStack()).equalsIgnoreCase(ItemStorage.EQUIPMENT_RANGED)) {
-
-                    if (ItemStorage.getId(trident.getItemStack()) == 300) {
-                        trident.setDamage(1.5);
-                    } else if (ItemStorage.getId(trident.getItemStack()) == 301) {
-                        trident.setDamage(1.75);
-                    }
-
+                double rangedDamage = trident.getItemStack().getItemMeta().getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_TRIDENT_RANGED_DAMAGE, PersistentDataType.DOUBLE, trident.getDamage());
+                if (rangedDamage != trident.getDamage()) {
+                    trident.setDamage(rangedDamage);
                 }
 
                 // Removes the trident when the player is not ingame
-                if (this.players.containsKey(shooter.getUniqueId())) {
-                    tridentList.add(shooter);
-                } else {
+                if (!this.players.containsKey(shooter.getUniqueId())) {
                     trident.remove();
                     continue;
                 }
+
             } else if (entity instanceof Item itemEntity) {
 
                 // Remove dropped tridents
@@ -511,6 +514,7 @@ public class Game extends GamePart {
 
     }
 
+    @Deprecated(forRemoval = true)
     public void task() {
 
         // KILL SWITCH
@@ -545,20 +549,6 @@ public class Game extends GamePart {
 
             }
 
-            // Check scores
-
-            if (!((playerData.getMeleeEquipment() == 0) || (playerData.getMeleeEquipment() >= 100 && playerData.getMeleeEquipment() <= 102) || (playerData.getMeleeEquipment() >= 200 && playerData.getMeleeEquipment() <= 202) || (playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 302) || (playerData.getMeleeEquipment() >= 1100 && playerData.getMeleeEquipment() <= 1103) || (playerData.getMeleeEquipment() >= 1200 && playerData.getMeleeEquipment() <= 1203) || (playerData.getMeleeEquipment() >= 1300 && playerData.getMeleeEquipment() <= 1303) || (playerData.getMeleeEquipment() >= 1400 && playerData.getMeleeEquipment() <= 1403) || (playerData.getMeleeEquipment() >= 1500 && playerData.getMeleeEquipment() <= 1503) || (playerData.getMeleeEquipment() >= 1600 && playerData.getMeleeEquipment() <= 1603))) {
-                playerData.setMeleeEquipment(0);
-            }
-
-            if (!((playerData.getRangedEquipment() == 0) || (playerData.getRangedEquipment() >= 100 && playerData.getRangedEquipment() <= 101) || (playerData.getRangedEquipment() >= 200 && playerData.getRangedEquipment() <= 201) || (playerData.getRangedEquipment() >= 300 && playerData.getRangedEquipment() <= 301) || (playerData.getRangedEquipment() >= 1100 && playerData.getRangedEquipment() <= 1102) || (playerData.getRangedEquipment() >= 1200 && playerData.getRangedEquipment() <= 1202) || (playerData.getRangedEquipment() >= 1300 && playerData.getRangedEquipment() <= 1302) || (playerData.getRangedEquipment() >= 1400 && playerData.getRangedEquipment() <= 1402) || (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1502) || (playerData.getRangedEquipment() >= 1600 && playerData.getRangedEquipment() <= 1602))) {
-                playerData.setRangedEquipment(0);
-            }
-
-            if (!((playerData.getArmorEquipment() == 0) || (playerData.getArmorEquipment() >= 100 && playerData.getArmorEquipment() <= 102) || (playerData.getArmorEquipment() >= 1100 && playerData.getArmorEquipment() <= 1103) || (playerData.getArmorEquipment() >= 1200 && playerData.getArmorEquipment() <= 1203))) {
-                playerData.setArmorEquipment(0);
-            }
-
             // Remove empty bottles and buckets
 
             if (player.getInventory().contains(Material.GLASS_BOTTLE)) {
@@ -569,217 +559,16 @@ public class Game extends GamePart {
                 player.getInventory().remove(Material.BUCKET);
             }
 
-            // Offhand ID
-
-            int offhandEquipment = 0;
-
-            if (playerData.getRangedEquipment() == 1300) {
-                offhandEquipment = 9000;
-            } else if (playerData.getRangedEquipment() == 1301) {
-                offhandEquipment = 9001;
-            } else if (playerData.getRangedEquipment() == 1302) {
-                offhandEquipment = 9002;
-            } else {
-                offhandEquipment = playerData.getArmorEquipment();
-            }
-
-            // Player inventory handling (give and remove equipment)
-
-            boolean meleeItemMissing = true;
-            boolean rangedItemMissing = true;
-            boolean armorItemMissing = true;
-            boolean offhandItemMissing = true;
-
-            for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
-
-                if (item != null) {
-
-                    // Melee item
-                    Integer meleeId = ItemStorage.getMeleeReverse(item);
-                    if (meleeId != null) {
-                        if (meleeId == playerData.getMeleeEquipment()) {
-                            meleeItemMissing = false;
-                        } else {
-                            player.getInventory().remove(item);
-                        }
-                        continue;
-                    }
-
-                    // Ranged item
-                    Integer rangedId = ItemStorage.getRangedReverse(item);
-                    if (rangedId != null) {
-                        if (rangedId == playerData.getRangedEquipment()) {
-                            rangedItemMissing = false;
-                        } else {
-                            player.getInventory().remove(item);
-                        }
-                        continue;
-                    }
-
-                    // Armor item
-                    Integer armorId = ItemStorage.getArmorReverse(item);
-                    if (armorId != null) {
-                        if (armorId == playerData.getArmorEquipment()) {
-                            armorItemMissing = false;
-                        } else {
-                            player.getInventory().remove(item);
-                            player.getInventory().setItem(39, new ItemStack(Material.AIR));
-                            player.getInventory().setItem(38, new ItemStack(Material.AIR));
-                            player.getInventory().setItem(37, new ItemStack(Material.AIR));
-                            player.getInventory().setItem(36, new ItemStack(Material.AIR));
-                        }
-                        continue;
-                    }
-
-                    // Offhand item
-                    Integer offhandId = ItemStorage.getOffhandEquipmentReverse(item);
-                    if (offhandId != null) {
-                        if (offhandId == offhandEquipment) {
-                            offhandItemMissing = false;
-                        } else {
-                            player.getInventory().remove(item);
-                            player.getInventory().setItem(40, new ItemStack(Material.AIR));
-                        }
-                        continue;
-                    }
-
-                }
-
-            }
-
-            // Give melee equipment
-
-            ItemStack meleeItem = ItemStorage.getMelee(playerData.getMeleeEquipment());
-            if (meleeItem != null && meleeItemMissing && !(player.getItemOnCursor() != null && ItemStorage.getIdPrefix(player.getItemOnCursor()).equals(ItemStorage.EQUIPMENT_MELEE) && ItemStorage.getId(player.getItemOnCursor()) == playerData.getMeleeEquipment())) {
-
-                if ((playerData.getMeleeEquipment() >= 300 && playerData.getMeleeEquipment() <= 399) || (playerData.getMeleeEquipment() >= 1500 && playerData.getMeleeEquipment() <= 1699)) {
-
-                    playerData.setPotionTimer(playerData.getPotionTimer() + 0.5);
-
-                    switch (playerData.getMeleeEquipment()) {
-                        case 300:
-                        case 1600:
-                            if (playerData.getPotionTimer() >= 4) {
-                                player.getInventory().addItem(meleeItem);
-                                playerData.setPotionTimer(0);
-                            }
-                            break;
-                        case 301:
-                        case 1601:
-                            if (playerData.getPotionTimer() >= 3.5) {
-                                player.getInventory().addItem(meleeItem);
-                                playerData.setPotionTimer(0);
-                            }
-                            break;
-                        case 302:
-                        case 1602:
-                            if (playerData.getPotionTimer() >= 3) {
-                                player.getInventory().addItem(meleeItem);
-                                playerData.setPotionTimer(0);
-                            }
-                            break;
-                        case 1500:
-                        case 1603:
-                            if (playerData.getPotionTimer() >= 2.5) {
-                                player.getInventory().addItem(meleeItem);
-                                playerData.setPotionTimer(0);
-                            }
-                            break;
-                        case 1501:
-                            if (playerData.getPotionTimer() >= 2) {
-                                player.getInventory().addItem(meleeItem);
-                                playerData.setPotionTimer(0);
-                            }
-                            break;
-                        case 1502:
-                            if (playerData.getPotionTimer() >= 1.5) {
-                                player.getInventory().addItem(meleeItem);
-                                playerData.setPotionTimer(0);
-                            }
-                            break;
-                        case 1503:
-                            if (playerData.getPotionTimer() >= 1) {
-                                player.getInventory().addItem(meleeItem);
-                                playerData.setPotionTimer(0);
-                            }
-                            break;
-                        default:
-                            playerData.setPotionTimer(0);
-                            break;
-                    }
-
-                } else {
-                    player.getInventory().addItem(meleeItem);
-                }
-
-            }
-
-            // Give ranged equipment
-
-            ItemStack rangedItem = ItemStorage.getRanged(playerData.getRangedEquipment());
-            if (rangedItem != null && rangedItemMissing && !(player.getItemOnCursor() != null && ItemStorage.getIdPrefix(player.getItemOnCursor()).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(player.getItemOnCursor()) == playerData.getRangedEquipment())) {
-
-                if ((playerData.getRangedEquipment() >= 300 && playerData.getRangedEquipment() <= 399) || (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1699)) {
-                    if (!this.hasTrident(player)) {
-
-                        if (playerData.getTridentTimer() >= 10) {
-                            player.getInventory().addItem(rangedItem);
-                            playerData.setTridentTimer(0);
-                        } else {
-                            playerData.setTridentTimer(playerData.getTridentTimer() + 1);
-                        }
-
-                    }
-                } else {
-                    player.getInventory().addItem(rangedItem);
-                }
-
-            }
-
-            // Give armor equipment
-
-            ItemStack armorItem = ItemStorage.getArmor(playerData.getArmorEquipment());
-            if (armorItem != null && armorItemMissing) {
-                player.getInventory().setItem(39, armorItem);
-            }
-
-            if (player.getInventory().getItem(38) == null || !(ItemStorage.getIdPrefix(player.getInventory().getItem(38)).equals(ItemStorage.EQUIPMENT_ARMOR) && ItemStorage.getId(player.getInventory().getItem(38)) == 10)) {
-                player.getInventory().setItem(38, ItemStorage.getArmorChestplate());
-            }
-
-            if (player.getInventory().getItem(37) == null || !(ItemStorage.getIdPrefix(player.getInventory().getItem(37)).equals(ItemStorage.EQUIPMENT_ARMOR) && ItemStorage.getId(player.getInventory().getItem(37)) == 10)) {
-                player.getInventory().setItem(37, ItemStorage.getArmorLeggings());
-            }
-
-            if (player.getInventory().getItem(36) == null || !(ItemStorage.getIdPrefix(player.getInventory().getItem(36)).equals(ItemStorage.EQUIPMENT_ARMOR) && ItemStorage.getId(player.getInventory().getItem(36)) == 10)) {
-                player.getInventory().setItem(36, ItemStorage.getArmorBoots());
-            }
-
-            // Give offhand equipment
-
-            ItemStack offhandItem = ItemStorage.getOffhandEquipment(offhandEquipment);
-            if (offhandItem != null && offhandItemMissing) {
-                if (offhandEquipment >= 100 && offhandEquipment <= 2999) {
-
-                    if (playerData.getShieldTimer() >= 20) {
-                        player.getInventory().setItem(40, offhandItem);
-                        playerData.setShieldTimer(0);
-                    } else {
-                        playerData.setShieldTimer(playerData.getShieldTimer() + 1);
-                    }
-
-                } else {
-                    player.getInventory().setItem(40, offhandItem);
-                }
-            }
-
             // Clear riptide trident after use
 
+            /*
             if (!player.isRiptiding() && playerData.hasUsedTrident() && playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1599) {
                 playerData.setHasUsedTrident(false);
                 player.getInventory().remove(Material.TRIDENT);
                 player.sendMessage("§bYour Trident no longer has enough energy to fly and needs to recharge first");
             }
+
+             */
 
             // No PvP Timer
 
@@ -915,6 +704,34 @@ public class Game extends GamePart {
         return List.copyOf(returnList);
     }
 
+    /**
+     * Returns a set of all online ingame players.
+     * @return ingame online players
+     */
+    public final Set<Player> getOnlinePlayers() {
+        return this.players.keySet().stream().map(Bukkit::getPlayer).collect(Collectors.toSet());
+    }
+
+    /**
+     * Returns the player data for the specified player UUID.<br/>
+     * Returns null if the player is not ingame.
+     * @param playerId player uuid
+     * @return player data
+     */
+    public final @Nullable PlayerData getPlayerData(@NotNull UUID playerId) {
+        return this.players.get(playerId);
+    }
+
+    /**
+     * Returns
+     * @param player
+     * @return
+     */
+    public final @Nullable PlayerData getPlayerData(@Nullable OfflinePlayer player) {
+        if (player == null) return null;
+        return this.players.get(player.getUniqueId());
+    }
+
     public Map<UUID, PlayerData> getPlayerMap() {
         return Map.copyOf(this.players);
     }
@@ -991,6 +808,10 @@ public class Game extends GamePart {
         }
 
         return location.getBlockX() >= this.border[0] && location.getBlockY() >= this.border[1] && location.getBlockZ() >= this.border[2] && location.getBlockX() <= this.border[3] && location.getBlockY() <= this.border[4] && location.getBlockZ() <= this.border[5];
+    }
+
+    public final CombatTest getPlugin() {
+        return this.plugin;
     }
 
     public int getTime() {

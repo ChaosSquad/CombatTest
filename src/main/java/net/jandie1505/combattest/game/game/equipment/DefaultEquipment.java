@@ -1,4 +1,4 @@
-package net.jandie1505.combattest.game.equipment;
+package net.jandie1505.combattest.game.game.equipment;
 
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import org.bukkit.*;

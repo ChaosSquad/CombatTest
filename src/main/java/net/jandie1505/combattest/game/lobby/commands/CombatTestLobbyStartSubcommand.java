@@ -1,8 +1,8 @@
-package net.jandie1505.combattest.lobby.commands;
+package net.jandie1505.combattest.game.lobby.commands;
 
 import net.chaossquad.mclib.command.TabCompletingCommandExecutor;
 import net.jandie1505.combattest.constants.Permissions;
-import net.jandie1505.combattest.lobby.Lobby;
+import net.jandie1505.combattest.game.lobby.Lobby;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

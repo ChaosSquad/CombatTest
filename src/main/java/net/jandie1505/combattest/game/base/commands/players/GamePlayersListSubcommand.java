@@ -1,9 +1,7 @@
-package net.jandie1505.combattest.commands.subcommands.players;
+package net.jandie1505.combattest.game.base.commands.players;
 
-import net.chaossquad.mclib.PlayerUtils;
 import net.chaossquad.mclib.command.TabCompletingCommandExecutor;
-import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.constants.Permissions;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

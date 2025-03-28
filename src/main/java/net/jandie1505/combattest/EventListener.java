@@ -1,12 +1,14 @@
 package net.jandie1505.combattest;
 
 import net.chaossquad.mclib.WorldUtils;
-import net.jandie1505.combattest.endlobby.Endlobby;
-import net.jandie1505.combattest.game.*;
-import net.jandie1505.combattest.lobby.Lobby;
-import net.jandie1505.combattest.lobby.LobbyMenu;
-import net.jandie1505.combattest.lobby.LobbyPlayerData;
-import net.jandie1505.combattest.lobby.MapData;
+import net.jandie1505.combattest.game.endlobby.Endlobby;
+import net.jandie1505.combattest.game.game.Game;
+import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.PlayerMenu;
+import net.jandie1505.combattest.game.lobby.Lobby;
+import net.jandie1505.combattest.game.lobby.LobbyMenu;
+import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
+import net.jandie1505.combattest.game.lobby.MapData;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,7 +28,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.json.JSONObject;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;

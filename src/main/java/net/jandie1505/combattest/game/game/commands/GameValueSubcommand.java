@@ -1,14 +1,13 @@
-package net.jandie1505.combattest.game.commands;
+package net.jandie1505.combattest.game.game.commands;
 
 import net.chaossquad.mclib.command.TabCompletingCommandExecutor;
 import net.jandie1505.combattest.constants.Permissions;
-import net.jandie1505.combattest.game.Game;
+import net.jandie1505.combattest.game.game.Game;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class GameValueSubcommand implements TabCompletingCommandExecutor {

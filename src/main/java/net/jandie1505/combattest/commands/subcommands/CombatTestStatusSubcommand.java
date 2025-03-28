@@ -2,11 +2,11 @@ package net.jandie1505.combattest.commands.subcommands;
 
 import net.chaossquad.mclib.command.TabCompletingCommandExecutor;
 import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.constants.Permissions;
-import net.jandie1505.combattest.endlobby.Endlobby;
-import net.jandie1505.combattest.game.Game;
-import net.jandie1505.combattest.lobby.Lobby;
+import net.jandie1505.combattest.game.endlobby.Endlobby;
+import net.jandie1505.combattest.game.game.Game;
+import net.jandie1505.combattest.game.lobby.Lobby;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

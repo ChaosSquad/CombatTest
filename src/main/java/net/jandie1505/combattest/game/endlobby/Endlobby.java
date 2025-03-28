@@ -1,9 +1,9 @@
-package net.jandie1505.combattest.endlobby;
+package net.jandie1505.combattest.game.endlobby;
 
 import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.GamePart;
-import net.jandie1505.combattest.game.PlayerData;
-import net.jandie1505.combattest.game.TeamData;
+import net.jandie1505.combattest.game.base.GamePart;
+import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.TeamData;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;

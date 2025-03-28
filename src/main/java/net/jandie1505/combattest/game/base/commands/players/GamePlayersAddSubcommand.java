@@ -1,9 +1,8 @@
-package net.jandie1505.combattest.commands.subcommands.players;
+package net.jandie1505.combattest.game.base.commands.players;
 
 import net.chaossquad.mclib.PlayerUtils;
 import net.chaossquad.mclib.command.TabCompletingCommandExecutor;
-import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.constants.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -13,13 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
-public class GamePlayersRemoveSubcommand implements TabCompletingCommandExecutor {
+public class GamePlayersAddSubcommand implements TabCompletingCommandExecutor {
     @NotNull private final GamePart game;
 
-    public GamePlayersRemoveSubcommand(@NotNull GamePart game) {
+    public GamePlayersAddSubcommand(@NotNull GamePart game) {
         this.game = game;
     }
 
@@ -36,17 +33,17 @@ public class GamePlayersRemoveSubcommand implements TabCompletingCommandExecutor
             return true;
         }
 
-        UUID playerId = PlayerUtils.getPlayerUUIDFromString(args[0]);
-        if (playerId == null) {
+        Player player = PlayerUtils.getPlayerFromString(args[0]);
+        if (player == null) {
             sender.sendRichMessage("<red>Player not found");
             return true;
         }
 
-        boolean success = game.removePlayer(playerId);
+        boolean success = game.addPlayer(player);
         if (success) {
-            sender.sendRichMessage("<green>Player removed");
+            sender.sendRichMessage("<green>Player added");
         } else {
-            sender.sendRichMessage("<red>Failed to remove player");
+            sender.sendRichMessage("<red>Failed to add player");
         }
 
         return true;
@@ -54,9 +51,8 @@ public class GamePlayersRemoveSubcommand implements TabCompletingCommandExecutor
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (args.length == 1) return this.game.getPlayers().stream()
-                .map(uuid -> Bukkit.getPlayer(uuid))
-                .filter(Objects::nonNull)
+        if (args.length == 1) return Bukkit.getOnlinePlayers().stream()
+                .filter(player -> !this.game.getPlayers().contains(player.getUniqueId()))
                 .map(Player::getName)
                 .toList();
         return List.of();

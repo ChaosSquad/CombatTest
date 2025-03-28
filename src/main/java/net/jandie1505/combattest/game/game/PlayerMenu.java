@@ -1,4 +1,4 @@
-package net.jandie1505.combattest.game;
+package net.jandie1505.combattest.game.game;
 
 import net.jandie1505.combattest.ItemStorage;
 import org.bukkit.Bukkit;

@@ -1,4 +1,4 @@
-package net.jandie1505.combattest.game;
+package net.jandie1505.combattest.game.game;
 
 import java.util.Comparator;
 

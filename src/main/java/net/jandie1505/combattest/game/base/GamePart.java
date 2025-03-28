@@ -1,9 +1,10 @@
-package net.jandie1505.combattest;
+package net.jandie1505.combattest.game.base;
 
 import net.chaossquad.mclib.command.DynamicSubcommandProvider;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.chaossquad.mclib.executable.CoreExecutable;
-import net.jandie1505.combattest.commands.subcommands.GamePlayersSubcommand;
+import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

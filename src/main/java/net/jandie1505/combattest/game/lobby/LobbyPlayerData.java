@@ -1,4 +1,4 @@
-package net.jandie1505.combattest.lobby;
+package net.jandie1505.combattest.game.lobby;
 
 public class LobbyPlayerData {
     private int team;

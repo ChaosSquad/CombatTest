@@ -3,7 +3,7 @@ package net.jandie1505.combattest.commands;
 import net.chaossquad.mclib.command.SubcommandCommand;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.commands.subcommands.CombatTestBypassSubcommand;
 import net.jandie1505.combattest.commands.subcommands.CombatTestStartSubcommand;
 import net.jandie1505.combattest.commands.subcommands.CombatTestStatusSubcommand;

@@ -1,12 +1,14 @@
 package net.jandie1505.combattest.commands;
 
 import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.GamePart;
-import net.jandie1505.combattest.game.*;
-import net.jandie1505.combattest.lobby.Lobby;
-import net.jandie1505.combattest.lobby.LobbyMenu;
-import net.jandie1505.combattest.lobby.LobbyPlayerData;
-import net.jandie1505.combattest.lobby.MapData;
+import net.jandie1505.combattest.game.base.GamePart;
+import net.jandie1505.combattest.game.game.Game;
+import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.PlayerMenu;
+import net.jandie1505.combattest.game.lobby.Lobby;
+import net.jandie1505.combattest.game.lobby.LobbyMenu;
+import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
+import net.jandie1505.combattest.game.lobby.MapData;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;

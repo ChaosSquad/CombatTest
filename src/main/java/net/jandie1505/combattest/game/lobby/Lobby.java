@@ -1,4 +1,4 @@
-package net.jandie1505.combattest.lobby;
+package net.jandie1505.combattest.game.lobby;
 
 import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager;
@@ -6,11 +6,11 @@ import de.simonsator.partyandfriends.spigot.api.party.PartyManager;
 import de.simonsator.partyandfriends.spigot.api.party.PlayerParty;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.GamePart;
+import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.ItemStorage;
-import net.jandie1505.combattest.game.Game;
-import net.jandie1505.combattest.game.Spawnpoint;
-import net.jandie1505.combattest.lobby.commands.CombatTestLobbyStartSubcommand;
+import net.jandie1505.combattest.game.game.Game;
+import net.jandie1505.combattest.game.game.Spawnpoint;
+import net.jandie1505.combattest.game.lobby.commands.CombatTestLobbyStartSubcommand;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;

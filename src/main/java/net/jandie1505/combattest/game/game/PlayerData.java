@@ -1,6 +1,6 @@
-package net.jandie1505.combattest.game;
+package net.jandie1505.combattest.game.game;
 
-import net.jandie1505.combattest.game.equipment.EquipmentItem;
+import net.jandie1505.combattest.game.game.equipment.EquipmentItem;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.Scoreboard;
 

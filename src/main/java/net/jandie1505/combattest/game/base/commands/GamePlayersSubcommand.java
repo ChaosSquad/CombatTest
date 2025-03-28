@@ -1,11 +1,11 @@
-package net.jandie1505.combattest.commands.subcommands;
+package net.jandie1505.combattest.game.base.commands;
 
 import net.chaossquad.mclib.command.SubcommandCommand;
 import net.chaossquad.mclib.command.SubcommandEntry;
-import net.jandie1505.combattest.GamePart;
-import net.jandie1505.combattest.commands.subcommands.players.GamePlayersAddSubcommand;
-import net.jandie1505.combattest.commands.subcommands.players.GamePlayersListSubcommand;
-import net.jandie1505.combattest.commands.subcommands.players.GamePlayersRemoveSubcommand;
+import net.jandie1505.combattest.game.base.GamePart;
+import net.jandie1505.combattest.game.base.commands.players.GamePlayersAddSubcommand;
+import net.jandie1505.combattest.game.base.commands.players.GamePlayersListSubcommand;
+import net.jandie1505.combattest.game.base.commands.players.GamePlayersRemoveSubcommand;
 import org.jetbrains.annotations.NotNull;
 
 public class GamePlayersSubcommand extends SubcommandCommand {

@@ -5,9 +5,9 @@ commands:
   combattest:
     description: CombatTest command
     usage: /combattest
-  combattest-equipment:
-    description: equipment debug command
-    usage: /combattest-equipment
+  combattest-old:
+    description: equipment old
+    usage: /combattest-old
 permissions:
   combattest.admin:
     default: op

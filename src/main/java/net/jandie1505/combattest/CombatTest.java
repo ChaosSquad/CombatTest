@@ -3,15 +3,13 @@ package net.jandie1505.combattest;
 import de.myzelyam.api.vanish.VanishAPI;
 import net.chaossquad.mclib.dynamicevents.EventListenerManager;
 import net.jandie1505.combattest.commands.CombatTestCommand;
-import net.jandie1505.combattest.commands.CombatTestEquipmentSubcommand;
+import net.jandie1505.combattest.commands.CombatTestCommandOld;
 import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.lobby.Lobby;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.*;
@@ -73,12 +71,12 @@ public class CombatTest extends JavaPlugin {
             this.svLoaded = false;
         }
 
-        this.getCommand("combattest").setExecutor(new CombatTestCommand(this));
-        this.getCommand("combattest").setTabCompleter(new CombatTestCommand(this));
+        CombatTestCommand command = new CombatTestCommand(this);
+        this.getCommand("combattest").setExecutor(command);
+        this.getCommand("combattest").setTabCompleter(command);
 
-        CombatTestEquipmentSubcommand equipmentSubcommand = new CombatTestEquipmentSubcommand(this);
-        this.getCommand("combattest-equipment").setExecutor(equipmentSubcommand);
-        this.getCommand("combattest-equipment").setTabCompleter(equipmentSubcommand);
+        this.getCommand("combattest-old").setExecutor(new CombatTestCommandOld(this));
+        this.getCommand("combattest-old").setTabCompleter(new CombatTestCommandOld(this));
 
         Listener listener = new EventListener(this);
         this.listenerManager.addExceptedListener(listener);
@@ -248,13 +246,13 @@ public class CombatTest extends JavaPlugin {
         this.bypassingPlayers.remove(playerId);
     }
 
-    public List<UUID> getBypassingPlayers() {
+    public List<UUID> getLocalBypassingPlayers() {
         return List.copyOf(this.bypassingPlayers);
     }
 
     public boolean isPlayerBypassing(UUID playerId) {
 
-        if (this.getBypassingPlayers().contains(playerId)) {
+        if (this.getLocalBypassingPlayers().contains(playerId)) {
             return true;
         }
 

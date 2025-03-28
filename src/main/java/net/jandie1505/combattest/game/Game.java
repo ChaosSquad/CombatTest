@@ -3,11 +3,15 @@ package net.jandie1505.combattest.game;
 import eu.cloudnetservice.driver.inject.InjectionLayer;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import net.chaossquad.mclib.WorldUtils;
+import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
+import net.jandie1505.combattest.commands.subcommands.GamePlayersSubcommand;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.endlobby.Endlobby;
+import net.jandie1505.combattest.game.commands.GamePlayersValueSubcommand;
+import net.jandie1505.combattest.game.commands.GameValueSubcommand;
 import net.jandie1505.combattest.game.equipment.DefaultEquipment;
 import net.jandie1505.combattest.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.lobby.LobbyPlayerData;
@@ -56,9 +60,19 @@ public class Game extends GamePart {
         this.equipmentSystem = new EquipmentSystem(this, () -> false);
         this.equipmentSystem.getEquipmentMap().putAll(DefaultEquipment.getEquipment());
 
+        // WORLD
+
         if (world == null) {
-            this.killswitch = true;
+            throw new IllegalArgumentException("World cannot be null");
         }
+
+        // COMMANDS
+        // if this throws an exception, the game is aborted. this is ok.
+
+        this.getDynamicSubcommands().put("value", SubcommandEntry.of(new GameValueSubcommand(this)));
+        ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new GamePlayersValueSubcommand(this)));
+
+        // PLAYERS
 
         this.players = Collections.synchronizedMap(new HashMap<>());
 
@@ -85,8 +99,12 @@ public class Game extends GamePart {
             player.getInventory().clear();
         }
 
+        // SPAWNPOINTS
+
         this.spawnpoints = Collections.synchronizedList(new ArrayList<>());
         this.spawnpoints.addAll(spawnpoints);
+
+        // BORDER
 
         this.enableBorder = enableBorder;
         this.border = border;
@@ -94,13 +112,15 @@ public class Game extends GamePart {
             this.killswitch = true;
         }
 
+        // MISC
+
         this.enforcePvp = enforcePvp;
 
         this.playerMenus = Collections.synchronizedMap(new HashMap<>());
 
-        if (world != null) {
-            world.setTime(6000);
-        }
+        world.setTime(6000);
+
+        // CLOUDSYSTEM MODE
 
         if (this.plugin.isCloudSystemMode()) {
 
@@ -139,6 +159,8 @@ public class Game extends GamePart {
             }
 
         }
+
+        // TASKS
 
         this.getTaskScheduler().scheduleRepeatingTask(this::timeTask, 1, 20, "time");
         this.getTaskScheduler().scheduleRepeatingTask(this::tridentCleanupTask, 1, 20, "trident_cleanup");
@@ -705,6 +727,14 @@ public class Game extends GamePart {
     }
 
     /**
+     * Returns a list of all registered player uuids.
+     * @return registered players
+     */
+    public final Set<UUID> getRegisteredPlayers() {
+        return Collections.unmodifiableSet(this.players.keySet());
+    }
+
+    /**
      * Returns a set of all online ingame players.
      * @return ingame online players
      */
@@ -808,10 +838,6 @@ public class Game extends GamePart {
         }
 
         return location.getBlockX() >= this.border[0] && location.getBlockY() >= this.border[1] && location.getBlockZ() >= this.border[2] && location.getBlockX() <= this.border[3] && location.getBlockY() <= this.border[4] && location.getBlockZ() <= this.border[5];
-    }
-
-    public final CombatTest getPlugin() {
-        return this.plugin;
     }
 
     public int getTime() {

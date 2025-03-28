@@ -4,11 +4,13 @@ import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayer;
 import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.spigot.api.party.PartyManager;
 import de.simonsator.partyandfriends.spigot.api.party.PlayerParty;
+import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.GamePart;
 import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.Game;
 import net.jandie1505.combattest.game.Spawnpoint;
+import net.jandie1505.combattest.lobby.commands.CombatTestLobbyStartSubcommand;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -48,7 +50,8 @@ public class Lobby extends GamePart {
         this.forcestart = false;
         this.maps = new ArrayList<>();
         this.selectedMap = null;
-        this.world = this.plugin.getServer().getWorlds().get(0);
+        this.world = this.plugin.getServer().getWorlds().getFirst();
+        this.getDynamicSubcommands().put("force-start", SubcommandEntry.of(new CombatTestLobbyStartSubcommand(this)));
         this.lobbyBorderEnabled = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optBoolean("enable", false);
         this.lobbyBorder = new int[]{
                 this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x1", -10),
@@ -68,7 +71,7 @@ public class Lobby extends GamePart {
         );
         this.lobbyMenus = Collections.synchronizedMap(new HashMap<>());
         this.mapVoting = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("mapVoting", false);
-        this.teamSelection = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("teamSelection", false);;
+        this.teamSelection = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("teamSelection", false);
 
         for (String world : List.copyOf(this.plugin.getMapConfig().getConfig().keySet())) {
             try {
@@ -609,7 +612,7 @@ public class Lobby extends GamePart {
     }
 
 
-    public boolean start() {
+    private boolean start() {
 
         if (this.selectedMap == null) {
             this.autoSelectMap();

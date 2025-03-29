@@ -3,11 +3,8 @@ package net.jandie1505.combattest.commands;
 import net.chaossquad.mclib.command.SubcommandCommand;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.commands.subcommands.*;
 import net.jandie1505.combattest.game.base.GamePart;
-import net.jandie1505.combattest.commands.subcommands.CombatTestBypassSubcommand;
-import net.jandie1505.combattest.commands.subcommands.CombatTestStartSubcommand;
-import net.jandie1505.combattest.commands.subcommands.CombatTestStatusSubcommand;
-import net.jandie1505.combattest.commands.subcommands.CombatTestStopSubcommand;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -27,6 +24,7 @@ public class CombatTestCommand extends SubcommandCommand {
         this.addSubcommand("status", SubcommandEntry.of(new CombatTestStatusSubcommand(this.plugin)));
         this.addSubcommand("start", SubcommandEntry.of(new CombatTestStartSubcommand(this.plugin)));
         this.addSubcommand("bypass", SubcommandEntry.of(new CombatTestBypassSubcommand(this.plugin)));
+        this.addSubcommand("settings", SubcommandEntry.of(new SettingsSubcommand(this.plugin)));
     }
 
 }

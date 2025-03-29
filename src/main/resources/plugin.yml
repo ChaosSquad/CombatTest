@@ -5,6 +5,9 @@ commands:
   combattest:
     description: CombatTest command
     usage: /combattest
+  pay:
+    description: Pay another player some points
+    usage: /pay <player> <amount>
   combattest-old:
     description: equipment old
     usage: /combattest-old

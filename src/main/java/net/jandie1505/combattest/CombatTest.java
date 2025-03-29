@@ -8,12 +8,14 @@ import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.Game;
+import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.*;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -75,6 +77,13 @@ public class CombatTest extends JavaPlugin {
         CombatTestCommand command = new CombatTestCommand(this);
         this.getCommand("combattest").setExecutor(command);
         this.getCommand("combattest").setTabCompleter(command);
+
+        PluginCommand payCommand = this.getCommand("pay");
+        if (payCommand != null) {
+            GamePayCommand cmd = new GamePayCommand(this);
+            payCommand.setExecutor(cmd);
+            payCommand.setTabCompleter(cmd);
+        }
 
         this.getCommand("combattest-old").setExecutor(new CombatTestCommandOld(this));
         this.getCommand("combattest-old").setTabCompleter(new CombatTestCommandOld(this));

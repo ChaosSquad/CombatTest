@@ -10,6 +10,7 @@ import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.endlobby.Endlobby;
+import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.game.commands.GameValueSubcommand;
 import net.jandie1505.combattest.game.game.equipment.DefaultEquipment;
@@ -71,6 +72,7 @@ public class Game extends GamePart {
 
         this.getDynamicSubcommands().put("value", SubcommandEntry.of(new GameValueSubcommand(this)));
         ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new GamePlayersValueSubcommand(this)));
+        this.getDynamicSubcommands().put("pay", SubcommandEntry.of(new GamePayCommand(this.getPlugin())));
 
         // PLAYERS
 

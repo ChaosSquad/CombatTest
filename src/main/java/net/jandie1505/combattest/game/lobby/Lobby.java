@@ -8,9 +8,13 @@ import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.ItemStorage;
+import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.Spawnpoint;
+import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.CombatTestLobbyStartSubcommand;
+import net.jandie1505.combattest.game.lobby.commands.LobbyPlayersValueSubcommand;
+import net.jandie1505.combattest.game.lobby.commands.LobbyValueSubcommand;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -52,6 +56,8 @@ public class Lobby extends GamePart {
         this.selectedMap = null;
         this.world = this.plugin.getServer().getWorlds().getFirst();
         this.getDynamicSubcommands().put("force-start", SubcommandEntry.of(new CombatTestLobbyStartSubcommand(this)));
+        this.getDynamicSubcommands().put("value", SubcommandEntry.of(new LobbyValueSubcommand(this)));
+        ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new LobbyPlayersValueSubcommand(this)));
         this.lobbyBorderEnabled = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optBoolean("enable", false);
         this.lobbyBorder = new int[]{
                 this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x1", -10),
@@ -357,23 +363,8 @@ public class Lobby extends GamePart {
     }
 
     @Override
-    public List<UUID> getPlayers() {
-        return List.copyOf(this.getPlayerMap().keySet());
-    }
-
-    @Override
-    public List<UUID> getPlayers(UUID[] playerIds) {
-        List<UUID> returnList = new ArrayList<>();
-
-        for (UUID playerId : playerIds) {
-
-            if (this.getPlayers().contains(playerId)) {
-                returnList.add(playerId);
-            }
-
-        }
-
-        return List.copyOf(returnList);
+    public Set<UUID> getRegisteredPlayers() {
+        return Set.copyOf(this.getPlayerMap().keySet());
     }
 
     private List<MapData> getHighestVotedMaps() {
@@ -684,6 +675,10 @@ public class Lobby extends GamePart {
 
     public int getTime() {
         return this.time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 
     public boolean isTeamSelection() {

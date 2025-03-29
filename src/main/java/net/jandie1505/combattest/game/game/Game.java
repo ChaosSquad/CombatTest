@@ -706,40 +706,12 @@ public class Game extends GamePart {
         return this.players.remove(uuid) != null;
     }
 
-    @Override
-    public List<UUID> getPlayers() {
-        return List.copyOf(this.getPlayerMap().keySet());
-    }
-
-    @Override
-    public List<UUID> getPlayers(UUID[] playerIds) {
-        List<UUID> returnList = new ArrayList<>();
-
-        for (UUID playerId : playerIds) {
-
-            if (this.getPlayers().contains(playerId)) {
-                returnList.add(playerId);
-            }
-
-        }
-
-        return List.copyOf(returnList);
-    }
-
     /**
      * Returns a list of all registered player uuids.
      * @return registered players
      */
     public final Set<UUID> getRegisteredPlayers() {
         return Collections.unmodifiableSet(this.players.keySet());
-    }
-
-    /**
-     * Returns a set of all online ingame players.
-     * @return ingame online players
-     */
-    public final Set<Player> getOnlinePlayers() {
-        return this.players.keySet().stream().map(Bukkit::getPlayer).collect(Collectors.toSet());
     }
 
     /**

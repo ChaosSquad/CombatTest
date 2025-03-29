@@ -13,10 +13,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Endlobby extends GamePart {
     private final CombatTest plugin;
@@ -293,13 +290,8 @@ public class Endlobby extends GamePart {
     }
 
     @Override
-    public List<UUID> getPlayers() {
-        return List.copyOf(this.playerMap.keySet());
-    }
-
-    @Override
-    public List<UUID> getPlayers(UUID[] playerIds) {
-        return null;
+    public Set<UUID> getRegisteredPlayers() {
+        return Set.copyOf(this.playerMap.keySet());
     }
 
     public List<Integer> getTeams() {

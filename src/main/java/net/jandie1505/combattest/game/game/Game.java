@@ -85,27 +85,37 @@ public class Game extends GamePart {
 
         this.players = Collections.synchronizedMap(new HashMap<>());
 
-        for (UUID playerId : Map.copyOf(players).keySet()) {
-            LobbyPlayerData lobbyPlayerData = players.get(playerId);
-            Player player = this.plugin.getServer().getPlayer(playerId);
+        for (Map.Entry<UUID, LobbyPlayerData> entry : Map.copyOf(players).entrySet()) {
+            UUID playerId = entry.getKey();
+            LobbyPlayerData lobbyPlayerData = entry.getValue();
 
-            if (player == null) {
-                continue;
-            }
-
-            player.setHealth(20);
-            player.setFoodLevel(20);
-            player.setSaturation(20);
+            // Create PlayerData
 
             PlayerData playerData = new PlayerData(playerId);
 
-            if (lobbyPlayerData != null) {
-                playerData.setTeam(lobbyPlayerData.getTeam());
+            // Set team
+
+            playerData.setTeam(lobbyPlayerData.getTeam());
+
+            // Set equipment
+
+            playerData.setEquipment("melee", this.getDefaultEquipmentForType("melee"));
+            playerData.setEquipment("ranged", this.getDefaultEquipmentForType("ranged"));
+            playerData.setEquipment("armor", this.getDefaultEquipmentForType("armor"));
+
+            // Prepare player
+
+            Player player = this.plugin.getServer().getPlayer(playerId);
+            if (player != null) {
+                player.setHealth(20);
+                player.setFoodLevel(20);
+                player.setSaturation(20);
+                player.getInventory().clear();
             }
 
-            this.players.put(playerId, playerData);
+            // Add player
 
-            player.getInventory().clear();
+            this.players.put(playerId, playerData);
         }
 
         // SPAWNPOINTS
@@ -811,6 +821,20 @@ public class Game extends GamePart {
         }
 
         return null;
+    }
+
+    /**
+     * Returns the default equipment id for the specified equipment type.
+     * @param type equipment type
+     * @return equipment id
+     */
+    public int getDefaultEquipmentForType(@NotNull String type) {
+        return switch (type) {
+            case "melee" -> 1000;
+            case "ranged" -> 2000;
+            case "armor" -> 3000;
+            default -> -1;
+        };
     }
 
     public boolean isInBorders(Location location) {

@@ -35,6 +35,7 @@ import java.util.List;
 public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
     @NotNull private static final NamespacedKey EQUIPMENT_CATEGORY = new NamespacedKey(NamespacedKeys.NAMESPACE, "gui.equipment.equipment.category");
     @NotNull private static final NamespacedKey EQUIPMENT_ID = new NamespacedKey(NamespacedKeys.NAMESPACE, "gui.equipment.equipment.id");
+    @NotNull private static final NamespacedKey BACK_BUTTON = new NamespacedKey(NamespacedKeys.NAMESPACE, "gui.equipment.back_button");
     @NotNull private static final NamespacedKey RESET_BUTTON = new NamespacedKey(NamespacedKeys.NAMESPACE, "gui.equipment.reset_button");
     @NotNull private final Game game;
     @NotNull private final Removable removeCondition;
@@ -149,16 +150,23 @@ public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
             }
         }
 
+        // Back button
+        ItemStack backItem = new ItemStack(Material.STRUCTURE_VOID);
+        ItemMeta backItemMeta = this.game.getPlugin().getServer().getItemFactory().getItemMeta(backItem.getType());
+        backItemMeta.displayName(Component.text("Back to main menu", NamedTextColor.AQUA, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+        backItemMeta.lore(List.of(Component.text("Click to go back to main menu.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
+        backItemMeta.getPersistentDataContainer().set(BACK_BUTTON, PersistentDataType.BOOLEAN, true);
+        backItem.setItemMeta(backItemMeta);
+        inventory.setItem(0, backItem);
+
+        // Reset button
         ItemStack resetItem = new ItemStack(Material.TNT);
         ItemMeta resetItemMeta = this.game.getPlugin().getServer().getItemFactory().getItemMeta(resetItem.getType());
-
-        resetItemMeta.displayName(Component.text("Reset item", NamedTextColor.RED, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
-        resetItemMeta.lore(List.of(Component.text("Click here to reset your equipment.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
+        resetItemMeta.displayName(Component.text("Reset Equipment", NamedTextColor.RED, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+        resetItemMeta.lore(List.of(Component.text("Click to reset your equipment.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
         resetItemMeta.getPersistentDataContainer().set(RESET_BUTTON, PersistentDataType.BOOLEAN, true);
         resetItemMeta.getPersistentDataContainer().set(EQUIPMENT_CATEGORY, PersistentDataType.STRING, equipmentType);
-
         resetItem.setItemMeta(resetItemMeta);
-
         inventory.setItem(8, resetItem);
 
         for (int i = 0; i < inventory.getSize(); i++) {
@@ -240,10 +248,12 @@ public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
             equipmentType = null;
         }
 
-        boolean isResetButton = meta.getPersistentDataContainer().getOrDefault(RESET_BUTTON, PersistentDataType.BOOLEAN, false);
-        if (isResetButton) {
+        if (meta.getPersistentDataContainer().getOrDefault(BACK_BUTTON, PersistentDataType.BOOLEAN, false)) {
+            player.openInventory(this.game.getPlayerMainGUI().getInventory());
+            player.playSound(player.getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+        } else if (meta.getPersistentDataContainer().getOrDefault(RESET_BUTTON, PersistentDataType.BOOLEAN, false)) {
             this.onResetButtonClick(player, playerData, equipmentType);
-        } else {
+        } else if (equipmentType != null) {
             int equipmentId = meta.getPersistentDataContainer().getOrDefault(EQUIPMENT_ID, PersistentDataType.INTEGER, -1);
             this.onUpgradeItemClick(player, playerData, equipmentType, equipmentId);
         }
@@ -259,17 +269,14 @@ public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
         }
 
         if (playerData.getPoints() >= price) {
-
             playerData.setPoints(playerData.getPoints() - price);
-
-            playerData.setEquipment(type, -1);
-
+            playerData.setEquipment(type, this.game.getDefaultEquipmentForType(type));
             player.sendRichMessage("<green>You have reset your equipment successfully.");
-
+            player.playSound(player.getLocation().clone(), Sound.ITEM_SHIELD_BREAK, 1, 1);
         } else {
             player.closeInventory();
             player.sendRichMessage("<red>You don't have enough points to reset your equipment!");
-            player.playSound(player.getLocation().clone(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.RECORDS, 1, 0);
+            player.playSound(player.getLocation().clone(), Sound.ENTITY_ITEM_PICKUP, 1, 0);
         }
 
     }
@@ -291,12 +298,14 @@ public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
             playerData.setPoints(playerData.getPoints() - equipmentData.price());
             playerData.setEquipment(type, equipmentId);
             player.sendRichMessage("<green>Equipment successfully upgraded to <aqua><equipment_name><green>!", TagResolver.resolver("equipment_name", Tag.inserting(Component.text(equipmentData.name()))));
+            player.playSound(player.getLocation().clone(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
 
             int updatedEquipmentId = playerData.getEquipment(type);
             player.openInventory(this.getUpgradeGUI(type, updatedEquipmentId));
         } else {
             player.closeInventory();
             player.sendRichMessage("<red>You don't have enough points to upgrade!");
+            player.playSound(player.getLocation().clone(), Sound.ENTITY_ITEM_PICKUP, 1, 0);
         }
 
     }

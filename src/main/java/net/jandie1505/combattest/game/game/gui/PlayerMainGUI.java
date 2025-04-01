@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -123,14 +124,18 @@ public class PlayerMainGUI implements InventoryHolder, ManagedListener {
         switch (buttonType) {
             case ButtonType.MELEE -> {
                 player.openInventory(this.game.getEquipmentUpgradeGUI().getUpgradeGUI("melee", playerData.getEquipment("melee")));
+                player.playSound(player.getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
             }
             case ButtonType.RANGED -> {
                 player.openInventory(this.game.getEquipmentUpgradeGUI().getUpgradeGUI("ranged", playerData.getEquipment("ranged")));
+                player.playSound(player.getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
             }
             case ButtonType.ARMOR -> {
                 player.openInventory(this.game.getEquipmentUpgradeGUI().getUpgradeGUI("armor", playerData.getEquipment("armor")));
+                player.playSound(player.getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
             }
             case ButtonType.ITEM_SHOP -> {
+                player.closeInventory();
                 player.sendRichMessage("<red>Currently not supported");
             }
         }

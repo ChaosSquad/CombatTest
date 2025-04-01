@@ -15,6 +15,7 @@ import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.game.commands.GameValueSubcommand;
 import net.jandie1505.combattest.game.game.equipment.DefaultEquipment;
 import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
+import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -44,6 +45,7 @@ public class Game extends GamePart {
     @NotNull private final World world;
     @NotNull private final Map<UUID, PlayerData> players;
     @NotNull private final EquipmentSystem equipmentSystem;
+    @NotNull private final EquipmentUpgradeGUI equipmentUpgradeGUI;
     private final List<Spawnpoint> spawnpoints;
     private int time;
     private boolean killswitch;
@@ -60,6 +62,7 @@ public class Game extends GamePart {
         this.world = world;
         this.equipmentSystem = new EquipmentSystem(this, () -> false);
         this.equipmentSystem.getEquipmentMap().putAll(DefaultEquipment.getEquipment());
+        this.equipmentUpgradeGUI = new EquipmentUpgradeGUI(this, () -> false);
 
         // WORLD
 
@@ -826,8 +829,12 @@ public class Game extends GamePart {
         return this.enableBorder;
     }
 
-    public World getWorld() {
+    public @NotNull World getWorld() {
         return this.world;
+    }
+
+    public @NotNull EquipmentSystem getEquipmentSystem() {
+        return this.equipmentSystem;
     }
 
     private Map<UUID, PlayerMenu> getPlayerMenus() {

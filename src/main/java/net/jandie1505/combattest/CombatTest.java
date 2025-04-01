@@ -8,6 +8,7 @@ import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.Game;
+import net.jandie1505.combattest.game.game.commands.GameMenuCommand;
 import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.kyori.adventure.text.Component;
@@ -85,12 +86,27 @@ public class CombatTest extends JavaPlugin {
             payCommand.setTabCompleter(cmd);
         }
 
+        PluginCommand menuCommand = this.getCommand("menu");
+        if (menuCommand != null) {
+            GameMenuCommand cmd = new GameMenuCommand(this);
+            menuCommand.setExecutor(cmd);
+            menuCommand.setTabCompleter(cmd);
+        }
+
         this.getCommand("combattest-old").setExecutor(new CombatTestCommandOld(this));
         this.getCommand("combattest-old").setTabCompleter(new CombatTestCommandOld(this));
 
         Listener listener = new EventListener(this);
         this.listenerManager.addExceptedListener(listener);
         this.getServer().getPluginManager().registerEvents(listener, this);
+
+        this.listenerManager.addSource(() -> {
+            if (this.game != null) {
+                return this.game;
+            } else {
+                return null;
+            }
+        });
 
         /*
         Game tick task

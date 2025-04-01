@@ -4,10 +4,13 @@ version: 1.0
 commands:
   combattest:
     description: CombatTest command
-    usage: /combattest
+    usage: /combattest <subcommand>
   pay:
     description: Pay another player some points
     usage: /pay <player> <amount>
+  menu:
+    description: Opens the player menu
+    usage: /menu
   combattest-old:
     description: equipment old
     usage: /combattest-old

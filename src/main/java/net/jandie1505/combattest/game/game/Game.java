@@ -10,12 +10,14 @@ import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.endlobby.Endlobby;
+import net.jandie1505.combattest.game.game.commands.GameMenuCommand;
 import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.game.commands.GameValueSubcommand;
 import net.jandie1505.combattest.game.game.equipment.DefaultEquipment;
 import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
+import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -38,13 +40,13 @@ import org.json.JSONObject;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game extends GamePart {
     @NotNull private final CombatTest plugin;
     @NotNull private final World world;
     @NotNull private final Map<UUID, PlayerData> players;
     @NotNull private final EquipmentSystem equipmentSystem;
+    @NotNull private final PlayerMainGUI playerMainGUI;
     @NotNull private final EquipmentUpgradeGUI equipmentUpgradeGUI;
     private final List<Spawnpoint> spawnpoints;
     private int time;
@@ -62,7 +64,8 @@ public class Game extends GamePart {
         this.world = world;
         this.equipmentSystem = new EquipmentSystem(this, () -> false);
         this.equipmentSystem.getEquipmentMap().putAll(DefaultEquipment.getEquipment());
-        this.equipmentUpgradeGUI = new EquipmentUpgradeGUI(this, () -> false);
+        this.playerMainGUI = new PlayerMainGUI(this, null);
+        this.equipmentUpgradeGUI = new EquipmentUpgradeGUI(this, null);
 
         // WORLD
 
@@ -76,6 +79,7 @@ public class Game extends GamePart {
         this.getDynamicSubcommands().put("value", SubcommandEntry.of(new GameValueSubcommand(this)));
         ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new GamePlayersValueSubcommand(this)));
         this.getDynamicSubcommands().put("pay", SubcommandEntry.of(new GamePayCommand(this.getPlugin())));
+        this.getDynamicSubcommands().put("menu", SubcommandEntry.of(new GameMenuCommand(this.getPlugin())));
 
         // PLAYERS
 
@@ -835,6 +839,14 @@ public class Game extends GamePart {
 
     public @NotNull EquipmentSystem getEquipmentSystem() {
         return this.equipmentSystem;
+    }
+
+    public @NotNull PlayerMainGUI getPlayerMainGUI() {
+        return this.playerMainGUI;
+    }
+
+    public @NotNull EquipmentUpgradeGUI getEquipmentUpgradeGUI() {
+        return this.equipmentUpgradeGUI;
     }
 
     private Map<UUID, PlayerMenu> getPlayerMenus() {

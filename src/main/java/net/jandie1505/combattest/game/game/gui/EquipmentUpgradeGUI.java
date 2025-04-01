@@ -41,8 +41,8 @@ public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
 
     public EquipmentUpgradeGUI(@NotNull Game game, @Nullable Removable removeCondition) {
         this.game = game;
-        this.game.registerListener(this);
         this.removeCondition = removeCondition != null ? removeCondition : () -> false;
+        this.game.registerListener(this);
     }
 
     // ----- INVENTORY HOLDER -----
@@ -54,7 +54,7 @@ public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
      */
     @Override
     public @NotNull Inventory getInventory() {
-        return Bukkit.createInventory(this, 9, Component.text("Equipment GUI: Error", NamedTextColor.DARK_RED, TextDecoration.STRIKETHROUGH));
+        return Bukkit.createInventory(this, 9, Component.text("Equipment GUI: Error", NamedTextColor.DARK_RED, TextDecoration.STRIKETHROUGH).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
     }
 
     // ----- GUI BUILDER -----
@@ -291,13 +291,12 @@ public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
             playerData.setPoints(playerData.getPoints() - equipmentData.price());
             playerData.setEquipment(type, equipmentId);
             player.sendRichMessage("<green>Equipment successfully upgraded to <aqua><equipment_name><green>!", TagResolver.resolver("equipment_name", Tag.inserting(Component.text(equipmentData.name()))));
-            player.closeInventory();
 
             int updatedEquipmentId = playerData.getEquipment(type);
             player.openInventory(this.getUpgradeGUI(type, updatedEquipmentId));
         } else {
             player.closeInventory();
-
+            player.sendRichMessage("<red>You don't have enough points to upgrade!");
         }
 
     }

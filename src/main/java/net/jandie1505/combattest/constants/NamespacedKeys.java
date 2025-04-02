@@ -13,4 +13,6 @@ public interface NamespacedKeys {
     NamespacedKey ITEM_TRIDENT_RANGED_DAMAGE = new NamespacedKey(NAMESPACE, "item.trident.ranged_damage");
     NamespacedKey ITEM_THROWABLE_DAMAGE = new NamespacedKey(NAMESPACE, "item.throwable.damage");
 
+    NamespacedKey ITEM_PLAYER_MENU = new NamespacedKey(NAMESPACE, "item.player_menu");
+
 }

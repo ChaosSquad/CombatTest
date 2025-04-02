@@ -16,6 +16,7 @@ import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.game.commands.GameValueSubcommand;
 import net.jandie1505.combattest.game.game.constants.DefaultShopItems;
 import net.jandie1505.combattest.game.game.constants.DefaultEquipment;
+import net.jandie1505.combattest.game.game.constants.OtherItems;
 import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
@@ -180,6 +181,12 @@ public class Game extends GamePart {
             }
 
         }
+
+        // LISTENERS
+
+        this.registerListener(new GameListener(this));
+
+        this.getPlugin().getListenerManager().manageListeners();
 
         // TASKS
 
@@ -575,15 +582,6 @@ public class Game extends GamePart {
 
             PlayerData playerData = this.players.get(playerId);
 
-            // Player Menu Button
-
-            if (!ItemStorage.getPlayerMenuButton().isSimilar(player.getInventory().getItem(8))) {
-
-                player.getInventory().remove(ItemStorage.getPlayerMenuButton());
-                player.getInventory().setItem(8, ItemStorage.getPlayerMenuButton());
-
-            }
-
             // Remove empty bottles and buckets
 
             if (player.getInventory().contains(Material.GLASS_BOTTLE)) {
@@ -765,6 +763,9 @@ public class Game extends GamePart {
         player.setGameMode(GameMode.ADVENTURE);
         player.teleport(spawnpoint.buildLocation(world));
         this.getPlayerMap().get(player.getUniqueId()).setAlive(true);
+
+        player.getInventory().clear();
+        player.getInventory().setItem(8, OtherItems.getPlayerMenuItem());
 
         return true;
     }

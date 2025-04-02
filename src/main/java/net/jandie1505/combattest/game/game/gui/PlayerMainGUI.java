@@ -135,8 +135,8 @@ public class PlayerMainGUI implements InventoryHolder, ManagedListener {
                 player.playSound(player.getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
             }
             case ButtonType.ITEM_SHOP -> {
-                player.closeInventory();
-                player.sendRichMessage("<red>Currently not supported");
+                player.openInventory(this.game.getShopGUI().getInventory());
+                player.playSound(player.getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
             }
         }
 

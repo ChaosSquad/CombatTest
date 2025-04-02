@@ -14,10 +14,12 @@ import net.jandie1505.combattest.game.game.commands.GameMenuCommand;
 import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.game.commands.GameValueSubcommand;
+import net.jandie1505.combattest.game.game.constants.DefaultShopItems;
 import net.jandie1505.combattest.game.game.equipment.DefaultEquipment;
 import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
+import net.jandie1505.combattest.game.game.gui.ShopGUI;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -48,6 +50,7 @@ public class Game extends GamePart {
     @NotNull private final EquipmentSystem equipmentSystem;
     @NotNull private final PlayerMainGUI playerMainGUI;
     @NotNull private final EquipmentUpgradeGUI equipmentUpgradeGUI;
+    @NotNull private final ShopGUI shopGUI;
     private final List<Spawnpoint> spawnpoints;
     private int time;
     private boolean killswitch;
@@ -66,6 +69,8 @@ public class Game extends GamePart {
         this.equipmentSystem.getEquipmentMap().putAll(DefaultEquipment.getEquipment());
         this.playerMainGUI = new PlayerMainGUI(this, null);
         this.equipmentUpgradeGUI = new EquipmentUpgradeGUI(this, null);
+        this.shopGUI = new ShopGUI(this, null);
+        this.shopGUI.getItems().addAll(DefaultShopItems.getShopItems());
 
         // WORLD
 
@@ -871,6 +876,10 @@ public class Game extends GamePart {
 
     public @NotNull EquipmentUpgradeGUI getEquipmentUpgradeGUI() {
         return this.equipmentUpgradeGUI;
+    }
+
+    public @NotNull ShopGUI getShopGUI() {
+        return this.shopGUI;
     }
 
     private Map<UUID, PlayerMenu> getPlayerMenus() {

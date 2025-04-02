@@ -15,7 +15,7 @@ import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.game.commands.GameValueSubcommand;
 import net.jandie1505.combattest.game.game.constants.DefaultShopItems;
-import net.jandie1505.combattest.game.game.equipment.DefaultEquipment;
+import net.jandie1505.combattest.game.game.constants.DefaultEquipment;
 import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;

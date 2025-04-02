@@ -1,6 +1,8 @@
-package net.jandie1505.combattest.game.game.equipment;
+package net.jandie1505.combattest.game.game.constants;
 
 import net.jandie1505.combattest.constants.NamespacedKeys;
+import net.jandie1505.combattest.game.game.equipment.EquipmentData;
+import net.jandie1505.combattest.game.game.equipment.EquipmentItem;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;

@@ -56,7 +56,6 @@ public class Game extends GamePart {
     private boolean killswitch;
     private boolean enableBorder;
     private int[] border;
-    @Deprecated private Map<UUID, PlayerMenu> playerMenus;
     private boolean enforcePvp;
 
     public Game(CombatTest plugin, int time, World world, Map<UUID, LobbyPlayerData> players, List<Spawnpoint> spawnpoints, boolean enableBorder, int[] border, boolean enforcePvp) {
@@ -139,8 +138,6 @@ public class Game extends GamePart {
         // MISC
 
         this.enforcePvp = enforcePvp;
-
-        this.playerMenus = Collections.synchronizedMap(new HashMap<>());
 
         world.setTime(6000);
 
@@ -578,14 +575,6 @@ public class Game extends GamePart {
 
             PlayerData playerData = this.players.get(playerId);
 
-            // Player Menu Object
-
-            if (!this.playerMenus.containsKey(playerId)) {
-
-                this.playerMenus.put(playerId, new PlayerMenu(this, playerId));
-
-            }
-
             // Player Menu Button
 
             if (!ItemStorage.getPlayerMenuButton().isSimilar(player.getInventory().getItem(8))) {
@@ -661,20 +650,6 @@ public class Game extends GamePart {
             // Actionbar
 
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a" + playerData.getKills() + " kills §8§l|§r§c " + playerData.getDeaths() + " deaths §8§l|§r§6 Points: " + playerData.getPoints() + " §8§l|§r§6 " + this.time + "s"));
-
-        }
-
-        // HANDLE MENUS
-
-        for (UUID playerId : this.getPlayerMenus().keySet()) {
-
-            Player player = this.plugin.getServer().getPlayer(playerId);
-
-            if (player == null || !this.players.containsKey(playerId)) {
-
-                this.playerMenus.remove(playerId);
-
-            }
 
         }
 
@@ -880,14 +855,6 @@ public class Game extends GamePart {
 
     public @NotNull ShopGUI getShopGUI() {
         return this.shopGUI;
-    }
-
-    private Map<UUID, PlayerMenu> getPlayerMenus() {
-        return Map.copyOf(this.playerMenus);
-    }
-
-    public PlayerMenu getPlayerMenu(UUID playerId) {
-        return this.getPlayerMenus().get(playerId);
     }
 
     public List<Integer> getTeams() {

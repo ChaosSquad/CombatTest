@@ -4,9 +4,7 @@ import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.PlayerData;
-import net.jandie1505.combattest.game.game.PlayerMenu;
 import net.jandie1505.combattest.game.lobby.Lobby;
-import net.jandie1505.combattest.game.lobby.LobbyMenu;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.jandie1505.combattest.game.lobby.MapData;
 import org.bukkit.Location;
@@ -108,9 +106,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
                 break;
             case "reload":
                 this.reloadSubcommand(sender);
-                break;
-            case "menu":
-                this.menuSubcommand(sender);
                 break;
             case "points":
                 this.pointsSubcommand(sender);
@@ -571,48 +566,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
             default:
                 sender.sendMessage("§cUnknown error");
                 break;
-        }
-
-    }
-
-    public void menuSubcommand(CommandSender sender) {
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("§cThis command can only be executed by a player");
-            return;
-        }
-
-        if (this.plugin.getGame() instanceof Lobby) {
-
-            LobbyMenu menu = ((Lobby) this.plugin.getGame()).getLobbyMenu(((Player) sender).getUniqueId());
-
-            if (menu == null) {
-                sender.sendMessage("§cYou are not ingame");
-                return;
-            }
-
-            menu.setPage(0);
-            ((Player) sender).openInventory(menu.getInventory());
-
-            return;
-
-        } else if (this.plugin.getGame() instanceof Game) {
-
-            PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(((Player) sender).getUniqueId());
-
-            if (menu == null) {
-                sender.sendMessage("§cYou are not ingame");
-                return;
-            }
-
-            menu.setPage(0);
-            ((Player) sender).openInventory(menu.getInventory());
-
-            return;
-
-        } else {
-            sender.sendMessage("§cNo lobby or game running");
-            return;
         }
 
     }

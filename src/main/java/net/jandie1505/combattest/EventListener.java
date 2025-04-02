@@ -4,7 +4,6 @@ import net.chaossquad.mclib.WorldUtils;
 import net.jandie1505.combattest.game.endlobby.Endlobby;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.PlayerData;
-import net.jandie1505.combattest.game.game.PlayerMenu;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.jandie1505.combattest.game.lobby.LobbyMenu;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
@@ -230,304 +229,6 @@ public class EventListener implements Listener {
             return;
         }
 
-        if (this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getClickedInventory() != null && event.getClickedInventory().getHolder() == event.getWhoClicked()) {
-
-            // Block player menu slot
-            if (event.getSlot() == 8) {
-                event.setCancelled(true);
-
-                if ((event.getAction() == InventoryAction.PICKUP_ALL || event.getAction() == InventoryAction.PICKUP_HALF || event.getAction() == InventoryAction.PICKUP_ONE) && event.getCurrentItem() != null && ItemStorage.getIdPrefix(event.getCurrentItem()).equals(ItemStorage.HOTBAR_ITEM) && ItemStorage.getId(event.getCurrentItem()) == 0) {
-
-                    PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId());
-
-                    menu.setPage(0);
-                    event.getWhoClicked().openInventory(menu.getInventory());
-
-                    if (event.getWhoClicked().getItemOnCursor() != null && ItemStorage.getIdPrefix(event.getWhoClicked().getItemOnCursor()).equals(ItemStorage.HOTBAR_ITEM) && ItemStorage.getId(event.getWhoClicked().getItemOnCursor()) == 0) {
-
-                        event.getWhoClicked().getInventory().setItem(40, new ItemStack(Material.AIR));
-
-                    }
-
-                }
-
-                return;
-            }
-
-            // Block player menu slot for number keys
-            if (event.getHotbarButton() == 8) {
-                event.setCancelled(true);
-                return;
-            }
-
-            // Block offhand
-            if (event.getSlot() == 40 || event.getRawSlot() == 45 || event.getClick() == ClickType.SWAP_OFFHAND) {
-
-                event.setCancelled(true);
-                event.getWhoClicked().sendMessage("§cOffhand can only be used for specific items");
-
-                /*
-                PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                if (playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) {
-                    event.setCancelled(true);
-                }
-
-                */
-
-                return;
-            }
-
-            // Block armor slots
-            if (event.getSlot() == 36 || event.getSlot() == 37 || event.getSlot() == 38 || event.getSlot() == 39) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (event.isShiftClick() && event.getCurrentItem() != null && ItemStorage.isArmor(event.getCurrentItem())) {
-                event.setCancelled(true);
-                return;
-            }
-
-            return;
-        }
-
-        // Player Menu
-        if (event.getClickedInventory() != null && event.getClickedInventory().getHolder() instanceof PlayerMenu) {
-
-            event.setCancelled(true);
-
-            if (this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getCurrentItem() != null) {
-
-                PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(event.getWhoClicked().getUniqueId());
-
-                if (menu.getPage() == 0) {
-
-                    if (event.getCurrentItem().isSimilar(ItemStorage.getMeleeButton())) {
-
-                        menu.setPage(1);
-                        event.getWhoClicked().openInventory(menu.getInventory());
-
-                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getRangedButton())) {
-
-                        menu.setPage(2);
-                        event.getWhoClicked().openInventory(menu.getInventory());
-
-                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getArmorButton())) {
-
-                        menu.setPage(3);
-                        event.getWhoClicked().openInventory(menu.getInventory());
-
-                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getItemShopButton())) {
-
-                        menu.setPage(4);
-                        event.getWhoClicked().openInventory(menu.getInventory());
-
-                    }
-
-                } else if (menu.getPage() == 1) {
-
-                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
-
-                        menu.setPage(0);
-                        event.getWhoClicked().openInventory(menu.getInventory());
-
-                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getResetButton())) {
-
-                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                        if (playerData.getPoints() >= 10000) {
-
-                            playerData.setMeleeEquipment(0);
-                            playerData.setPoints(playerData.getPoints() - 10000);
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§aSuccessfully reset your melee equipment");
-
-                        } else {
-
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your melee equipment");
-
-                        }
-
-                    } else {
-
-                        Integer itemId = ItemStorage.getMeleeReverse(event.getCurrentItem());
-                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                        if (itemId != null && itemId > playerData.getMeleeEquipment()) {
-
-                            if (playerData.getPoints() >= ItemStorage.getMeleePrice(itemId)) {
-
-                                playerData.setMeleeEquipment(itemId);
-                                playerData.setPoints(playerData.getPoints() - ItemStorage.getMeleePrice(itemId));
-                                playerData.setRewardPoints(playerData.getRewardPoints() + this.plugin.getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("upgradePurchased", 0));
-                                event.getWhoClicked().closeInventory();
-                                event.getWhoClicked().sendMessage("§aItem successfully upgraded");
-
-                            } else {
-
-                                event.getWhoClicked().closeInventory();
-                                event.getWhoClicked().sendMessage("§cYou don't have enough points to upgrade (Price: " + ItemStorage.getMeleePrice(itemId) + ")");
-
-                            }
-
-                        } else {
-
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§cYou cannot upgrade to an item which is the same or below the item you already have");
-
-                        }
-
-                    }
-
-                } else if (menu.getPage() == 2) {
-
-                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
-
-                        menu.setPage(0);
-                        event.getWhoClicked().openInventory(menu.getInventory());
-
-                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getResetButton())) {
-
-                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                        if (playerData.getPoints() >= 10000) {
-
-                            playerData.setRangedEquipment(0);
-                            playerData.setPoints(playerData.getPoints() - 10000);
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§aSuccessfully reset your ranged equipment");
-
-                        } else {
-
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your ranged equipment");
-
-                        }
-
-                    } else {
-
-                        Integer itemId = ItemStorage.getRangedReverse(event.getCurrentItem());
-                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                        if (itemId != null && itemId > playerData.getRangedEquipment()) {
-
-                            if (playerData.getPoints() >= ItemStorage.getRangedPrice(itemId)) {
-
-                                playerData.setRangedEquipment(itemId);
-                                playerData.setPoints(playerData.getPoints() - ItemStorage.getRangedPrice(itemId));
-                                playerData.setRewardPoints(playerData.getRewardPoints() + this.plugin.getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("upgradePurchased", 0));
-                                event.getWhoClicked().closeInventory();
-                                event.getWhoClicked().sendMessage("§aItem successfully upgraded");
-
-                            } else {
-
-                                event.getWhoClicked().closeInventory();
-                                event.getWhoClicked().sendMessage("§cYou don't have enough points to upgrade (Price: " + ItemStorage.getRangedPrice(itemId) + ")");
-
-                            }
-
-                        } else {
-
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§cYou cannot upgrade to an item which is the same or below the item you already have");
-
-                        }
-
-                    }
-
-                } else if (menu.getPage() == 3) {
-
-                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
-
-                        menu.setPage(0);
-                        event.getWhoClicked().openInventory(menu.getInventory());
-
-                    } else if (event.getCurrentItem().isSimilar(ItemStorage.getResetButton())) {
-
-                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                        if (playerData.getPoints() >= 10000) {
-
-                            playerData.setArmorEquipment(0);
-                            playerData.setPoints(playerData.getPoints() - 10000);
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§aSuccessfully reset your armor");
-
-                        } else {
-
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§cYou don't have enough points to reset your armor");
-
-                        }
-
-                    } else {
-
-                        Integer itemId = ItemStorage.getArmorReverse(event.getCurrentItem());
-                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                        if (itemId != null && itemId > playerData.getArmorEquipment()) {
-
-                            if (playerData.getPoints() >= ItemStorage.getArmorPrice(itemId)) {
-
-                                playerData.setArmorEquipment(itemId);
-                                playerData.setPoints(playerData.getPoints() - ItemStorage.getArmorPrice(itemId));
-                                playerData.setRewardPoints(playerData.getRewardPoints() + this.plugin.getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("upgradePurchased", 0));
-                                event.getWhoClicked().closeInventory();
-                                event.getWhoClicked().sendMessage("§aItem successfully upgraded");
-
-                            } else {
-
-                                event.getWhoClicked().closeInventory();
-                                event.getWhoClicked().sendMessage("§cYou don't have enough points to upgrade (Price: " + ItemStorage.getArmorPrice(itemId) + ")");
-
-                            }
-
-                        } else {
-
-                            event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage("§cYou cannot upgrade to an item which is the same or below the item you already have");
-
-                        }
-
-                    }
-
-                } else if (menu.getPage() == 4) {
-
-                    if (event.getCurrentItem().isSimilar(ItemStorage.getBackButton())) {
-
-                        menu.setPage(0);
-                        event.getWhoClicked().openInventory(menu.getInventory());
-
-                    } else {
-
-                        Integer itemId = ItemStorage.getShopItemReverse(event.getCurrentItem());
-                        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getWhoClicked().getUniqueId());
-
-                        if (itemId != null) {
-
-                            if (playerData.getPoints() >= ItemStorage.getShopItemPrice(itemId)) {
-
-                                playerData.setPoints(playerData.getPoints() - ItemStorage.getShopItemPrice(itemId));
-                                event.getWhoClicked().getInventory().addItem(ItemStorage.getShopItem(itemId));
-                                event.getWhoClicked().sendMessage("§aItem successfully purchased");
-
-                            } else {
-                                event.getWhoClicked().sendMessage("§cUnfortunately you cannot afford this item :(");
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-            return;
-        }
-
         // Lobby Menu
         if (event.getClickedInventory() != null && event.getClickedInventory().getHolder() instanceof LobbyMenu) {
 
@@ -705,25 +406,6 @@ public class EventListener implements Listener {
             event.setCancelled(true);
             return;
         }
-
-        if (this.plugin.getGame() instanceof Game && event.getWhoClicked() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getWhoClicked().getUniqueId()) && event.getInventory() != null && event.getInventory().getHolder() == event.getWhoClicked()) {
-
-            if (event.getInventorySlots().contains(8)) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (event.getInventorySlots().contains(40) || event.getRawSlots().contains(45)) {
-                event.setCancelled(true);
-                return;
-            }
-
-        }
-
-        if (event.getInventory() != null && (event.getInventory().getHolder() instanceof PlayerMenu || event.getInventory().getHolder() instanceof LobbyMenu)) {
-            event.setCancelled(true);
-            return;
-        }
     }
 
     @EventHandler
@@ -735,32 +417,12 @@ public class EventListener implements Listener {
 
             return;
         }
-
-        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
-
-            if (event.getPlayer().getInventory().getHeldItemSlot() == 8) {
-                event.setCancelled(true);
-            }
-
-            if (ItemStorage.getMeleeReverse(event.getItemDrop().getItemStack()) != null || ItemStorage.getIdPrefix(event.getItemDrop().getItemStack()).equals(ItemStorage.EQUIPMENT_MELEE)) {
-                event.setCancelled(true);
-            }
-
-            if (ItemStorage.getRangedReverse(event.getItemDrop().getItemStack()) != null || ItemStorage.getIdPrefix(event.getItemDrop().getItemStack()).equals(ItemStorage.EQUIPMENT_RANGED)) {
-                event.setCancelled(true);
-            }
-
-            if (ItemStorage.getArmorReverse(event.getItemDrop().getItemStack()) != null || ItemStorage.getIdPrefix(event.getItemDrop().getItemStack()).equals(ItemStorage.EQUIPMENT_ARMOR)) {
-                event.setCancelled(true);
-            }
-
-            return;
-        }
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
 
+        /*
         if (this.plugin.getGame() instanceof  Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 
             if (event.getItem() != null) {
@@ -790,6 +452,8 @@ public class EventListener implements Listener {
 
             return;
         }
+
+         */
 
         if (this.plugin.getGame() instanceof Lobby && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 

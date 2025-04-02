@@ -422,39 +422,6 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
 
-        /*
-        if (this.plugin.getGame() instanceof  Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
-
-            if (event.getItem() != null) {
-
-                if (ItemStorage.getIdPrefix(event.getItem()).equals(ItemStorage.HOTBAR_ITEM) && ItemStorage.getId(event.getItem()) == 0) {
-
-                    event.setCancelled(true);
-
-                    if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-
-                        PlayerMenu menu = ((Game) this.plugin.getGame()).getPlayerMenu(event.getPlayer().getUniqueId());
-
-                        menu.setPage(0);
-                        event.getPlayer().openInventory(menu.getInventory());
-
-                    }
-
-                    return;
-                }
-
-                if (ItemStorage.isArmor(event.getItem())) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-            }
-
-            return;
-        }
-
-         */
-
         if (this.plugin.getGame() instanceof Lobby && ((Lobby) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
 
             if (event.getItem() == null) {
@@ -509,29 +476,6 @@ public class EventListener implements Listener {
             event.setCancelled(true);
 
             return;
-        }
-
-        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
-
-            event.setCancelled(true);
-            event.getPlayer().getInventory().setItem(40, new ItemStack(Material.AIR));
-            return;
-
-            /*
-            if (event.getPlayer().getInventory().getHeldItemSlot() == 8) {
-                event.setCancelled(true);
-                return;
-            }
-
-            PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId());
-
-            if (playerData.getRangedEquipment() == 1301 || playerData.getRangedEquipment() == 1302) {
-                event.setCancelled(true);
-                return;
-            }
-
-             */
-
         }
     }
 

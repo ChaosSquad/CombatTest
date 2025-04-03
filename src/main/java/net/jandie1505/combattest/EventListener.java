@@ -81,6 +81,7 @@ public class EventListener implements Listener {
         }
     }
 
+    /*
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
@@ -205,20 +206,7 @@ public class EventListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
-
-            Location location = event.getPlayer().getLocation();
-
-            if (location.getY() < -65) {
-                location.setY(-65);
-            }
-
-            event.setRespawnLocation(location);
-
-        }
-    }
+     */
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -607,6 +595,7 @@ public class EventListener implements Listener {
         }
     }
 
+    /*
     @EventHandler
     public void onPlayerRiptide(PlayerRiptideEvent event) {
         if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
@@ -620,6 +609,8 @@ public class EventListener implements Listener {
 
         }
     }
+
+     */
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

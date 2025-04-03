@@ -2,6 +2,7 @@ package net.jandie1505.combattest.game.game;
 
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.constants.NamespacedKeys;
+import net.jandie1505.combattest.game.game.equipment.EquipmentItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -10,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -75,6 +77,11 @@ public class GameListener implements ManagedListener {
         if (!this.isPlayerMenuItem(event.getItemDrop().getItemStack())) return;
 
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerDeathForMenuItemRemoval(@NotNull PlayerDeathEvent event) {
+        event.getDrops().removeIf(item -> item.getItemMeta() != null && item.getItemMeta().getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_PLAYER_MENU, PersistentDataType.BOOLEAN, false));
     }
 
     // ----- UTILITIES -----

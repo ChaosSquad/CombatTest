@@ -12,6 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -462,6 +464,11 @@ public class EquipmentSystem implements Removable {
 
             }
 
+        }
+
+        @EventHandler
+        public void onPlayerDeath(PlayerDeathEvent event) {
+            event.getDrops().removeIf(item -> EquipmentItem.getIdentifierFromItem(item) != null);
         }
 
         @Override

@@ -21,6 +21,7 @@ import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
 import net.jandie1505.combattest.game.game.gui.ShopGUI;
+import net.jandie1505.combattest.game.game.listeners.DeathListener;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -185,6 +186,7 @@ public class Game extends GamePart {
         // LISTENERS
 
         this.registerListener(new GameListener(this));
+        this.registerListener(new DeathListener(this));
 
         this.getPlugin().getListenerManager().manageListeners();
 
@@ -322,7 +324,7 @@ public class Game extends GamePart {
                     // Sends the dead title
                     player.showTitle(Title.title(
                             Component.text("DEAD", NamedTextColor.RED),
-                            Component.text("You will respawn in "),
+                            Component.text("You will respawn in " + playerData.getRespawntimer(), NamedTextColor.GRAY),
                             Title.Times.times(Duration.ZERO, Duration.ofMillis(1250), Duration.ZERO)
                     ));
 

@@ -10,9 +10,6 @@ public class PlayerData {
     private final UUID playerId;
     private final Map<String, Integer> equipments;
     private final Map<EquipmentItem.Identifier, Integer> equipmentCountdowns;
-    private int meleeEquipment;
-    private int rangedEquipment;
-    private int armorEquipment;
     private boolean alive;
     private int respawntimer;
     private int points;
@@ -28,16 +25,13 @@ public class PlayerData {
     private int noPvpTimer;
     private boolean weatherDisabled;
     private int rewardPoints;
+    private int downgradeScore;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
 
         this.equipments = new HashMap<>();
         this.equipmentCountdowns = new HashMap<>();
-
-        this.meleeEquipment = 0;
-        this.rangedEquipment = 0;
-        this.armorEquipment = 0;
 
         this.alive = false;
         this.respawntimer = 0;
@@ -60,40 +54,12 @@ public class PlayerData {
         this.weatherDisabled = false;
 
         this.rewardPoints = 0;
+
+        this.downgradeScore = 0;
     }
 
     public UUID getPlayerId() {
         return this.playerId;
-    }
-
-    @Deprecated(forRemoval = true)
-    public int getMeleeEquipment() {
-        return meleeEquipment;
-    }
-
-    @Deprecated(forRemoval = true)
-    public void setMeleeEquipment(int meleeEquipment) {
-        this.meleeEquipment = meleeEquipment;
-    }
-
-    @Deprecated(forRemoval = true)
-    public int getRangedEquipment() {
-        return rangedEquipment;
-    }
-
-    @Deprecated(forRemoval = true)
-    public void setRangedEquipment(int rangedEquipment) {
-        this.rangedEquipment = rangedEquipment;
-    }
-
-    @Deprecated(forRemoval = true)
-    public int getArmorEquipment() {
-        return armorEquipment;
-    }
-
-    @Deprecated(forRemoval = true)
-    public void setArmorEquipment(int armorEquipment) {
-        this.armorEquipment = armorEquipment;
     }
 
     public boolean isAlive() {
@@ -120,6 +86,14 @@ public class PlayerData {
         this.points = points;
     }
 
+    public void addPoints(int points) {
+        this.points += points;
+    }
+
+    public void removePoints(int points) {
+        this.points -= points;
+    }
+
     public int getRegenerationCooldown() {
         return regenerationCooldown;
     }
@@ -136,12 +110,20 @@ public class PlayerData {
         this.kills = kills;
     }
 
+    public void incrementKills() {
+        this.kills++;
+    }
+
     public int getDeaths() {
         return deaths;
     }
 
     public void setDeaths(int deaths) {
         this.deaths = deaths;
+    }
+
+    public void incrementDeaths() {
+        this.deaths++;
     }
 
     public double getPotionTimer() {
@@ -220,6 +202,14 @@ public class PlayerData {
 
     public void setRewardPoints(int rewardPoints) {
         this.rewardPoints = rewardPoints;
+    }
+
+    public int getDowngradeScore() {
+        return downgradeScore;
+    }
+
+    public void setDowngradeScore(int downgradeScore) {
+        this.downgradeScore = downgradeScore;
     }
 
     // ----- EQUIPMENT -----

@@ -408,16 +408,18 @@ public class Game extends GamePart {
                 player.setFoodLevel(20);
             }
 
-            if (player.getSaturation() < 20) {
-                player.setSaturation(20);
+            if (player.getSaturation() < 20.0f) {
+                player.setSaturation(20.0f);
             }
 
-            // Regeneration
+            // Natural Regeneration
 
-            if (!player.hasPotionEffect(PotionEffectType.REGENERATION) && playerData.getRegenerationCooldown() >= 10) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 0, false, false));
-            } else if (!player.hasPotionEffect(PotionEffectType.REGENERATION) && playerData.getRegenerationCooldown() < 10) {
-                playerData.setRegenerationCooldown(playerData.getRegenerationCooldown() + 1);
+            if (player.getSaturatedRegenRate() != 5 * 20) {
+                player.setSaturatedRegenRate(5 * 20);
+            }
+
+            if (player.getUnsaturatedRegenRate() != 5 * 20) {
+                player.setUnsaturatedRegenRate(5 * 20);
             }
 
             // Player weather

@@ -146,10 +146,6 @@ public class CombatTest extends JavaPlugin {
 
                 for (Player player : List.copyOf(CombatTest.this.getServer().getOnlinePlayers())) {
 
-                    if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
-                        player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-                    }
-
                     if (CombatTest.this.autostartNewGame && CombatTest.this.singleServer) {
                         player.sendActionBar(Component.text("--- Starting new game in " + CombatTest.this.autostartNewGameTimer + " seconds ---", NamedTextColor.AQUA));
                     }
@@ -171,6 +167,34 @@ public class CombatTest extends JavaPlugin {
 
             }
         }.runTaskTimer(CombatTest.this, 0L, 20L);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!CombatTest.this.isSingleServer()) return;
+
+                for (Player player : List.copyOf(Bukkit.getOnlinePlayers())) {
+
+                    if (CombatTest.this.isPlayerBypassing(player)) {
+                        this.clearScoreboard(player);
+                        continue;
+                    }
+
+                    if (CombatTest.this.game == null) {
+                        this.clearScoreboard(player);
+                        continue;
+                    }
+
+                }
+
+            }
+
+            private void clearScoreboard(Player player) {
+                if (player.getScoreboard() != Bukkit.getScoreboardManager().getMainScoreboard()) {
+                    player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+                }
+            }
+        }.runTaskTimer(this, 0, 10*20);
 
         /*
         Manage worlds task

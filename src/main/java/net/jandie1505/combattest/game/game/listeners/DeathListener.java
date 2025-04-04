@@ -94,8 +94,6 @@ public class DeathListener implements ManagedListener {
         final int LOW_EQUIPMENT_BONUS_KILL = 1000;
 
         int killerEquipmentLevel = (int) Math.round(this.getEquipmentLevelAverage(killer.playerData()));
-        System.out.println(killerEquipmentLevel);
-        System.out.println(playerEquipmentLevel);
 
         int lowEquipmentBonus = killerEquipmentLevel < playerEquipmentLevel ? LOW_EQUIPMENT_BONUS_KILL * (playerEquipmentLevel - killerEquipmentLevel) : 0;
 

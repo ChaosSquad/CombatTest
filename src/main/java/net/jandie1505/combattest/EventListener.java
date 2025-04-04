@@ -468,29 +468,8 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerRegainHealth(EntityRegainHealthEvent event) {
-        if (event.getEntity() instanceof Player && this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
-
-            if (event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED) {
-                event.setCancelled(true);
-            }
-
-        }
-    }
-
-    @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (this.plugin.getGame() instanceof Game) {
-
-            if (event.getEntity() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
-
-                ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId()).setRegenerationCooldown(0);
-                ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId()).setNoPvpTimer(0);
-                ((Player) event.getEntity()).removePotionEffect(PotionEffectType.REGENERATION);
-
-            }
-
-        } else if (this.plugin.getGame() instanceof Lobby || this.plugin.getGame() instanceof Endlobby) {
+        if (this.plugin.getGame() instanceof Lobby || this.plugin.getGame() instanceof Endlobby) {
 
             if (event.getEntity() instanceof Player && this.plugin.getGame().getPlayers().contains(event.getEntity().getUniqueId())) {
 
@@ -516,54 +495,6 @@ public class EventListener implements Listener {
 
             }
 
-        } else if (this.plugin.getGame() instanceof Game) {
-
-            if (event.getEntity() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getEntity().getUniqueId())) {
-
-                Player damager;
-
-                if (event.getDamager() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getDamager().getUniqueId())) {
-                    damager = (Player) event.getDamager();
-                } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(((Player) ((Projectile) event.getDamager()).getShooter()).getUniqueId())) {
-                    damager = (Player) ((Projectile) event.getDamager()).getShooter();
-                } else {
-                    damager = null;
-                }
-
-                if (damager != null) {
-
-                    PlayerData victimData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getEntity().getUniqueId());
-                    PlayerData damagerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getDamager().getUniqueId());
-
-                    if (damagerData != null) {
-
-                        if (victimData.getTeam() > 0 && victimData.getTeam() == damagerData.getTeam()) {
-                            event.setCancelled(true);
-                            return;
-                        }
-
-                        damagerData.setPoints(damagerData.getPoints() + (5 * (int) event.getDamage()));
-                        damagerData.setNoPvpTimer(0);
-
-                        if (damagerData.getTeam() > 0) {
-
-                            for (UUID playerId : ((Game) this.plugin.getGame()).getTeamMembers(damagerData.getTeam())) {
-                                if (!event.getDamager().getUniqueId().equals(playerId) && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(playerId)) {
-                                    PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(playerId);
-                                    playerData.setPoints((playerData.getPoints() + ((int) (5.0 * event.getDamage() * 0.25))));
-                                }
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        } else if (this.plugin.getGame() == null && this.plugin.isSingleServer() && this.plugin.isAutostartNewGame()) {
-            event.setCancelled(true);
         }
     }
 

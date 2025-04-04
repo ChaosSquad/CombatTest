@@ -22,6 +22,7 @@ import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
 import net.jandie1505.combattest.game.game.gui.ShopGUI;
 import net.jandie1505.combattest.game.game.listeners.DeathListener;
+import net.jandie1505.combattest.game.game.listeners.GameMiscListener;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -187,6 +188,7 @@ public class Game extends GamePart {
 
         this.registerListener(new GameListener(this));
         this.registerListener(new DeathListener(this));
+        this.registerListener(new GameMiscListener(this));
 
         this.getPlugin().getListenerManager().manageListeners();
 

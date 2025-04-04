@@ -503,34 +503,6 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onProjectileLaunch(ProjectileLaunchEvent event) {
-        if (this.plugin.getGame() instanceof Game game) {
-
-            if (event.getEntity() instanceof Trident && ItemStorage.getIdPrefix(((Trident) event.getEntity()).getItem()).equals(ItemStorage.EQUIPMENT_RANGED) && ItemStorage.getId(((Trident) event.getEntity()).getItem()) == 1602) {
-
-                Random random = new Random();
-                int number = random.nextInt(10);
-
-                if (number >= 8) {
-
-                    if (WorldUtils.getWeather(game.getWorld()) != WorldUtils.WeatherType.THUNDER) {
-
-                        if (event.getEntity().getShooter() != null && event.getEntity().getShooter() instanceof Player && (game).getPlayerMap().containsKey(((Player) event.getEntity().getShooter()).getUniqueId())) {
-                            ((Player) event.getEntity().getShooter()).sendMessage("§bThe weather has been changed through your weather manipulation ability");
-                        }
-
-                        WorldUtils.setWeather(game.getWorld(), WorldUtils.WeatherType.THUNDER);
-
-                    }
-
-                }
-
-            }
-
-        }
-    }
-
-    @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (this.plugin.getGame() instanceof Lobby || this.plugin.getGame() instanceof Endlobby) {
 
@@ -594,23 +566,6 @@ public class EventListener implements Listener {
             event.setCancelled(true);
         }
     }
-
-    /*
-    @EventHandler
-    public void onPlayerRiptide(PlayerRiptideEvent event) {
-        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).getPlayerMap().containsKey(event.getPlayer().getUniqueId())) {
-
-            PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId());
-
-            if (playerData.getRangedEquipment() >= 1500 && playerData.getRangedEquipment() <= 1599) {
-                playerData.setHasUsedTrident(true);
-                return;
-            }
-
-        }
-    }
-
-     */
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

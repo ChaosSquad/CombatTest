@@ -5,6 +5,7 @@ import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.spigot.api.party.PartyManager;
 import de.simonsator.partyandfriends.spigot.api.party.PlayerParty;
 import net.chaossquad.mclib.command.SubcommandEntry;
+import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.ItemStorage;
@@ -15,6 +16,7 @@ import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.CombatTestLobbyStartSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyPlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyValueSubcommand;
+import net.jandie1505.combattest.game.lobby.gui.LobbyVoteMenu;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -24,33 +26,36 @@ import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
 
-public class Lobby extends GamePart {
+public class Lobby extends GamePart implements ManagedListener {
     private final CombatTest plugin;
+    private final List<MapData> maps;
+    private final Map<UUID, LobbyPlayerData> players;
+    @NotNull private final LobbyVoteMenu voteMenu;
+    private final boolean lobbyBorderEnabled;
+    private final int[] lobbyBorder;
+    private final Location lobbySpawn;
+    @Deprecated(forRemoval = true) private final Map<UUID, LobbyMenu> lobbyMenus;
     private boolean killswitch;
     private int time;
-    private Map<UUID, LobbyPlayerData> players;
     private boolean forcestart;
-    private List<MapData> maps;
     private MapData selectedMap;
     private World world;
-    private boolean lobbyBorderEnabled;
-    private int[] lobbyBorder;
-    private Location lobbySpawn;
-    private Map<UUID, LobbyMenu> lobbyMenus;
     private boolean mapVoting;
     private boolean teamSelection;
 
     public Lobby(CombatTest plugin) {
         super(plugin);
         this.plugin = plugin;
-        this.killswitch = false;
         this.time = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optInt("time", 90);
         this.players = Collections.synchronizedMap(new HashMap<>());
+        this.voteMenu = new LobbyVoteMenu(this);
+        this.killswitch = false;
         this.forcestart = false;
         this.maps = new ArrayList<>();
         this.selectedMap = null;
@@ -113,6 +118,9 @@ public class Lobby extends GamePart {
                 this.plugin.getLogger().warning("Error while loading map config " + world + ". Please check your configuration.");
             }
         }
+
+        this.registerListener(this);
+        this.plugin.getListenerManager().manageListeners();
 
         this.getTaskScheduler().scheduleRepeatingTask(this::timeTask, 1, 20, "time");
         this.getTaskScheduler().scheduleRepeatingTask(this::autoSelectMapTask, 1, 20, "auto_select_map");
@@ -661,6 +669,10 @@ public class Lobby extends GamePart {
         return List.copyOf(this.maps);
     }
 
+    public @NotNull LobbyVoteMenu getVoteMenu() {
+        return this.voteMenu;
+    }
+
     public LobbyMenu getLobbyMenu(UUID playerId) {
         return this.lobbyMenus.get(playerId);
     }
@@ -719,5 +731,10 @@ public class Lobby extends GamePart {
         }
 
         return List.copyOf(teamMembers);
+    }
+
+    @Override
+    public boolean toBeRemoved() {
+        return false;
     }
 }

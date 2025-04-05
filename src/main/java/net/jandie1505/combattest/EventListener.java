@@ -388,7 +388,7 @@ public class EventListener implements Listener {
                 }
 
                 lobbyMenu.setPage(1);
-                event.getPlayer().openInventory(lobbyMenu.getInventory());
+                event.getPlayer().openInventory(((Lobby) this.plugin.getGame()).getVoteMenu().getInventory(event.getPlayer()));
 
                 return;
             }

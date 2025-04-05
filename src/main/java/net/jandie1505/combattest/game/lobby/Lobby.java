@@ -12,13 +12,12 @@ import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.Spawnpoint;
-import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.CombatTestLobbyStartSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyPlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
-import net.jandie1505.combattest.game.lobby.gui.LobbyVoteMenu;
-import net.jandie1505.combattest.game.lobby.gui.TeamSelectionGUI;
+import net.jandie1505.combattest.game.lobby.gui.LobbyVoteGUI;
+import net.jandie1505.combattest.game.lobby.gui.LobbyTeamSelectionGUI;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -38,8 +37,8 @@ public class Lobby extends GamePart implements ManagedListener {
     private final CombatTest plugin;
     private final List<MapData> maps;
     private final Map<UUID, LobbyPlayerData> players;
-    @NotNull private final LobbyVoteMenu voteMenu;
-    @NotNull private final TeamSelectionGUI teamSelectionGUI;
+    @NotNull private final LobbyVoteGUI voteMenu;
+    @NotNull private final LobbyTeamSelectionGUI teamSelectionGUI;
     private final boolean lobbyBorderEnabled;
     private final int[] lobbyBorder;
     private final Location lobbySpawn;
@@ -57,8 +56,8 @@ public class Lobby extends GamePart implements ManagedListener {
         this.plugin = plugin;
         this.time = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optInt("time", 90);
         this.players = Collections.synchronizedMap(new HashMap<>());
-        this.voteMenu = new LobbyVoteMenu(this);
-        this.teamSelectionGUI = new TeamSelectionGUI(this);
+        this.voteMenu = new LobbyVoteGUI(this);
+        this.teamSelectionGUI = new LobbyTeamSelectionGUI(this);
         this.killswitch = false;
         this.forcestart = false;
         this.maps = new ArrayList<>();
@@ -674,11 +673,11 @@ public class Lobby extends GamePart implements ManagedListener {
         return List.copyOf(this.maps);
     }
 
-    public @NotNull LobbyVoteMenu getVoteMenu() {
+    public @NotNull LobbyVoteGUI getVoteMenu() {
         return this.voteMenu;
     }
 
-    public @NotNull TeamSelectionGUI getTeamSelectionGUI() {
+    public @NotNull LobbyTeamSelectionGUI getTeamSelectionGUI() {
         return this.teamSelectionGUI;
     }
 

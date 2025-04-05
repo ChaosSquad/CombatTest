@@ -15,7 +15,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -28,13 +27,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class TeamSelectionGUI implements InventoryHolder, ManagedListener {
+public class LobbyTeamSelectionGUI implements InventoryHolder, ManagedListener {
     @NotNull private static final NamespacedKey LEAVE_BUTTON = new NamespacedKey(NamespacedKeys.NAMESPACE, "gui.team_selection.leave");
     @NotNull private static final NamespacedKey CREATE_BUTTON = new NamespacedKey(NamespacedKeys.NAMESPACE, "gui.team_selection.create");
     @NotNull private static final NamespacedKey TEAM_ID = new NamespacedKey(NamespacedKeys.NAMESPACE, "gui.team_selection.team");
     @NotNull private final Lobby lobby;
 
-    public TeamSelectionGUI(@NotNull Lobby lobby) {
+    public LobbyTeamSelectionGUI(@NotNull Lobby lobby) {
         this.lobby = lobby;
         this.lobby.registerListener(this);
     }

@@ -30,11 +30,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Iterator;
 import java.util.List;
 
-public class LobbyVoteMenu implements InventoryHolder, ManagedListener {
+public class LobbyVoteGUI implements InventoryHolder, ManagedListener {
     @NotNull private static final NamespacedKey MAP_ID = new NamespacedKey(NamespacedKeys.NAMESPACE, "gui.map_voting.map_id");
     @NotNull private final Lobby lobby;
 
-    public LobbyVoteMenu(@NotNull Lobby lobby) {
+    public LobbyVoteGUI(@NotNull Lobby lobby) {
         this.lobby = lobby;
         this.lobby.registerListener(this);
     }

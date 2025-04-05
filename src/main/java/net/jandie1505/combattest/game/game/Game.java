@@ -351,7 +351,7 @@ public class Game extends GamePart {
 
         for (Map.Entry<UUID, PlayerData> entry : this.players.entrySet()) {
             Player player = this.plugin.getServer().getPlayer(entry.getKey());
-            if (player != null) return;
+            if (player != null) continue;
             entry.getValue().setAlive(false);
         }
 

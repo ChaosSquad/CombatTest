@@ -16,6 +16,7 @@ import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.CombatTestLobbyStartSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyPlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyValueSubcommand;
+import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
 import net.jandie1505.combattest.game.lobby.gui.LobbyVoteMenu;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -63,6 +64,7 @@ public class Lobby extends GamePart implements ManagedListener {
         this.getDynamicSubcommands().put("force-start", SubcommandEntry.of(new CombatTestLobbyStartSubcommand(this)));
         this.getDynamicSubcommands().put("value", SubcommandEntry.of(new LobbyValueSubcommand(this)));
         ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new LobbyPlayersValueSubcommand(this)));
+        this.getDynamicSubcommands().put("votemap", SubcommandEntry.of(new LobbyVoteCommand(this.getPlugin())));
         this.lobbyBorderEnabled = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optBoolean("enable", false);
         this.lobbyBorder = new int[]{
                 this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x1", -10),

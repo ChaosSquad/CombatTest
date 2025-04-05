@@ -11,6 +11,9 @@ commands:
   menu:
     description: Opens the player menu
     usage: /menu
+  votemap:
+    description: Vote for a map
+    usage: /votemap <map>
   combattest-old:
     description: equipment old
     usage: /combattest-old

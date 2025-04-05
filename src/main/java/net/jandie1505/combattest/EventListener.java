@@ -404,7 +404,7 @@ public class EventListener implements Listener {
                 }
 
                 lobbyMenu.setPage(2);
-                event.getPlayer().openInventory(lobbyMenu.getInventory());
+                event.getPlayer().openInventory(((Lobby) this.plugin.getGame()).getTeamSelectionGUI().getInventory(event.getPlayer()));
 
                 return;
             }

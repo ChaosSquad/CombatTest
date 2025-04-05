@@ -18,6 +18,7 @@ import net.jandie1505.combattest.game.lobby.commands.LobbyPlayersValueSubcommand
 import net.jandie1505.combattest.game.lobby.commands.LobbyValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
 import net.jandie1505.combattest.game.lobby.gui.LobbyVoteMenu;
+import net.jandie1505.combattest.game.lobby.gui.TeamSelectionGUI;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -38,6 +39,7 @@ public class Lobby extends GamePart implements ManagedListener {
     private final List<MapData> maps;
     private final Map<UUID, LobbyPlayerData> players;
     @NotNull private final LobbyVoteMenu voteMenu;
+    @NotNull private final TeamSelectionGUI teamSelectionGUI;
     private final boolean lobbyBorderEnabled;
     private final int[] lobbyBorder;
     private final Location lobbySpawn;
@@ -56,6 +58,7 @@ public class Lobby extends GamePart implements ManagedListener {
         this.time = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optInt("time", 90);
         this.players = Collections.synchronizedMap(new HashMap<>());
         this.voteMenu = new LobbyVoteMenu(this);
+        this.teamSelectionGUI = new TeamSelectionGUI(this);
         this.killswitch = false;
         this.forcestart = false;
         this.maps = new ArrayList<>();
@@ -673,6 +676,10 @@ public class Lobby extends GamePart implements ManagedListener {
 
     public @NotNull LobbyVoteMenu getVoteMenu() {
         return this.voteMenu;
+    }
+
+    public @NotNull TeamSelectionGUI getTeamSelectionGUI() {
+        return this.teamSelectionGUI;
     }
 
     public LobbyMenu getLobbyMenu(UUID playerId) {

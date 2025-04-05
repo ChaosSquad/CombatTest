@@ -38,49 +38,6 @@ public class EventListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        if (this.plugin.getGame() instanceof Game && ((Game) this.plugin.getGame()).isPlayerIngame(event.getPlayer()) && !this.plugin.isPlayerBypassing(event.getPlayer().getUniqueId())) {
-
-            if (((Game) this.plugin.getGame()).isEnableBorder() && ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).isAlive()) {
-
-                if (!((Game) this.plugin.getGame()).isInBorders(event.getTo())) {
-
-                    if (((Game) this.plugin.getGame()).isInBorders(event.getFrom())) {
-                        event.setCancelled(true);
-                        event.getPlayer().sendMessage("§cYou cannot leave the game area");
-                        return;
-                    } else {
-                        event.setCancelled(true);
-                        ((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).setAlive(false);
-                        event.getPlayer().sendMessage("§cYou have been killed for leaving the game area");
-                        return;
-                    }
-
-                }
-
-            } else if (!((Game) this.plugin.getGame()).getPlayerMap().get(event.getPlayer().getUniqueId()).isAlive()) {
-
-                if (event.getTo() == null) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                if (event.getFrom().getWorld() != event.getTo().getWorld()) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-                if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-            }
-
-        }
-    }
-
     /*
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {

@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -67,6 +68,46 @@ public class GameMiscListener implements ManagedListener {
 
             // Players in the same team can't damage each other
             if (playerData.getTeam() > 0 && playerData.getTeam() == damagerData.getTeam()) {
+                event.setCancelled(true);
+                return;
+            }
+
+        }
+
+    }
+
+    @EventHandler
+    public void onEntityMoveForWorldBorder(PlayerMoveEvent event) {
+        if (!this.game.isEnableBorder()) return;
+        if (this.game.getPlugin().isPlayerBypassing(event.getPlayer())) return;
+
+        PlayerData playerData = this.game.getPlayerData(event.getPlayer());
+        if (playerData == null) return;
+
+        if (playerData.isAlive()) {
+
+            if (this.game.isInBorders(event.getTo())) return;
+            event.setCancelled(true);
+
+            // If the player trying to leave the area, prevent it
+            // IF the player has already left the area, "kill" them.
+            if (this.game.isInBorders(event.getFrom())) {
+                event.getPlayer().showTitle(Title.title(
+                        Component.text("\uD83D\uDEB7", NamedTextColor.RED),
+                        Component.text("Don't leave the game area!", NamedTextColor.RED),
+                        Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ZERO)
+                ));
+                event.getPlayer().playSound(event.getPlayer().getLocation().clone(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.RECORDS, 1, 0);
+            } else {
+                playerData.setRespawntimer(10);
+                playerData.setAlive(false);
+                event.getPlayer().sendRichMessage("<red>You have been killed for leaving the game area!");
+            }
+
+        } else {
+
+            // Block moving in spectator, only looking around is allowed
+            if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
                 event.setCancelled(true);
                 return;
             }

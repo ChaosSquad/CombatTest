@@ -1,18 +1,12 @@
-package net.jandie1505.combattest.game.game;
+package net.jandie1505.combattest.game.game.listeners;
 
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.constants.NamespacedKeys;
-import net.jandie1505.combattest.game.game.equipment.EquipmentItem;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import net.jandie1505.combattest.game.game.Game;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -24,10 +18,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GameListener implements ManagedListener {
+public class GameInventoryListener implements ManagedListener {
     @NotNull private final Game game;
 
-    public GameListener(@NotNull Game game) {
+    public GameInventoryListener(@NotNull Game game) {
         this.game = game;
     }
 

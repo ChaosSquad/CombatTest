@@ -6,7 +6,6 @@ import net.chaossquad.mclib.WorldUtils;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.GamePart;
-import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.endlobby.Endlobby;
@@ -21,7 +20,8 @@ import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
 import net.jandie1505.combattest.game.game.gui.ShopGUI;
-import net.jandie1505.combattest.game.game.listeners.DeathListener;
+import net.jandie1505.combattest.game.game.listeners.GameDeathListener;
+import net.jandie1505.combattest.game.game.listeners.GameInventoryListener;
 import net.jandie1505.combattest.game.game.listeners.GameMiscListener;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
@@ -186,8 +186,8 @@ public class Game extends GamePart {
 
         // LISTENERS
 
-        this.registerListener(new GameListener(this));
-        this.registerListener(new DeathListener(this));
+        this.registerListener(new GameInventoryListener(this));
+        this.registerListener(new GameDeathListener(this));
         this.registerListener(new GameMiscListener(this));
 
         this.getPlugin().getListenerManager().manageListeners();

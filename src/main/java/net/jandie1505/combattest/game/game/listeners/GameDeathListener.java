@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class DeathListener implements ManagedListener {
+public class GameDeathListener implements ManagedListener {
     @NotNull private final Game game;
 
-    public DeathListener(@NotNull Game game) {
+    public GameDeathListener(@NotNull Game game) {
         this.game = game;
     }
 

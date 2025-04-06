@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Permissions {
     String ADMIN = "combattest.admin";
+    String CHAT_FORMATTING = "combattest.chat_formatting";
     String USE = "playerlevels.use";
 
     /**

@@ -4,7 +4,6 @@ import net.chaossquad.mclib.MiscUtils;
 import net.chaossquad.mclib.PlayerUtils;
 import net.chaossquad.mclib.WorldUtils;
 import net.chaossquad.mclib.executable.ManagedListener;
-import net.jandie1505.combattest.EventListener;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.PlayerData;

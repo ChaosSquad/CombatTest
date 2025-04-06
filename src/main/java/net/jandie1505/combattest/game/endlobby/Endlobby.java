@@ -1,21 +1,29 @@
 package net.jandie1505.combattest.game.endlobby;
 
+import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.PlayerData;
 import net.jandie1505.combattest.game.game.TeamData;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.json.JSONObject;
 
 import java.util.*;
 
-public class Endlobby extends GamePart {
+public class Endlobby extends GamePart implements ManagedListener {
     private final CombatTest plugin;
     private boolean timeStep;
     private int time;
@@ -110,6 +118,9 @@ public class Endlobby extends GamePart {
 
         this.teamKDRanking = new ArrayList<>(this.teams);
         this.teamKDRanking.sort(TeamData.getKDComparator());
+
+        this.registerListener(this);
+        this.getTaskScheduler().runTaskLater(this.plugin.getListenerManager()::manageListeners, 1);
 
         this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10);
     }
@@ -279,6 +290,77 @@ public class Endlobby extends GamePart {
         }
     }
 
+    // ----- EVENTS -----
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (event.getInventory().getHolder() != event.getWhoClicked()) return;
+        if (this.getPlugin().isPlayerBypassing(player)) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (event.getInventory().getHolder() != event.getWhoClicked()) return;
+        if (this.getPlugin().isPlayerBypassing(player)) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (this.getPlugin().isPlayerBypassing(event.getPlayer())) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+
+        // Cancel all interactions except for bypassing players
+        if (!this.getPlugin().isPlayerBypassing(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+
+    }
+
+    @EventHandler
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        if (this.getPlugin().isPlayerBypassing(event.getPlayer())) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+
+        // Allow bypassing players to take damage
+        if (event.getEntity() instanceof Player player && this.getPlugin().isPlayerBypassing(player)) {
+            return;
+        }
+
+        // Allow bypassing players to deal damage
+        if (event instanceof EntityDamageByEntityEvent byEntityEvent &&
+                byEntityEvent.getDamager() instanceof Player damager &&
+                this.getPlugin().isPlayerBypassing(damager.getUniqueId())
+        ) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.joinMessage(null);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        event.quitMessage(null);
+    }
+
+    // ----- OTHER -----
+
     @Override
     public boolean addPlayer(Player player) {
         return false;
@@ -350,5 +432,10 @@ public class Endlobby extends GamePart {
 
     public Map<UUID, PlayerData> getPlayerMap() {
         return Map.copyOf(this.playerMap);
+    }
+
+    @Override
+    public boolean toBeRemoved() {
+        return false;
     }
 }

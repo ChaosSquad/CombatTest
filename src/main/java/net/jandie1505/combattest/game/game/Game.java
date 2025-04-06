@@ -189,8 +189,7 @@ public class Game extends GamePart {
         this.registerListener(new GameInventoryListener(this));
         this.registerListener(new GameDeathListener(this));
         this.registerListener(new GameMiscListener(this));
-
-        this.getPlugin().getListenerManager().manageListeners();
+        this.getTaskScheduler().runTaskLater(this.plugin.getListenerManager()::manageListeners, 1);
 
         // TASKS
 

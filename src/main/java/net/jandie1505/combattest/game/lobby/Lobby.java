@@ -7,6 +7,7 @@ import de.simonsator.partyandfriends.spigot.api.party.PlayerParty;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.ItemStorage;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
@@ -16,13 +17,25 @@ import net.jandie1505.combattest.game.lobby.commands.CombatTestLobbyStartSubcomm
 import net.jandie1505.combattest.game.lobby.commands.LobbyPlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
+import net.jandie1505.combattest.game.lobby.constants.LobbyItems;
 import net.jandie1505.combattest.game.lobby.gui.LobbyVoteGUI;
 import net.jandie1505.combattest.game.lobby.gui.LobbyTeamSelectionGUI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -42,7 +55,6 @@ public class Lobby extends GamePart implements ManagedListener {
     private final boolean lobbyBorderEnabled;
     private final int[] lobbyBorder;
     private final Location lobbySpawn;
-    @Deprecated(forRemoval = true) private final Map<UUID, LobbyMenu> lobbyMenus;
     private boolean killswitch;
     private int time;
     private boolean forcestart;
@@ -84,7 +96,6 @@ public class Lobby extends GamePart implements ManagedListener {
                 this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("yaw", 0.0F),
                 this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("pitch", 0.0F)
         );
-        this.lobbyMenus = Collections.synchronizedMap(new HashMap<>());
         this.mapVoting = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("mapVoting", false);
         this.teamSelection = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("teamSelection", false);
 
@@ -124,7 +135,7 @@ public class Lobby extends GamePart implements ManagedListener {
         }
 
         this.registerListener(this);
-        this.plugin.getListenerManager().manageListeners();
+        this.getTaskScheduler().runTaskLater(this.plugin.getListenerManager()::manageListeners, 1);
 
         this.getTaskScheduler().scheduleRepeatingTask(this::timeTask, 1, 20, "time");
         this.getTaskScheduler().scheduleRepeatingTask(this::autoSelectMapTask, 1, 20, "auto_select_map");
@@ -226,12 +237,6 @@ public class Lobby extends GamePart implements ManagedListener {
                 player.sendMessage("§7The game starts in " + this.time + " seconds");
             }
 
-            // Player Menu
-
-            if (!this.lobbyMenus.containsKey(playerId)) {
-                this.lobbyMenus.put(playerId, new LobbyMenu(this, playerId));
-            }
-
             // Single Server stuff
 
             if (this.plugin.isSingleServer()) {
@@ -291,40 +296,6 @@ public class Lobby extends GamePart implements ManagedListener {
                 objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
                 player.setScoreboard(scoreboard);
-
-                if (!this.plugin.isPlayerBypassing(player.getUniqueId())) {
-
-                    for (ItemStack item : Arrays.copyOf(player.getInventory().getContents(), player.getInventory().getContents().length)) {
-
-                        if (item == null || item.getType() == Material.AIR) {
-                            continue;
-                        }
-
-                        if (!item.isSimilar(ItemStorage.getLobbyVoteHotbarButton()) && !item.isSimilar(ItemStorage.getLobbyTeamSelectionHotbarButton())) {
-                            player.getInventory().clear();
-                        }
-
-                    }
-
-                    if (!player.getInventory().contains(ItemStorage.getLobbyVoteHotbarButton())) {
-                        player.getInventory().setItem(3, ItemStorage.getLobbyVoteHotbarButton());
-                    }
-
-                    if (!player.getInventory().contains(ItemStorage.getLobbyTeamSelectionHotbarButton())) {
-                        player.getInventory().setItem(5, ItemStorage.getLobbyTeamSelectionHotbarButton());
-                    }
-
-                }
-            }
-
-        }
-
-        // PLAYER MENUS
-
-        for (UUID playerId : Map.copyOf(this.lobbyMenus).keySet()) {
-
-            if (!this.players.containsKey(playerId)) {
-                this.lobbyMenus.remove(playerId);
             }
 
         }
@@ -361,7 +332,14 @@ public class Lobby extends GamePart implements ManagedListener {
             return false;
         }
 
+        // Add player
         this.players.put(player.getUniqueId(), new LobbyPlayerData());
+
+        // Inventory
+        player.getInventory().clear();
+        player.getInventory().setItem(2, LobbyItems.mapVotingMenuItem());
+        player.getInventory().setItem(6, LobbyItems.teamSelectionMenuItem(player));
+
         return true;
     }
 
@@ -660,6 +638,106 @@ public class Lobby extends GamePart implements ManagedListener {
         this.forcestart = true;
     }
 
+    // ----- EVENTS -----
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (event.getInventory().getHolder() != event.getWhoClicked()) return;
+        if (this.getPlugin().isPlayerBypassing(player)) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (event.getInventory().getHolder() != event.getWhoClicked()) return;
+        if (this.getPlugin().isPlayerBypassing(player)) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (this.getPlugin().isPlayerBypassing(event.getPlayer())) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+
+        // Cancel all interactions except for bypassing players
+        if (!this.getPlugin().isPlayerBypassing(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+
+        // Only right-clicks from now on
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        ItemStack item = event.getItem();
+        if (item == null) return;
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return;
+
+        if (meta.getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_VOTING_MENU, PersistentDataType.BOOLEAN, false)) {
+            event.setCancelled(true); // Cancel this interaction again in case a bypassing player wants to use the item
+            event.getPlayer().openInventory(this.getVoteMenu().getInventory(event.getPlayer()));
+            event.getPlayer().playSound(event.getPlayer().getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+        } else if (meta.getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_TEAM_SELECTION_MENU, PersistentDataType.BOOLEAN, false)) {
+            event.setCancelled(true);
+            event.getPlayer().openInventory(this.getTeamSelectionGUI().getInventory(event.getPlayer()));
+            event.getPlayer().playSound(event.getPlayer().getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
+        }
+
+    }
+
+    @EventHandler
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        if (this.getPlugin().isPlayerBypassing(event.getPlayer())) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+
+        // Allow bypassing players to take damage
+        if (event.getEntity() instanceof Player player && this.getPlugin().isPlayerBypassing(player)) {
+            return;
+        }
+
+        // Allow bypassing players to deal damage
+        if (event instanceof EntityDamageByEntityEvent byEntityEvent &&
+                byEntityEvent.getDamager() instanceof Player damager &&
+                this.getPlugin().isPlayerBypassing(damager.getUniqueId())
+        ) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.joinMessage(Component.empty()
+                .append(event.getPlayer().displayName())
+                .appendSpace()
+                .append(Component.text("has joined", NamedTextColor.GRAY))
+        );
+
+        event.getPlayer().teleport(this.getLobbySpawn().clone());
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        event.quitMessage(Component.empty()
+                .append(event.getPlayer().displayName())
+                .appendSpace()
+                .append(Component.text("has left", NamedTextColor.GRAY))
+        );
+    }
+
+    // ----- OTHER -----
+
     public MapData getSelectedMap() {
         return this.selectedMap;
     }
@@ -679,10 +757,6 @@ public class Lobby extends GamePart implements ManagedListener {
 
     public @NotNull LobbyTeamSelectionGUI getTeamSelectionGUI() {
         return this.teamSelectionGUI;
-    }
-
-    public LobbyMenu getLobbyMenu(UUID playerId) {
-        return this.lobbyMenus.get(playerId);
     }
 
     public boolean isMapVoting() {

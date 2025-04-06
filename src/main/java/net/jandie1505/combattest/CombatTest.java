@@ -104,10 +104,6 @@ public class CombatTest extends JavaPlugin {
         this.getCommand("combattest-old").setExecutor(new CombatTestCommandOld(this));
         this.getCommand("combattest-old").setTabCompleter(new CombatTestCommandOld(this));
 
-        Listener listener = new EventListener(this);
-        this.listenerManager.addExceptedListener(listener);
-        this.getServer().getPluginManager().registerEvents(listener, this);
-
         this.listenerManager.addSource(() -> {
             if (this.game != null) {
                 return this.game;

@@ -14,5 +14,7 @@ public interface NamespacedKeys {
     NamespacedKey ITEM_THROWABLE_DAMAGE = new NamespacedKey(NAMESPACE, "item.throwable.damage");
 
     NamespacedKey ITEM_PLAYER_MENU = new NamespacedKey(NAMESPACE, "item.player_menu");
+    NamespacedKey ITEM_VOTING_MENU = new NamespacedKey(NAMESPACE, "item.voting_menu");
+    NamespacedKey ITEM_TEAM_SELECTION_MENU = new NamespacedKey(NAMESPACE, "item.team_selection_menu");
 
 }

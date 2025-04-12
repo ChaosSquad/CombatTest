@@ -27,6 +27,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -179,14 +180,19 @@ public class ShopGUI implements InventoryHolder, ManagedListener {
             }
 
             if (playerData.getPoints() >= shopItem.price()) {
+
                 playerData.setPoints(playerData.getPoints() - shopItem.price());
                 player.getInventory().addItem(shopItem.item().clone());
+
                 player.sendRichMessage(
                         "<green>Successfully purchased <aqua><item_name><reset><green> for <aqua><price>P<green>!",
                         TagResolver.resolver("item_name", Tag.inserting(shopItem.item().displayName())),
                         TagResolver.resolver("price", Tag.inserting(Component.text(shopItem.price())))
                 );
                 player.playSound(player.getLocation().clone(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
+
+                playerData.addRewardPoints(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("upgradePurchased", 0));
+                playerData.addRewardXP(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("upgradePurchased", 0));
             } else {
                 player.sendRichMessage("<red>You don't have enough points to buy this item!");
                 player.playSound(player.getLocation().clone(), Sound.UI_BUTTON_CLICK, 0.5F, 0F);

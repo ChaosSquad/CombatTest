@@ -18,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +113,9 @@ public class GameDeathListener implements ManagedListener {
                     )
             );
         }
+
+        killer.playerData().addRewardPoints(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("playerKill", 0));
+        killer.playerData().addRewardXP(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("playerKill", 0));
     }
 
     private void rewardTeam(@Nullable UUID playerId) {

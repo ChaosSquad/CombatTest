@@ -59,11 +59,20 @@ public final class DefaultConfigValues {
         JSONObject rewardsConfig = new JSONObject();
 
         rewardsConfig.put("playerKill", 20);
-        rewardsConfig.put("indirectPlayerKill", 10);
+        rewardsConfig.put("indirectPlayerKill", 5);
         rewardsConfig.put("upgradePurchased", 5);
         rewardsConfig.put("maxRewardsAmount", 5000);
 
         config.put("playerPointsRewards", rewardsConfig);
+
+        JSONObject xpRewardsConfig = new JSONObject();
+
+        xpRewardsConfig.put("playerKill", 10.0);
+        xpRewardsConfig.put("indirectPlayerKill", 5.0);
+        xpRewardsConfig.put("upgradePurchased", 1.0);
+        xpRewardsConfig.put("maxRewardsAmount", 1000.0);
+
+        config.put("playerLevelsRewards", xpRewardsConfig);
 
         return config;
     }

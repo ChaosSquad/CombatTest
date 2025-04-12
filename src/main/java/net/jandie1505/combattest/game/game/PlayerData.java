@@ -25,6 +25,7 @@ public class PlayerData {
     private int noPvpTimer;
     private boolean weatherDisabled;
     private int rewardPoints;
+    private double rewardXP;
     private int downgradeScore;
 
     public PlayerData(UUID playerId) {
@@ -54,6 +55,7 @@ public class PlayerData {
         this.weatherDisabled = false;
 
         this.rewardPoints = 0;
+        this.rewardXP = 0;
 
         this.downgradeScore = 0;
     }
@@ -202,6 +204,22 @@ public class PlayerData {
 
     public void setRewardPoints(int rewardPoints) {
         this.rewardPoints = rewardPoints;
+    }
+
+    public void addRewardPoints(int points) {
+        this.points += points;
+    }
+
+    public double getRewardXP() {
+        return rewardXP;
+    }
+
+    public void setRewardXP(double rewardXP) {
+        this.rewardXP = rewardXP;
+    }
+
+    public void addRewardXP(double rewardXP) {
+        this.rewardXP += rewardXP;
     }
 
     public int getDowngradeScore() {

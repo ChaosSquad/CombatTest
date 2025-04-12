@@ -12,8 +12,12 @@ import net.jandie1505.combattest.game.game.commands.GameMenuCommand;
 import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
+import net.jandie1505.playerlevels.api.core.level.Leveler;
+import net.jandie1505.playerlevels.core.PlayerLevelsAPIProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.*;
@@ -27,6 +31,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CombatTest extends JavaPlugin {
     private ConfigManager configManager;
@@ -476,6 +481,39 @@ public class CombatTest extends JavaPlugin {
 
         }
 
+    }
+
+    /**
+     * Gives XP to a player using the AuroraLevels integration.
+     * @param player player
+     * @param xp xp amount
+     */
+    public void giveXPToPlayer(@NotNull Player player, double xp, @Nullable String message) {
+        if (!this.configManager.getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("playerlevels", false)) return;
+        if (xp <= 0) return;
+
+        try {
+            Class.forName("net.jandie1505.playerlevels.core.PlayerLevelsAPIProvider");
+
+            Leveler leveler = PlayerLevelsAPIProvider.getApi().getLevelManager().getLeveler(player.getUniqueId());
+            if (leveler == null) return;
+
+            double maxAmount = this.configManager.getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("maxRewardsAmount", 1000.0);
+            if (xp > maxAmount) {
+                xp = maxAmount;
+            }
+
+            leveler.getData().xp(leveler.getData().xp() + xp);
+
+            if (message != null) {
+                player.sendRichMessage(message, TagResolver.resolver("xp", Tag.inserting(Component.text(xp))));
+            }
+
+        } catch (ClassNotFoundException e) {
+            this.getLogger().warning("PlayerLevels integration failed: PlayerLevels has not been found.");
+        } catch (Exception e) {
+            this.getLogger().log(Level.WARNING, "PlayerLevels integration: Failed to add XP to player", e);
+        }
     }
 
 }

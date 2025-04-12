@@ -96,7 +96,7 @@ public class Endlobby extends GamePart implements ManagedListener {
             }
 
             this.plugin.givePointsToPlayer(player, playerData.getRewardPoints(), "§6Rewards for this game: + {points} points");
-
+            this.plugin.giveXPToPlayer(player, playerData.getRewardXP(), "<gold>Rewards for this game: + <xp> XP");
         }
 
         this.teams = new ArrayList<>();

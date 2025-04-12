@@ -52,6 +52,7 @@ dependencies {
     compileOnly("de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.4-RELEASE")
     compileOnly("de.simonsator:spigot-party-api-for-party-and-friends:1.0.5-RELEASE")
     compileOnly("org.black_ixx:playerpoints:3.2.6")
+    compileOnly("net.jandie1505:PlayerLevels-API:master-809c1e4a0992561a25a25a97c79bf17b9fa16aa1")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

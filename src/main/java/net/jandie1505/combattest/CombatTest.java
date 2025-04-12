@@ -19,7 +19,6 @@ import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -162,7 +161,7 @@ public class CombatTest extends JavaPlugin {
 
                     if (CombatTest.this.autostartNewGameTimer <= 0) {
                         CombatTest.this.autostartNewGameTimer = 30;
-                        CombatTest.this.startGame();
+                        CombatTest.this.startLobby();
                     } else {
                         CombatTest.this.autostartNewGameTimer--;
                     }
@@ -228,8 +227,37 @@ public class CombatTest extends JavaPlugin {
         this.getLogger().info("CombatTest Plugin was successfully enabled");
 
         if (this.isCloudSystemMode()) {
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    CombatTest.this.stopGame();
+                    CombatTest.this.startLobby();
+                    CombatTest.this.getLogger().info("Cloudsystem Mode has started a lobby.");
+                }
+            }.runTaskLater(this, 1);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (CombatTest.this.isCloudSystemMode()) {
+                        if (CombatTest.this.getGame() == null) {
+                            CombatTest.this.getLogger().info("Cloudsystem mode is shutting down server because game ended.");
+                            CombatTest.this.getServer().shutdown();
+                        }
+                    } else {
+                        this.cancel();
+                    }
+
+                }
+            }.runTaskTimer(this, 20, 20);
+
+        }
+
+        if (this.isCloudSystemMode()) {
             this.getLogger().info("Cloud System Mode enabled (autostart game + switch to ingame + shutdown on end)");
-            this.startGame();
+            this.startLobby();
         }
     }
 
@@ -244,7 +272,7 @@ public class CombatTest extends JavaPlugin {
 
     }
 
-    public boolean startGame() {
+    public boolean startLobby() {
         if (game == null) {
             this.game = new Lobby(this);
             return true;

@@ -25,7 +25,7 @@ public class CombatTestStartSubcommand implements TabCompletingCommandExecutor {
             return true;
         }
 
-        boolean success = this.plugin.startGame();
+        boolean success = this.plugin.startLobby();
 
         if (success) {
             sender.sendRichMessage("<green>Game has been started");

@@ -158,7 +158,7 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
 
         if (this.plugin.getGame() == null) {
 
-            if (this.plugin.startGame()) {
+            if (this.plugin.startLobby()) {
                 sender.sendMessage("§aGame successfully started");
             } else {
                 sender.sendMessage("§cCould not start game (unknown error)");

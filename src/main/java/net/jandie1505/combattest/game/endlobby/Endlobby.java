@@ -279,14 +279,7 @@ public class Endlobby extends GamePart implements ManagedListener {
         // TIME
 
         if (this.time < 0) {
-
             this.plugin.stopGame();
-
-            if (this.plugin.isCloudSystemMode()) {
-                this.plugin.getServer().shutdown();
-
-            }
-
         }
     }
 

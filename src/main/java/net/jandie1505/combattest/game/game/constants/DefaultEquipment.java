@@ -65,26 +65,26 @@ public final class DefaultEquipment {
         equipmentMap.put(1311, new EquipmentData("Fast Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Fast Damage Potion +", 1, 2), 30)), 2500, List.of(1312), 1310, 5)); // Fast Damage Potion +
         equipmentMap.put(1312, new EquipmentData("Fast Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Fast Damage Potion ++", 1, 1.5), 25)), 2500, List.of(1313), 1311, 6)); // Fast Damage Potion ++
         equipmentMap.put(1313, new EquipmentData("Fast Damage Potion +++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Fast Damage Potion +++", 1, 1), 20)), 5000, List.of(), 1312, 7)); // Fast Damage Potion +++
-        equipmentMap.put(1320, new EquipmentData("Heavy Damage Potion", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion", 2, 4), 60)), 2500, List.of(1321), 0, 4)); // Heavy Damage Potion
-        equipmentMap.put(1321, new EquipmentData("Heavy Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion +", 2, 3.5), 50)), 2500, List.of(1322), 1320, 5)); // Heavy Damage Potion +
-        equipmentMap.put(1322, new EquipmentData("Heavy Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion ++", 2, 3), 45)), 2500, List.of(1323), 1321, 6)); // Heavy Damage Potion ++
-        equipmentMap.put(1323, new EquipmentData("Heavy Damage Potion +++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion +++", 2, 2.5), 40)), 5000, List.of(), 1322, 7)); // Heavy Damage Potion +++
+        equipmentMap.put(1320, new EquipmentData("Heavy Damage Potion", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion", 2, 4.5), 60)), 2500, List.of(1321), 0, 4)); // Heavy Damage Potion
+        equipmentMap.put(1321, new EquipmentData("Heavy Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion +", 2, 4), 50)), 2500, List.of(1322), 1320, 5)); // Heavy Damage Potion +
+        equipmentMap.put(1322, new EquipmentData("Heavy Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion ++", 2, 3.5), 45)), 2500, List.of(1323), 1321, 6)); // Heavy Damage Potion ++
+        equipmentMap.put(1323, new EquipmentData("Heavy Damage Potion +++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion +++", 2, 3), 40)), 5000, List.of(), 1322, 7)); // Heavy Damage Potion +++
 
         // RANGED
 
         equipmentMap.put(2000, new EquipmentData("Default Ranged", List.of(), 0, List.of(2100, 2200, 2300), 0, 0)); // Default (No item)
 
-        equipmentMap.put(2100, new EquipmentData("Default Bow", List.of(EquipmentItem.defaultSlot(bowBuilder("Default Bow", 0, 0, 0, 0))), 1250, List.of(2101), 0, 1)); // Default Bow
-        equipmentMap.put(2101, new EquipmentData("Default Bow +", List.of(EquipmentItem.defaultSlot(bowBuilder("Default Bow +", 0, 1, 0, 0))), 1250, List.of(2110, 2120), 2100, 2)); // Default Bow +
-        equipmentMap.put(2110, new EquipmentData("Powerful Bow", List.of(EquipmentItem.defaultSlot(bowBuilder("Powerful Bow", 1, 0, 0, 0))), 2500, List.of(2111), 0, 4)); // Powerful Bow
-        equipmentMap.put(2111, new EquipmentData("Powerful Bow +", List.of(EquipmentItem.defaultSlot(bowBuilder("Powerful Bow +", 2, 0, 0, 0))), 2500, List.of(2112), 2110, 6)); // Powerful Bow +
-        equipmentMap.put(2112, new EquipmentData("Powerful Bow ++", List.of(EquipmentItem.defaultSlot(bowBuilder("Most Powerful Pow", 3, 0, 0, 0))), 5000, List.of(), 2111, 7)); // Powerful Bow ++
-        equipmentMap.put(2120, new EquipmentData("Misc Bow", List.of(EquipmentItem.defaultSlot(bowBuilder("Misc Bow", 0, 2, 0, 0))), 2500, List.of(2121), 0, 4)); // Misc Bow
-        equipmentMap.put(2121, new EquipmentData("Misc Bow +", List.of(EquipmentItem.defaultSlot(bowBuilder("Misc Bow +", 0, 2, 1, 0))), 2500, List.of(2122), 2120, 6)); // Misc Bow +
-        equipmentMap.put(2122, new EquipmentData("Misc Bow ++", List.of(EquipmentItem.defaultSlot(bowBuilder("Misc Bow ++", 0, 2, 1, 1))), 5000, List.of(), 2121, 7)); // Misc Bow ++
+        equipmentMap.put(2100, new EquipmentData("Default Bow", List.of(EquipmentItem.defaultSlot(bowBuilder("Default Bow", 0, 0, 0, 1)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 1250, List.of(2101), 0, 1)); // Default Bow
+        equipmentMap.put(2101, new EquipmentData("Default Bow +", List.of(EquipmentItem.defaultSlot(bowBuilder("Default Bow +", 0, 1, 0, 1)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 1250, List.of(2110, 2120), 2100, 2)); // Default Bow +
+        equipmentMap.put(2110, new EquipmentData("Powerful Bow", List.of(EquipmentItem.defaultSlot(bowBuilder("Powerful Bow", 1, 0, 0, 1)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 2500, List.of(2111), 0, 4)); // Powerful Bow
+        equipmentMap.put(2111, new EquipmentData("Powerful Bow +", List.of(EquipmentItem.defaultSlot(bowBuilder("Powerful Bow +", 2, 0, 0, 1)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 2500, List.of(2112), 2110, 6)); // Powerful Bow +
+        equipmentMap.put(2112, new EquipmentData("Powerful Bow ++", List.of(EquipmentItem.defaultSlot(bowBuilder("Most Powerful Pow", 3, 0, 0, 1)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 5000, List.of(), 2111, 7)); // Powerful Bow ++
+        equipmentMap.put(2120, new EquipmentData("Misc Bow", List.of(EquipmentItem.defaultSlot(bowBuilder("Misc Bow", 0, 2, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW))), 2500, List.of(2121), 0, 4)); // Misc Bow
+        equipmentMap.put(2121, new EquipmentData("Misc Bow +", List.of(EquipmentItem.defaultSlot(bowBuilder("Misc Bow +", 1, 2, 1, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW))), 2500, List.of(2122), 2120, 6)); // Misc Bow +
+        equipmentMap.put(2122, new EquipmentData("Misc Bow ++", List.of(EquipmentItem.defaultSlot(bowBuilder("Misc Bow ++", 2, 2, 1, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW))), 5000, List.of(), 2121, 7)); // Misc Bow ++
 
-        equipmentMap.put(2200, new EquipmentData("Default Crossbow", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Default Crossbow", 0, 0, 0, 0))), 1250, List.of(2201), 0, 1)); // Default Crossbow
-        equipmentMap.put(2201, new EquipmentData("Default Crossbow +", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Default Crossbow +", 1, 0, 0, 0))), 1250, List.of(2210, 2220), 2200, 2)); // Default Crossbow +
+        equipmentMap.put(2200, new EquipmentData("Default Crossbow", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Default Crossbow", 1, 0, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 1250, List.of(2201), 0, 1)); // Default Crossbow
+        equipmentMap.put(2201, new EquipmentData("Default Crossbow +", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Default Crossbow +", 2, 0, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 1250, List.of(2210, 2220), 2200, 2)); // Default Crossbow +
         equipmentMap.put(2210, new EquipmentData("Rocket Launcher Crossbow", List.of(
                 EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow", 1, 0, 0, 1)),
                 new EquipmentItem(rocketBuilder("Rocket Tier 1", 1), EquipmentSlot.OFF_HAND, 1, 1)), 2500, List.of(2211), 0, 4)
@@ -97,9 +97,9 @@ public final class DefaultEquipment {
                 EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow ++", 1, 0, 0, 3)),
                 new EquipmentItem(rocketBuilder("Rocket Tier 3", 4), EquipmentSlot.OFF_HAND, 1, 1)
         ), 5000, List.of(), 2211, 7)); // Rocket Launcher Crossbow ++
-        equipmentMap.put(2220, new EquipmentData("Advanced Crossbow", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow", 2, 1, 0, 0))), 2500, List.of(2221), 0, 4)); // Advanced Crossbow
-        equipmentMap.put(2221, new EquipmentData("Advanced Crossbow +", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow +", 2, 2, 0, 0))), 2500, List.of(2222), 2220, 6)); // Advanced Crossbow +
-        equipmentMap.put(2222, new EquipmentData("Advanced Crossbow ++", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow ++", 2, 2, 1, 0))), 5000, List.of(), 2221, 7)); // Advanced Crossbow ++
+        equipmentMap.put(2220, new EquipmentData("Advanced Crossbow", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow", 3, 1, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW))), 2500, List.of(2221), 0, 4)); // Advanced Crossbow
+        equipmentMap.put(2221, new EquipmentData("Advanced Crossbow +", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow +", 4, 2, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW))), 2500, List.of(2222), 2220, 6)); // Advanced Crossbow +
+        equipmentMap.put(2222, new EquipmentData("Advanced Crossbow ++", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow ++", 4, 2, 1, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW, 3))), 5000, List.of(), 2221, 7)); // Advanced Crossbow ++
 
         equipmentMap.put(2300, new EquipmentData("Default Trident", List.of(EquipmentItem.defaultSlot(tridentBuilder("Default Trident", false, 1, 0, 0, 2d, false))), 1250, List.of(2301), 0, 1)); // Default Trident
         equipmentMap.put(2301, new EquipmentData("Default Trident +", List.of(EquipmentItem.defaultSlot(tridentBuilder("Default Trident +", false, 2, 0, 0, 4d, false))), 1250, List.of(2310, 2320), 2300, 2)); // Default Trident +
@@ -161,28 +161,28 @@ public final class DefaultEquipment {
         ), 1250, List.of(3110, 3120), 3101, 3)); // Chainmail Armor ++
 
         equipmentMap.put(3110, new EquipmentData("Heavy Armor", List.of(
-                new EquipmentItem(armorBuilder("Heavy Armor", Material.DIAMOND_HELMET, 15, 5, 0), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(armorBuilder("Heavy Armor", Material.DIAMOND_HELMET, 15, 5, 1), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Heavy Armor Shield", 24), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeDiamondChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeDiamondLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeDiamondBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3111), 0, 4)); // Heavy Armor
         equipmentMap.put(3111, new EquipmentData("Heavy Armor +", List.of(
-                new EquipmentItem(armorBuilder("Heavy Armor +", Material.DIAMOND_HELMET, 17, 7, 0), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(armorBuilder("Heavy Armor +", Material.DIAMOND_HELMET, 17, 7, 2), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Heavy Armor + Shield", 28), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeDiamondChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeDiamondLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeDiamondBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3112), 3110, 5)); // Heavy Armor +
         equipmentMap.put(3112, new EquipmentData("Heavy Armor ++", List.of(
-                new EquipmentItem(armorBuilder("Heavy Armor ++", Material.DIAMOND_HELMET, 18, 8, 0), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(armorBuilder("Heavy Armor ++", Material.DIAMOND_HELMET, 18, 8, 3), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Heavy Armor ++ Shield", 33), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeDiamondChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeDiamondLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeDiamondBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3113), 3111, 6)); // Heavy Armor ++
         equipmentMap.put(3113, new EquipmentData("Heavy Armor +++", List.of(
-                new EquipmentItem(armorBuilder("Heavy Armor +++", Material.NETHERITE_HELMET, 20, 10, 0), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(armorBuilder("Heavy Armor +++", Material.NETHERITE_HELMET, 20, 10, 5), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Heavy Armor +++ Shield", 38), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeNetheriteChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeNetheriteLeggings, EquipmentSlot.LEGS, 0, 0),
@@ -190,29 +190,29 @@ public final class DefaultEquipment {
         ), 2500, List.of(), 3112, 7)); // Heavy Armor +++
 
         equipmentMap.put(3120, new EquipmentData("Multi-Defence Armor", List.of(
-                new EquipmentItem(armorBuilder("Multi-Defense Armor", Material.IRON_HELMET, 0, 0, 10), EquipmentSlot.HEAD, 0, 0),
-                new EquipmentItem(shieldBuilder("Multi-Defense Armor Shield", 28), EquipmentSlot.OFF_HAND, 0, 10*20),
+                new EquipmentItem(armorBuilder("Multi-Defense Armor", Material.IRON_HELMET, 5, 0, 10, 10), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(shieldBuilder("Multi-Defense Armor Shield", 48), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeIronChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeIronLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeIronBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3121), 0, 4)); // Multi-Defence Armor
         equipmentMap.put(3121, new EquipmentData("Multi-Defence Armor +", List.of(
-                new EquipmentItem(armorBuilder("Multi-Defense Armor +", Material.IRON_HELMET, 0, 0, 12), EquipmentSlot.HEAD, 0, 0),
-                new EquipmentItem(shieldBuilder("Multi-Defense Armor + Shield", 36), EquipmentSlot.OFF_HAND, 0, 10*20),
+                new EquipmentItem(armorBuilder("Multi-Defense Armor +", Material.IRON_HELMET, 7, 0, 12, 20), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(shieldBuilder("Multi-Defense Armor + Shield", 52), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeIronChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeIronLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeIronBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3122), 3120, 5)); // Multi-Defence Armor +
         equipmentMap.put(3122, new EquipmentData("Multi-Defence Armor ++", List.of(
-                new EquipmentItem(armorBuilder("Multi-Defense Armor ++", Material.IRON_HELMET, 0, 0, 13), EquipmentSlot.HEAD, 0, 0),
-                new EquipmentItem(shieldBuilder("Multi-Defense Armor ++ Shield", 45), EquipmentSlot.OFF_HAND, 0, 10*20),
+                new EquipmentItem(armorBuilder("Multi-Defense Armor ++", Material.IRON_HELMET, 8, 0, 13, 30), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(shieldBuilder("Multi-Defense Armor ++ Shield", 56), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeIronChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeIronLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeIronBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3123), 3121, 6)); // Multi-Defence Armor ++
         equipmentMap.put(3123, new EquipmentData("Multi-Defence Armor +++", List.of(
-                new EquipmentItem(armorBuilder("Multi-Defense Armor +++", Material.GOLDEN_HELMET, 0, 0, 15), EquipmentSlot.HEAD, 0, 0),
-                new EquipmentItem(shieldBuilder("Multi-Defense Armor +++ Shield", 55), EquipmentSlot.OFF_HAND, 0, 10*20),
+                new EquipmentItem(armorBuilder("Multi-Defense Armor +++", Material.GOLDEN_HELMET, 10, 0, 15, 40), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(shieldBuilder("Multi-Defense Armor +++ Shield", 60), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeGoldChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeGoldLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeGoldBoots, EquipmentSlot.FEET, 0, 0)
@@ -411,19 +411,26 @@ public final class DefaultEquipment {
         return item;
     }
 
-    public static ItemStack armorBuilder(String name, Material material, int armor, int toughness, int protection) {
+    public static ItemStack armorBuilder(String name, Material material, int armor, int toughness, int protection, int knockbackResistance) {
 
         ItemStack item = new ItemStack(material);
 
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
 
         meta.setDisplayName("§r" + name);
-        meta.setLore(List.of("§r§7Armor: " + armor, "§r§7Toughness: " + toughness, "§r§7Protection: " + protection));
         meta.addItemFlags(ItemFlag.values());
         meta.setUnbreakable(true);
 
+        List<String> lore = new ArrayList<>();
+        lore.add("§r§7Armor: " + armor);
+        lore.add("§r§7Toughness: " + toughness);
+        lore.add("§r§7Protection: " + protection);
+        if (knockbackResistance > 0) lore.add("§r§7Knockback Resistance: " + knockbackResistance + "%");
+        meta.setLore(lore);
+
         meta.addAttributeModifier(Attribute.ARMOR, new AttributeModifier(NamespacedKey.minecraft("generic.armor"), armor, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ARMOR));
         meta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS, new AttributeModifier(NamespacedKey.minecraft("generic.armor_toughness"), toughness, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ARMOR));
+        if (knockbackResistance > 0) meta.addAttributeModifier(Attribute.KNOCKBACK_RESISTANCE, new AttributeModifier(Attribute.KNOCKBACK_RESISTANCE.getKey(), knockbackResistance, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ARMOR));
 
         if (protection > 0) {
             meta.addEnchant(Enchantment.PROTECTION, protection, true);
@@ -437,6 +444,10 @@ public final class DefaultEquipment {
 
         return item;
 
+    }
+
+    public static ItemStack armorBuilder(String name, Material material, int armor, int toughness, int protection) {
+        return armorBuilder(name, material, armor, toughness, protection, 0);
     }
 
     public static ItemStack decorativeArmorBuilder(Material material, boolean glint) {

@@ -65,36 +65,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
             case "settime":
                 this.setTimeSubcommand(sender, args);
                 break;
-            case "getpoints":
-                this.getScoreSubcommand(sender, args, 0);
-                break;
-            case "setpoints":
-                this.setScoreSubcommand(sender, args, 0);
-                break;
-            case "getmelee":
-                this.getScoreSubcommand(sender, args, 1);
-                break;
-            case "setmelee":
-                this.setScoreSubcommand(sender, args, 1);
-                break;
-            case "getranged":
-                this.getScoreSubcommand(sender, args, 2);
-                break;
-            case "setranged":
-                this.setScoreSubcommand(sender, args, 2);
-                break;
-            case "getarmor":
-                this.getScoreSubcommand(sender, args, 3);
-                break;
-            case "setarmor":
-                this.setScoreSubcommand(sender, args, 3);
-                break;
-            case "getteam":
-                this.getScoreSubcommand(sender, args, 4);
-                break;
-            case "setteam":
-                this.setScoreSubcommand(sender, args, 4);
-                break;
             case "isautostart":
                 this.isAutostartSubcommand(sender);
                 break;
@@ -416,60 +386,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
 
     }
 
-    public void getScoreSubcommand(CommandSender sender, String[] args, int score) {
-
-        if (!this.hasPermissionAdmin(sender)) {
-            sender.sendMessage("§cNo permission");
-            return;
-        }
-
-        if (args.length != 2) {
-            sender.sendMessage("§cUsage: /combattest get<score> <player>");
-            return;
-        }
-
-        if (!(this.plugin.getGame() instanceof Game)) {
-            sender.sendMessage("§cNo game running");
-            return;
-        }
-
-        Player player = this.plugin.getPlayerFromString(args[1]);
-
-        if (player == null) {
-            sender.sendMessage("§cPlayer is offline");
-            return;
-        }
-
-        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(player.getUniqueId());
-
-        if (playerData == null) {
-            sender.sendMessage("§cPlayer not ingame");
-            return;
-        }
-
-        switch (score) {
-            case 0:
-                sender.sendMessage("§7Points: " + playerData.getPoints());
-                break;
-            case 1:
-                //sender.sendMessage("§7Melee score: " + playerData.getMeleeEquipment());
-                break;
-            case 2:
-                //sender.sendMessage("§7Ranged score: " + playerData.getRangedEquipment());
-                break;
-            case 3:
-                //sender.sendMessage("§7Armor score: " + playerData.getArmorEquipment());
-                break;
-            case 4:
-                sender.sendMessage("§7Team score: " + playerData.getTeam());
-                break;
-            default:
-                sender.sendMessage("§cUnknown error");
-                break;
-        }
-
-    }
-
     public void setTimeSubcommand(CommandSender sender, String[] args) {
 
         if (!this.hasPermissionAdmin(sender)) {
@@ -492,80 +408,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
             sender.sendMessage("§aTime successfully changed");
         } catch (IllegalArgumentException e) {
             sender.sendMessage("§cPlease specify a valid int value");
-        }
-
-    }
-
-    public void setScoreSubcommand(CommandSender sender, String[] args, int score) {
-
-        if (!this.hasPermissionAdmin(sender)) {
-            sender.sendMessage("§cNo permission");
-            return;
-        }
-
-        if (args.length != 3) {
-            sender.sendMessage("§cUsage: /combattest set<score> <player> <score>");
-            return;
-        }
-
-        if (!(this.plugin.getGame() instanceof Game)) {
-            sender.sendMessage("§cNo game running");
-            return;
-        }
-
-        Player player = this.plugin.getPlayerFromString(args[1]);
-
-        if (player == null) {
-            sender.sendMessage("§cPlayer is offline");
-            return;
-        }
-
-        PlayerData playerData = ((Game) this.plugin.getGame()).getPlayerMap().get(player.getUniqueId());
-
-        if (playerData == null) {
-            sender.sendMessage("§cPlayer not ingame");
-            return;
-        }
-
-        int value;
-
-        try {
-
-            value = Integer.parseInt(args[2]);
-
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage("§cPlease specify a valid int value");
-            return;
-        }
-
-        switch (score) {
-            case 0:
-                playerData.setPoints(value);
-                sender.sendMessage("§aPoints set");
-                break;
-            case 1:
-                //playerData.setMeleeEquipment(value);
-                sender.sendMessage("§aMelee score set");
-                break;
-            case 2:
-                //playerData.setRangedEquipment(value);
-                sender.sendMessage("§aRanged score set");
-                break;
-            case 3:
-                //playerData.setArmorEquipment(value);
-                sender.sendMessage("§aArmor score set");
-                break;
-            case 4:
-                if (value >= 0) {
-                    playerData.setTeam(value);
-                    sender.sendMessage("§aTeam score set");
-                } else {
-                    sender.sendMessage("§cTeam values must be 0 for no team or a positive value for a team id");
-                }
-                break;
-            default:
-                sender.sendMessage("§cUnknown error");
-                break;
         }
 
     }
@@ -1345,16 +1187,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
                 tabComplete.add("getplayers");
                 tabComplete.add("bypass");
                 tabComplete.add("settime");
-                tabComplete.add("getpoints");
-                tabComplete.add("setpoints");
-                tabComplete.add("getmelee");
-                tabComplete.add("setmelee");
-                tabComplete.add("getranged");
-                tabComplete.add("setranged");
-                tabComplete.add("getarmor");
-                tabComplete.add("setarmor");
-                tabComplete.add("getteam");
-                tabComplete.add("setteam");
                 tabComplete.add("isautostart");
                 tabComplete.add("setautostart");
                 tabComplete.add("givepoints");
@@ -1405,16 +1237,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case "removeplayer":
-                case "getpoints":
-                case "setpoints":
-                case "getmelee":
-                case "setmelee":
-                case "getranged":
-                case "setranged":
-                case "getarmor":
-                case "setarmor":
-                case "getteam":
-                case "setteam":
                 case "givepoints":
                     if (hasPermissionAdmin(sender)) {
                         tabComplete.addAll(this.getIngamePlayerNames());

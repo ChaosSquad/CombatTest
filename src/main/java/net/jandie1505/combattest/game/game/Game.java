@@ -3,6 +3,7 @@ package net.jandie1505.combattest.game.game;
 import eu.cloudnetservice.driver.inject.InjectionLayer;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import net.chaossquad.mclib.WorldUtils;
+import net.chaossquad.mclib.combattracking.CombatTracker;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.GamePart;
@@ -55,6 +56,7 @@ public class Game extends GamePart {
     @NotNull private final PlayerMainGUI playerMainGUI;
     @NotNull private final EquipmentUpgradeGUI equipmentUpgradeGUI;
     @NotNull private final ShopGUI shopGUI;
+    @NotNull private final CombatTracker combatTracker;
     private final List<Spawnpoint> spawnpoints;
     private int time;
     private boolean killswitch;
@@ -74,6 +76,7 @@ public class Game extends GamePart {
         this.equipmentUpgradeGUI = new EquipmentUpgradeGUI(this, null);
         this.shopGUI = new ShopGUI(this, null);
         this.shopGUI.getItems().addAll(DefaultShopItems.getShopItems());
+        this.combatTracker = new CombatTracker();
 
         // WORLD
 
@@ -863,6 +866,10 @@ public class Game extends GamePart {
 
     public @NotNull ShopGUI getShopGUI() {
         return this.shopGUI;
+    }
+
+    public @NotNull CombatTracker getCombatTracker() {
+        return this.combatTracker;
     }
 
     public List<Integer> getTeams() {

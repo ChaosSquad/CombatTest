@@ -1,6 +1,7 @@
 package net.jandie1505.combattest.game.game.listeners;
 
 import net.chaossquad.mclib.MiscUtils;
+import net.chaossquad.mclib.combattracking.PlayerFight;
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.PlayerData;
@@ -9,6 +10,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -65,27 +68,39 @@ public class GameDeathListener implements ManagedListener {
             this.game.getTaskScheduler().runTaskLater(() -> player.spigot().respawn(), 2, "player_respawn");
         }
 
+        // Combat Tracking Death
+        @Nullable final PlayerFight fight = this.game.getCombatTracker().onPlayerDeath(player.getUniqueId());
+
         // Get values
         final double playerEquipmentLevel = this.getEquipmentLevelAverage(playerData);
+        @Nullable final Killer mostDamageKiller = Killer.create(this.game, PlayerFight.getKiller(fight));
         @Nullable final Killer lastHitKiller = this.getLastHitKiller(player);
 
         // Reward killer
-        if (lastHitKiller != null) this.rewardKiller(lastHitKiller, (int) playerEquipmentLevel);
+        if (mostDamageKiller != null) this.rewardKiller(mostDamageKiller, (int) playerEquipmentLevel);
+        if (lastHitKiller != null && lastHitKiller != mostDamageKiller) this.rewardKiller(lastHitKiller, (int) playerEquipmentLevel);
 
         // Reward team
-        if (lastHitKiller != null) this.rewardTeam(lastHitKiller.playerId());
+        if (mostDamageKiller != null) this.rewardTeam(mostDamageKiller.playerId());
+        if (lastHitKiller != null && lastHitKiller != mostDamageKiller) this.rewardTeam(lastHitKiller.playerId());
 
-        // Low Equipment Bonus
-        this.giveLowEquipmentBonus(playerData, null, lastHitKiller);
+        // Reward assistants
+        if (fight != null) this.rewardAssistants(fight, lastHitKiller != null ? lastHitKiller.playerId() : null);
 
         // Decrease Downgrade Score
         this.decreaseDowngradeScore(playerData, null, lastHitKiller);
+
+        // Low Equipment Bonus
+        this.giveLowEquipmentBonus(playerData, null, lastHitKiller);
 
         // Equipment downgrade
         this.downgradeEquipment(playerData);
 
         // Stats
         playerData.incrementDeaths();
+
+        // Respawn
+        this.respawnPlayerImmediately(event.getPlayer());
     }
 
     // ----- DEATH ACTIONS -----
@@ -131,6 +146,40 @@ public class GameDeathListener implements ManagedListener {
             if (entry.getValue().getTeam() != playerData.getTeam()) continue;
             if (entry.getKey().equals(playerId)) continue;
             entry.getValue().addPoints(TEAM_KILL_REWARD);
+        }
+
+    }
+
+    private void rewardAssistants(@NotNull PlayerFight fight, @Nullable UUID lastHitKillerId) {
+        final int PAYOUT_ASSIST = 2000; // TODO: Add config option
+
+        for (UUID playerId : PlayerFight.getAssistants(fight, lastHitKillerId)) {
+            PlayerData assistantData = this.game.getPlayerData(playerId);
+
+            if (assistantData == null) {
+                continue;
+            }
+
+            Double damage = fight.getStats().get(playerId);
+            if (damage == null || damage < 0) continue;
+
+            int assistPointsReward = (int) Math.round(damage * (double) PAYOUT_ASSIST);
+            if (assistPointsReward > 0) assistantData.addPoints(assistPointsReward);
+
+            assistantData.addRewardPoints(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("indirectPlayerKill", 0));
+            assistantData.addRewardXP(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("indirectPlayerKill", 0));
+
+            assistantData.incrementAssists();
+
+            Player assistant = this.game.getPlugin().getServer().getPlayer(playerId);
+
+            if (assistant == null) {
+                continue;
+            }
+
+            if (assistPointsReward > 0) {
+                assistant.sendRichMessage("<gray>Kill assist: + <amount><reset><gray>P", TagResolver.resolver("amount", Tag.inserting(Component.text(assistPointsReward))));
+            }
         }
 
     }
@@ -189,6 +238,11 @@ public class GameDeathListener implements ManagedListener {
             playerData.setEquipment(entry.getKey(), downgradeId);
         }
 
+    }
+
+    private void respawnPlayerImmediately(@NotNull Player player) {
+        if (Boolean.TRUE.equals(this.game.getWorld().getGameRuleValue(GameRule.DO_IMMEDIATE_RESPAWN))) return;
+        this.game.getTaskScheduler().runTaskLater(() -> player.spigot().respawn(), 2);
     }
 
     // ----- UTILITIES -----

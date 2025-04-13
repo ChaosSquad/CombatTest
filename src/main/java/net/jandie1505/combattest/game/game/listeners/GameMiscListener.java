@@ -3,6 +3,7 @@ package net.jandie1505.combattest.game.game.listeners;
 import net.chaossquad.mclib.MiscUtils;
 import net.chaossquad.mclib.PlayerUtils;
 import net.chaossquad.mclib.WorldUtils;
+import net.chaossquad.mclib.combattracking.CombatTracker;
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;
@@ -71,6 +72,8 @@ public class GameMiscListener implements ManagedListener {
                 return;
             }
 
+            CombatTracker tracker = this.game.getCombatTracker();
+            tracker.onPlayerDamage(player.getUniqueId(), damager.getUniqueId(), event.getFinalDamage());
         }
 
     }

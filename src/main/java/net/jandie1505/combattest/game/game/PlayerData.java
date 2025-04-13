@@ -15,6 +15,7 @@ public class PlayerData {
     private int points;
     private int regenerationCooldown;
     private int kills;
+    private int assists;
     private int deaths;
     private double potionTimer;
     private int tridentTimer;
@@ -114,6 +115,18 @@ public class PlayerData {
 
     public void incrementKills() {
         this.kills++;
+    }
+
+    public int getAssists() {
+        return assists;
+    }
+
+    public void setAssists(int assists) {
+        this.assists = assists;
+    }
+
+    public void incrementAssists() {
+        this.assists++;
     }
 
     public int getDeaths() {

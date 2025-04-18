@@ -3,6 +3,7 @@ package net.jandie1505.combattest.game.game.listeners;
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -76,6 +77,15 @@ public class GameInventoryListener implements ManagedListener {
     @EventHandler
     public void onPlayerDeathForMenuItemRemoval(@NotNull PlayerDeathEvent event) {
         event.getDrops().removeIf(item -> item.getItemMeta() != null && item.getItemMeta().getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_PLAYER_MENU, PersistentDataType.BOOLEAN, false));
+    }
+
+    @EventHandler
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        event.setCancelled(true);
+
+        if (event.getPlayer().getInventory().getItemInOffHand().getType() == Material.SHIELD) {
+            event.getPlayer().getInventory().setItemInOffHand(null);
+        }
     }
 
     // ----- UTILITIES -----

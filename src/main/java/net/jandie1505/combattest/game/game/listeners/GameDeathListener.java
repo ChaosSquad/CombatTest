@@ -23,10 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class GameDeathListener implements ManagedListener {
     @NotNull private final Game game;
@@ -78,7 +75,7 @@ public class GameDeathListener implements ManagedListener {
 
         // Reward killer
         if (mostDamageKiller != null) this.rewardKiller(mostDamageKiller, (int) playerEquipmentLevel);
-        if (lastHitKiller != null && lastHitKiller != mostDamageKiller) this.rewardKiller(lastHitKiller, (int) playerEquipmentLevel);
+        if (lastHitKiller != null && !lastHitKiller.equals(mostDamageKiller)) this.rewardKiller(lastHitKiller, (int) playerEquipmentLevel);
 
         // Reward team
         if (mostDamageKiller != null) this.rewardTeam(mostDamageKiller.playerId());
@@ -307,6 +304,19 @@ public class GameDeathListener implements ManagedListener {
             Player player = game.getPlugin().getServer().getPlayer(playerId);
 
             return create(playerId, player, playerData);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.playerId);
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj == null) return false;
+            if (this == obj) return true;
+            if (!(obj instanceof Killer)) return false;
+            return this.hashCode() == obj.hashCode();
         }
 
     }

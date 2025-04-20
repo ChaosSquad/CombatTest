@@ -95,7 +95,7 @@ public final class DefaultEquipment {
         ), 2500, List.of(2212), 2210, 6)); // Rocket Launcher Crossbow +
         equipmentMap.put(2212, new EquipmentData("Rocket Launcher Crossbow ++", List.of(
                 EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow ++", 1, 0, 0, 3)),
-                new EquipmentItem(rocketBuilder("Rocket Tier 3", 4), EquipmentSlot.OFF_HAND, 1, 1)
+                new EquipmentItem(rocketBuilder("Rocket Tier 3", 3), EquipmentSlot.OFF_HAND, 1, 1)
         ), 5000, List.of(), 2211, 7)); // Rocket Launcher Crossbow ++
         equipmentMap.put(2220, new EquipmentData("Advanced Crossbow", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow", 3, 1, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW))), 2500, List.of(2221), 0, 4)); // Advanced Crossbow
         equipmentMap.put(2221, new EquipmentData("Advanced Crossbow +", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow +", 4, 2, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW))), 2500, List.of(2222), 2220, 6)); // Advanced Crossbow +

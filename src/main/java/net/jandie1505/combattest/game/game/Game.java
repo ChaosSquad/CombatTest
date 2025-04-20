@@ -21,10 +21,7 @@ import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
 import net.jandie1505.combattest.game.game.gui.ShopGUI;
-import net.jandie1505.combattest.game.game.listeners.GameChatListener;
-import net.jandie1505.combattest.game.game.listeners.GameDeathListener;
-import net.jandie1505.combattest.game.game.listeners.GameInventoryListener;
-import net.jandie1505.combattest.game.game.listeners.GameMiscListener;
+import net.jandie1505.combattest.game.game.listeners.*;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -194,6 +191,7 @@ public class Game extends GamePart {
         this.registerListener(new GameDeathListener(this));
         this.registerListener(new GameMiscListener(this));
         this.registerListener(new GameChatListener(this));
+        this.registerListener(new SplashPotionModifierListener(this, () -> false));
         this.getTaskScheduler().runTaskLater(this.plugin.getListenerManager()::manageListeners, 1);
 
         // TASKS

@@ -3,6 +3,8 @@ package net.jandie1505.combattest.game.game.constants;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.equipment.EquipmentData;
 import net.jandie1505.combattest.game.game.equipment.EquipmentItem;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -58,17 +60,17 @@ public final class DefaultEquipment {
         equipmentMap.put(1222, new EquipmentData("Light Axe ++", List.of(EquipmentItem.defaultSlot(meleeWeaponBuilder("Light Axe ++", Material.GOLDEN_AXE, 9.5, 1.1, Map.of()))), 2500, List.of(1223), 1221, 6)); // Light Axe ++
         equipmentMap.put(1223, new EquipmentData("Light Axe +++", List.of(EquipmentItem.defaultSlot(meleeWeaponBuilder("Light Axe +++", Material.GOLDEN_AXE, 10, 1.1, Map.of()))), 5000, List.of(), 1222, 7)); // Light Axe +++
 
-        equipmentMap.put(1300, new EquipmentData("Damage Potion", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Damage Potion", 1, 4), 60)), 1250, List.of(1301), 0, 1)); // Damage Potion
-        equipmentMap.put(1301, new EquipmentData("Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Damage Potion +", 1, 3.5), 55)), 1250, List.of(1302), 1300, 2)); // Damage Potion +
-        equipmentMap.put(1302, new EquipmentData("Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Damage Potion ++", 1, 3), 50)), 1250, List.of(1310, 1320), 1301, 3)); // Damage Potion ++
-        equipmentMap.put(1310, new EquipmentData("Fast Damage Potion", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Fast Damage Potion", 1, 2.5), 40)), 2500, List.of(1311), 0, 4)); // Fast Damage Potion
-        equipmentMap.put(1311, new EquipmentData("Fast Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Fast Damage Potion +", 1, 2), 30)), 2500, List.of(1312), 1310, 5)); // Fast Damage Potion +
-        equipmentMap.put(1312, new EquipmentData("Fast Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Fast Damage Potion ++", 1, 1.5), 25)), 2500, List.of(1313), 1311, 6)); // Fast Damage Potion ++
-        equipmentMap.put(1313, new EquipmentData("Fast Damage Potion +++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Fast Damage Potion +++", 1, 1), 20)), 5000, List.of(), 1312, 7)); // Fast Damage Potion +++
-        equipmentMap.put(1320, new EquipmentData("Heavy Damage Potion", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion", 2, 4.5), 60)), 2500, List.of(1321), 0, 4)); // Heavy Damage Potion
-        equipmentMap.put(1321, new EquipmentData("Heavy Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion +", 2, 4), 50)), 2500, List.of(1322), 1320, 5)); // Heavy Damage Potion +
-        equipmentMap.put(1322, new EquipmentData("Heavy Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion ++", 2, 3.5), 45)), 2500, List.of(1323), 1321, 6)); // Heavy Damage Potion ++
-        equipmentMap.put(1323, new EquipmentData("Heavy Damage Potion +++", List.of(EquipmentItem.defaultWithCountdown(potionBuilder("Heavy Damage Potion +++", 2, 3), 40)), 5000, List.of(), 1322, 7)); // Heavy Damage Potion +++
+        equipmentMap.put(1300, new EquipmentData("Damage Potion", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Damage Potion"), 2, 3, 0.75), 3*20)), 1250, List.of(1301), 0, 1)); // Damage Potion
+        equipmentMap.put(1301, new EquipmentData("Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Damage Potion +"), 2.5, 3, 0.75), 3*20)), 1250, List.of(1302), 1300, 2)); // Damage Potion +
+        equipmentMap.put(1302, new EquipmentData("Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Damage Potion ++"), 2.5, 2.5, 0.75), (int) (2.5*20.0))), 1250, List.of(1310, 1320), 1301, 3)); // Damage Potion ++
+        equipmentMap.put(1310, new EquipmentData("Heavy Damage Potion", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Heavy Damage Potion"), 3.0, 2.5, 0.5), (int) (2.5*20.0))), 2500, List.of(1311), 0, 4)); // Fast Damage Potion
+        equipmentMap.put(1311, new EquipmentData("Heavy Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Heavy Damage Potion +"), 3.5, 2.5, 0.5), (int) (2.5*20.0))), 2500, List.of(1312), 1310, 5)); // Fast Damage Potion +
+        equipmentMap.put(1312, new EquipmentData("Heavy Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Heavy Damage Potion ++"), 4.0, 2.5, 0.5), (int) (2.5*20.0))), 2500, List.of(1313), 1311, 6)); // Fast Damage Potion ++
+        equipmentMap.put(1313, new EquipmentData("Heavy Damage Potion +++", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Heavy Damage Potion +++"), 5.0, 2.5, 0.5), (int) (2.5*20.0))), 5000, List.of(), 1312, 7)); // Fast Damage Potion +++
+        equipmentMap.put(1320, new EquipmentData("Area Damage Potion", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Area Damage Potion"), 1.5, 3, 1), 3*20)), 2500, List.of(1321), 0, 4)); // Heavy Damage Potion
+        equipmentMap.put(1321, new EquipmentData("Area Damage Potion +", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Area Damage Potion +"), 1.5, 3, 1.1), 3*20)), 2500, List.of(1322), 1320, 5)); // Heavy Damage Potion +
+        equipmentMap.put(1322, new EquipmentData("Area Damage Potion ++", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Area Damage Potion ++"), 2.0, 3, 1.1), 3*20)), 2500, List.of(1323), 1321, 6)); // Heavy Damage Potion ++
+        equipmentMap.put(1323, new EquipmentData("Area Damage Potion +++", List.of(EquipmentItem.defaultWithCountdown(EquipmentBuilders.potionBuilder(Component.text("Area Damage Potion +++"), 2.0, 3, 1.2), 3*20)), 5000, List.of(), 1322, 7)); // Heavy Damage Potion +++
 
         // RANGED
 
@@ -103,12 +105,12 @@ public final class DefaultEquipment {
 
         equipmentMap.put(2300, new EquipmentData("Default Trident", List.of(EquipmentItem.defaultSlot(tridentBuilder("Default Trident", false, 1, 0, 0, 2d, false))), 1250, List.of(2301), 0, 1)); // Default Trident
         equipmentMap.put(2301, new EquipmentData("Default Trident +", List.of(EquipmentItem.defaultSlot(tridentBuilder("Default Trident +", false, 2, 0, 0, 4d, false))), 1250, List.of(2310, 2320), 2300, 2)); // Default Trident +
-        equipmentMap.put(2310, new EquipmentData("Riptide Trident", List.of(EquipmentItem.defaultWithCountdown(tridentBuilder("Riptide Trident", false, 1, 0, 2, null, false), 4*20)), 2500, List.of(2311), 0, 4)); // Riptide Trident
-        equipmentMap.put(2311, new EquipmentData("Riptide Trident +", List.of(EquipmentItem.defaultWithCountdown(tridentBuilder("Riptide Trident +", false, 1, 0, 3, null, false), 4*20)), 2500, List.of(2312), 2310, 6)); // Riptide Trident +
-        equipmentMap.put(2312, new EquipmentData("Riptide Trident ++", List.of(EquipmentItem.defaultWithCountdown(tridentBuilder("Riptide Trident ++", true, 1, 0, 4, null, false), 4*20)), 5000, List.of(), 2311, 7)); // Riptide Trident ++
-        equipmentMap.put(2320, new EquipmentData("Extra-loyal Trident", List.of(EquipmentItem.defaultSlot(tridentBuilder("Extra-loyal Trident", false, 3, 0, 0, null, false))), 2500, List.of(2321), 0, 4)); // Extra-loyal Trident
-        equipmentMap.put(2321, new EquipmentData("Lightning Trident", List.of(EquipmentItem.defaultSlot(tridentBuilder("Lightning Trident", false, 3, 1, 0, null, false))), 2500, List.of(2322), 2320, 6)); // Lightning Trident
-        equipmentMap.put(2322, new EquipmentData("Weather-manipulating Lightning Trident", List.of(EquipmentItem.defaultSlot(tridentBuilder("Weather-manipulating lightning Trident", false, 3, 8, 0, null, true))), 5000, List.of(), 2321, 7)); // Weather-manipulating Lightning Trident
+        equipmentMap.put(2310, new EquipmentData("Riptide Trident", List.of(EquipmentItem.defaultWithCountdown(tridentBuilder("Riptide Trident", false, 1, 0, 2, -1, false), 4*20)), 2500, List.of(2311), 0, 4)); // Riptide Trident
+        equipmentMap.put(2311, new EquipmentData("Riptide Trident +", List.of(EquipmentItem.defaultWithCountdown(tridentBuilder("Riptide Trident +", false, 1, 0, 3, -1, false), 4*20)), 2500, List.of(2312), 2310, 6)); // Riptide Trident +
+        equipmentMap.put(2312, new EquipmentData("Riptide Trident ++", List.of(EquipmentItem.defaultWithCountdown(tridentBuilder("Riptide Trident ++", true, 1, 0, 4, -1, false), 4*20)), 5000, List.of(), 2311, 7)); // Riptide Trident ++
+        equipmentMap.put(2320, new EquipmentData("Extra-loyal Trident", List.of(EquipmentItem.defaultSlot(tridentBuilder("Extra-loyal Trident", false, 3, 0, 0, -1, false))), 2500, List.of(2321), 0, 4)); // Extra-loyal Trident
+        equipmentMap.put(2321, new EquipmentData("Lightning Trident", List.of(EquipmentItem.defaultSlot(tridentBuilder("Lightning Trident", false, 3, 1, 0, -1, false))), 2500, List.of(2322), 2320, 6)); // Lightning Trident
+        equipmentMap.put(2322, new EquipmentData("Weather-manipulating Lightning Trident", List.of(EquipmentItem.defaultSlot(tridentBuilder("Weather-manipulating lightning Trident", false, 3, 8, 0, -1, true))), 5000, List.of(), 2321, 7)); // Weather-manipulating Lightning Trident
 
         // ARMOR
 
@@ -223,274 +225,49 @@ public final class DefaultEquipment {
         return equipmentMap;
     }
 
+    @Deprecated
     private static ItemStack meleeWeaponBuilder(String name, Material material, double attackDamage, double attackSpeed, Map<Enchantment, Integer> enchantments) {
-
-        ItemStack item = new ItemStack(material);
-
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
-        meta.setDisplayName("§r" + name);
-        List<String> lore = new ArrayList<>();
-        meta.addItemFlags(ItemFlag.values());
-        meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-        if (attackDamage >= 0) {
-            lore.add("§7Damage: " + attackDamage);
-            attackDamage = attackDamage - 1;
-            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(NamespacedKey.minecraft("generic.attack_damage"), attackDamage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
-        }
-
-        if (attackSpeed >= 0) {
-            lore.add("§7Speed: " + attackSpeed);
-            attackSpeed = attackSpeed - 3.5;
-            meta.addAttributeModifier(Attribute.ATTACK_SPEED, new AttributeModifier(NamespacedKey.minecraft("generic.attack_speed"), attackSpeed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
-        }
-
-        for (Enchantment enchantment : enchantments.keySet()) {
-            int level = enchantments.get(enchantment);
-
-            if (level < 0) {
-                continue;
-            }
-
-            meta.addEnchant(enchantment, level, true);
-
-        }
-
-        meta.setLore(lore);
-
-        meta.setUnbreakable(true);
-
-        item.setItemMeta(meta);
-
-        return item;
-
+        return EquipmentBuilders.meleeWeaponBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), material, attackDamage, attackSpeed, enchantments);
     }
 
+    @Deprecated
     private static ItemStack potionBuilder(String name, int level, double cooldown) {
-
-        ItemStack item = new ItemStack(Material.SPLASH_POTION);
-
-        PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.SPLASH_POTION);
-
-        meta.setDisplayName("§r" + name);
-        meta.setLore(List.of("Cooldown: " + cooldown));
-        meta.addItemFlags(ItemFlag.values());
-        meta.setUnbreakable(true);
-
-        meta.setColor(Color.fromRGB(4459017));
-
-        if (level > 0) {
-
-            level = level - 1;
-
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, 1, level), true);
-
-        }
-
-        item.setItemMeta(meta);
-
-        return item;
-
+        return EquipmentBuilders.potionBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), level * 3, cooldown, 100.0);
     }
 
+    @Deprecated
     private static ItemStack bowBuilder(String name, int power, int punch, int flame, int infinity) {
-
-        ItemStack item = new ItemStack(Material.BOW);
-
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-
-        meta.setDisplayName("§r" + name);
-
-        if (power > 0) {
-            meta.addEnchant(Enchantment.POWER, power, true);
-        }
-
-        if (punch > 0) {
-            meta.addEnchant(Enchantment.PUNCH, punch, true);
-        }
-
-        if (flame > 0) {
-            meta.addEnchant(Enchantment.FLAME, flame, true);
-        }
-
-        if (infinity > 0) {
-            meta.addEnchant(Enchantment.INFINITY, infinity, true);
-        }
-
-        meta.setUnbreakable(true);
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
-
-        item.setItemMeta(meta);
-
-        return item;
+        return EquipmentBuilders.bowBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), power, punch, flame, infinity > 0);
     }
 
+    @Deprecated
     private static ItemStack crossbowBuilder(String name, int quickCharge, int piercing, int multiShot, int rocketLevel) {
-
-        ItemStack item = new ItemStack(Material.CROSSBOW);
-
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-
-        meta.setDisplayName("§r" + name);
-
-        if (quickCharge > 0) {
-            meta.addEnchant(Enchantment.QUICK_CHARGE, quickCharge, true);
-        }
-
-        if (piercing > 0) {
-            meta.addEnchant(Enchantment.PIERCING, piercing, true);
-        }
-
-        if (multiShot > 0) {
-            meta.addEnchant(Enchantment.MULTISHOT, multiShot, true);
-        }
-
-        if (rocketLevel > 0) {
-            meta.setLore(List.of("§r§7Ammunition: Rockets Lvl. " + rocketLevel));
-        }
-
-        meta.setUnbreakable(true);
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
-
-        item.setItemMeta(meta);
-
-        return item;
+        return EquipmentBuilders.crossbowBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), quickCharge, piercing, multiShot, rocketLevel);
     }
 
-    private static ItemStack tridentBuilder(String name, boolean meleeDamage, int loyalty, int channeling, int riptide, @Nullable Double rangedDamage, boolean weatherManipulationText) {
-
-        ItemStack item = new ItemStack(Material.TRIDENT);
-
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-
-        meta.setDisplayName("§r" + name);
-
-        if (loyalty > 0) {
-            meta.addEnchant(Enchantment.LOYALTY, loyalty, true);
-        } else {
-            meta.addEnchant(Enchantment.LOYALTY, 1, true);
-        }
-
-        if (channeling > 0) {
-            meta.addEnchant(Enchantment.CHANNELING, channeling, true);
-        }
-
-        if (riptide > 0) {
-            meta.addEnchant(Enchantment.RIPTIDE, riptide, true);
-        }
-
-        List<String> lore = new ArrayList<>();
-
-        lore.add("§7Ranged Damage: " + rangedDamage);
-
-        if (rangedDamage != null) {
-            meta.getPersistentDataContainer().set(NamespacedKeys.ITEM_TRIDENT_RANGED_DAMAGE, PersistentDataType.DOUBLE, rangedDamage);
-        }
-
-        if (weatherManipulationText) {
-            meta.getPersistentDataContainer().set(NamespacedKeys.ITEM_TRIDENT_WEATHER_MANIPULATION, PersistentDataType.BOOLEAN, true);
-            lore.add("§750% chance of starting a thunderstorm");
-            lore.add(" §7when hitting a player");
-        }
-
-        if (!meleeDamage) {
-            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(NamespacedKey.minecraft("generic.attack_damage"), 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
-            lore.add("§7Melee damage disabled");
-        }
-
-        meta.setLore(lore);
-        meta.setUnbreakable(true);
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
-
-        //if (rangedDamage >= 0) {
-        //    meta.getPersistentDataContainer().set(NamespacedKeys.ITEM_THROWABLE_DAMAGE, PersistentDataType.DOUBLE, rangedDamage);
-        //}
-
-        item.setItemMeta(meta);
-
-        return item;
+    @Deprecated
+    private static ItemStack tridentBuilder(String name, boolean meleeDamage, int loyalty, int channeling, int riptide, double rangedDamage, boolean weatherManipulationText) {
+        return EquipmentBuilders.tridentBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), meleeDamage, loyalty, channeling, riptide, rangedDamage, weatherManipulationText);
     }
 
+    @Deprecated
     public static ItemStack armorBuilder(String name, Material material, int armor, int toughness, int protection, int knockbackResistance) {
-
-        ItemStack item = new ItemStack(material);
-
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(material);
-
-        meta.setDisplayName("§r" + name);
-        meta.addItemFlags(ItemFlag.values());
-        meta.setUnbreakable(true);
-
-        List<String> lore = new ArrayList<>();
-        lore.add("§r§7Armor: " + armor);
-        lore.add("§r§7Toughness: " + toughness);
-        lore.add("§r§7Protection: " + protection);
-        if (knockbackResistance > 0) lore.add("§r§7Knockback Resistance: " + knockbackResistance + "%");
-        meta.setLore(lore);
-
-        meta.addAttributeModifier(Attribute.ARMOR, new AttributeModifier(NamespacedKey.minecraft("generic.armor"), armor, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ARMOR));
-        meta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS, new AttributeModifier(NamespacedKey.minecraft("generic.armor_toughness"), toughness, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ARMOR));
-        if (knockbackResistance > 0) meta.addAttributeModifier(Attribute.KNOCKBACK_RESISTANCE, new AttributeModifier(Attribute.KNOCKBACK_RESISTANCE.getKey(), knockbackResistance, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ARMOR));
-
-        if (protection > 0) {
-            meta.addEnchant(Enchantment.PROTECTION, protection, true);
-        }
-
-        if (meta instanceof ArmorMeta armorMeta && !(meta instanceof LeatherArmorMeta)) {
-            armorMeta.setTrim(new ArmorTrim(TrimMaterial.IRON, TrimPattern.WARD));
-        }
-
-        item.setItemMeta(meta);
-
-        return item;
-
+        return EquipmentBuilders.armorBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), material, armor, toughness, protection, knockbackResistance);
     }
 
+    @Deprecated
     public static ItemStack armorBuilder(String name, Material material, int armor, int toughness, int protection) {
         return armorBuilder(name, material, armor, toughness, protection, 0);
     }
 
+    @Deprecated
     public static ItemStack decorativeArmorBuilder(Material material, boolean glint) {
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-
-        meta.setDisplayName("§r§7Armor part");
-        meta.setLore(List.of("§r§7See helmet for armor details."));
-        meta.addItemFlags(ItemFlag.values());
-        meta.setUnbreakable(true);
-
-        meta.addAttributeModifier(Attribute.ARMOR, new AttributeModifier(NamespacedKey.minecraft("generic.armor"), 0, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ARMOR));
-        meta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS, new AttributeModifier(NamespacedKey.minecraft("generic.armor_toughness"), 0, AttributeModifier.Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ARMOR));
-
-        if (glint) {
-            meta.addEnchant(Enchantment.UNBREAKING, 1, true);
-        }
-        if (meta instanceof ArmorMeta armorMeta && !(meta instanceof LeatherArmorMeta)) {
-            armorMeta.setTrim(new ArmorTrim(TrimMaterial.IRON, TrimPattern.WARD));
-        }
-
-        item.setItemMeta(meta);
-
-        return item;
+        return EquipmentBuilders.decorativeArmorBuilder(material, glint);
     }
 
+    @Deprecated
     public static ItemStack shieldBuilder(String name, int durability) {
-
-        ItemStack item = new ItemStack(Material.SHIELD);
-
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(Material.SHIELD);
-
-        meta.setDisplayName(name);
-        meta.setLore(List.of("§r§7Press F to reload shield"));
-
-        item.setItemMeta(meta);
-
-        if (durability < 336) {
-            item.setDurability((short) (336 - durability));
-        }
-
-        return item;
-
+        return EquipmentBuilders.shieldBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), durability);
     }
 
     public static ItemStack rocketBuilder(String name, int fireworkStars) {

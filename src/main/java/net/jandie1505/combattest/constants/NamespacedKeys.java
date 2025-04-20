@@ -11,10 +11,12 @@ public interface NamespacedKeys {
 
     NamespacedKey ITEM_TRIDENT_WEATHER_MANIPULATION = new NamespacedKey(NAMESPACE, "item.trident.weathermanipulation");
     NamespacedKey ITEM_TRIDENT_RANGED_DAMAGE = new NamespacedKey(NAMESPACE, "item.trident.ranged_damage");
-    NamespacedKey ITEM_THROWABLE_DAMAGE = new NamespacedKey(NAMESPACE, "item.throwable.damage");
 
     NamespacedKey ITEM_PLAYER_MENU = new NamespacedKey(NAMESPACE, "item.player_menu");
     NamespacedKey ITEM_VOTING_MENU = new NamespacedKey(NAMESPACE, "item.voting_menu");
     NamespacedKey ITEM_TEAM_SELECTION_MENU = new NamespacedKey(NAMESPACE, "item.team_selection_menu");
+
+    NamespacedKey ITEM_POTION_INTENSITY_MODIFIER = new NamespacedKey(NAMESPACE, "item.modifier.splash_potion.intensity");
+    NamespacedKey ITEM_POTION_INSTANT_DAMAGE_CUSTOM_VALUE = new NamespacedKey(NAMESPACE, "item.modifier.splash_potion.instant_damage");
 
 }

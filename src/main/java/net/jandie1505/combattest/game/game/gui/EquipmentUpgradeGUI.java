@@ -269,6 +269,7 @@ public class EquipmentUpgradeGUI implements InventoryHolder, ManagedListener {
         }
 
         if (playerData.getPoints() >= price) {
+            player.closeInventory();
             playerData.setPoints(playerData.getPoints() - price);
             playerData.setEquipment(type, this.game.getDefaultEquipmentForType(type));
             player.sendRichMessage("<green>You have reset your equipment successfully.");

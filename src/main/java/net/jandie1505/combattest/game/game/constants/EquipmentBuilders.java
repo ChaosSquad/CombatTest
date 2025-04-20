@@ -107,6 +107,10 @@ public final class EquipmentBuilders {
 
         List<Component> lore = new ArrayList<>();
 
+        if (damageAmount > 0) {
+            lore.add(CLEARED_COMPONENT.append(Component.text("Damage: " + damageAmount, NamedTextColor.GRAY)));
+        }
+
         if (cooldown > 0) {
             lore.add(CLEARED_COMPONENT.append(Component.text("Cooldown: " + cooldown + "s", NamedTextColor.GRAY)));
         }

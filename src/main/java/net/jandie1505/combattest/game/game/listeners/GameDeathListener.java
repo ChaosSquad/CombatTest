@@ -85,10 +85,10 @@ public class GameDeathListener implements ManagedListener {
         if (fight != null) this.rewardAssistants(fight, lastHitKiller != null ? lastHitKiller.playerId() : null);
 
         // Decrease Downgrade Score
-        this.decreaseDowngradeScore(playerData, null, lastHitKiller);
+        this.decreaseDowngradeScore(playerData, mostDamageKiller, lastHitKiller);
 
         // Low Equipment Bonus
-        this.giveLowEquipmentBonus(playerData, null, lastHitKiller);
+        this.giveLowEquipmentBonus(player, playerData, mostDamageKiller, lastHitKiller);
 
         // Equipment downgrade
         this.downgradeEquipment(playerData);
@@ -194,7 +194,7 @@ public class GameDeathListener implements ManagedListener {
 
     }
 
-    private void giveLowEquipmentBonus(@NotNull PlayerData playerData, @Nullable Killer mostDamageKiller, @Nullable Killer lastHitKiller) {
+    private void giveLowEquipmentBonus(@NotNull Player player, @NotNull PlayerData playerData, @Nullable Killer mostDamageKiller, @Nullable Killer lastHitKiller) {
         final int PAYOUT_LOW_EQUIPMENT_BONUS_ON_DEATH_WITH_DOWNGRADE = 500; // TODO: Add config option
         final int PAYOUT_LOW_EQUIPMENT_BONUS_ON_DEATH_WITHOUT_DOWNGRADE = 100;
 
@@ -211,10 +211,11 @@ public class GameDeathListener implements ManagedListener {
                 deathBonus = PAYOUT_LOW_EQUIPMENT_BONUS_ON_DEATH_WITHOUT_DOWNGRADE;
             }
 
-            if (deathBonus != 0) deathBonus = deathBonus * Math.round(higherKillerEquipmentLevel - playerEquipmentLevel);
+            if (deathBonus != 0) deathBonus = deathBonus * ((int) Math.round(higherKillerEquipmentLevel - playerEquipmentLevel));
 
             if (deathBonus > 0) {
                 playerData.addPoints(deathBonus);
+                player.sendRichMessage("<gray>Killed by player with significantly higher equipment: + " + deathBonus + "P");
             }
 
         }

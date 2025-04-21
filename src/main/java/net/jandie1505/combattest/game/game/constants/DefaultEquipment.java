@@ -88,15 +88,15 @@ public final class DefaultEquipment {
         equipmentMap.put(2200, new EquipmentData("Default Crossbow", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Default Crossbow", 1, 0, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 1250, List.of(2201), 0, 1)); // Default Crossbow
         equipmentMap.put(2201, new EquipmentData("Default Crossbow +", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Default Crossbow +", 2, 0, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.ARROW))), 1250, List.of(2210, 2220), 2200, 2)); // Default Crossbow +
         equipmentMap.put(2210, new EquipmentData("Rocket Launcher Crossbow", List.of(
-                EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow", 1, 0, 0, 1)),
+                EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow", 0, 0, 0, 1)),
                 new EquipmentItem(rocketBuilder("Rocket Tier 1", 1), EquipmentSlot.OFF_HAND, 1, 1)), 2500, List.of(2211), 0, 4)
         ); // Rocket Launcher Crossbow
         equipmentMap.put(2211, new EquipmentData("Rocket Launcher Crossbow +", List.of(
-                EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow +", 1, 0, 0, 2)),
+                EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow +", 0, 0, 0, 2)),
                 new EquipmentItem(rocketBuilder("Rocket Tier 2", 2), EquipmentSlot.OFF_HAND, 1, 1)
         ), 2500, List.of(2212), 2210, 6)); // Rocket Launcher Crossbow +
         equipmentMap.put(2212, new EquipmentData("Rocket Launcher Crossbow ++", List.of(
-                EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow ++", 1, 0, 0, 3)),
+                EquipmentItem.defaultSlot(crossbowBuilder("Rocket Launcher Crossbow ++", 0, 0, 0, 3)),
                 new EquipmentItem(rocketBuilder("Rocket Tier 3", 3), EquipmentSlot.OFF_HAND, 1, 1)
         ), 5000, List.of(), 2211, 7)); // Rocket Launcher Crossbow ++
         equipmentMap.put(2220, new EquipmentData("Advanced Crossbow", List.of(EquipmentItem.defaultSlot(crossbowBuilder("Advanced Crossbow", 3, 1, 0, 0)), EquipmentItem.defaultSlot(new ItemStack(Material.SPECTRAL_ARROW))), 2500, List.of(2221), 0, 4)); // Advanced Crossbow

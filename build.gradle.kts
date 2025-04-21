@@ -63,9 +63,13 @@ java {
 }
 
 tasks {
+    jar {
+        archiveClassifier.set("original")
+    }
     shadowJar {
         relocate("net.chaossquad.mclib", "net.chaossquad.combattest.dependencies.net.chaossquad.mclib")
         relocate("org.json", "net.chaossquad.combattest.dependencies.org.json")
+        archiveClassifier.set("")
     }
     build {
         dependsOn(shadowJar)

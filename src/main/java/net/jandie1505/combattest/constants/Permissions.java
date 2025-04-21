@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public interface Permissions {
     String ADMIN = "combattest.admin";
     String CHAT_FORMATTING = "combattest.chat_formatting";
-    String USE = "playerlevels.use";
+    String START = "combattest.start";
 
     /**
      * Returns if the specified sender has at least one of the specified permissions.<br/>

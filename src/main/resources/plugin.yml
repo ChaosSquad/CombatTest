@@ -14,6 +14,9 @@ commands:
   votemap:
     description: Vote for a map
     usage: /votemap <map>
+  start:
+    description: Force-start a game
+    usage: /start
   combattest-old:
     description: equipment old
     usage: /combattest-old
@@ -21,6 +24,9 @@ permissions:
   combattest.admin:
     default: op
     description: admin permission
+  combattest.start:
+    default: op
+    description: Force-start the game using /start
   combattest.*:
     default: op
     children:

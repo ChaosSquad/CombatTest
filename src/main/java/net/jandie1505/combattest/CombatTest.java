@@ -11,6 +11,7 @@ import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.commands.GameMenuCommand;
 import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.lobby.Lobby;
+import net.jandie1505.combattest.game.lobby.commands.LobbyStartCommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
 import net.jandie1505.playerlevels.api.core.level.Leveler;
 import net.jandie1505.playerlevels.core.PlayerLevelsAPIProvider;
@@ -103,6 +104,13 @@ public class CombatTest extends JavaPlugin {
             LobbyVoteCommand cmd = new LobbyVoteCommand(this);
             votemapCommand.setExecutor(cmd);
             votemapCommand.setTabCompleter(cmd);
+        }
+
+        PluginCommand startCommand = this.getCommand("start");
+        if (startCommand != null) {
+            LobbyStartCommand cmd = new LobbyStartCommand(this);
+            startCommand.setExecutor(cmd);
+            startCommand.setTabCompleter(cmd);
         }
 
         this.getCommand("combattest-old").setExecutor(new CombatTestCommandOld(this));

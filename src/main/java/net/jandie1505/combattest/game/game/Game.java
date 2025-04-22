@@ -2,6 +2,7 @@ package net.jandie1505.combattest.game.game;
 
 import eu.cloudnetservice.driver.inject.InjectionLayer;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
+import net.chaossquad.mclib.MiscUtils;
 import net.chaossquad.mclib.WorldUtils;
 import net.chaossquad.mclib.combattracking.CombatTracker;
 import net.chaossquad.mclib.command.SubcommandEntry;
@@ -489,79 +490,100 @@ public class Game extends GamePart {
     }
 
     private @NotNull List<Component> buildSidebar(@NotNull Player player) {
-        PlayerData playerData = this.getPlayerData(player);
-        if (playerData == null) return List.of();
-
         List<Component> sidebar = new ArrayList<>();
 
         sidebar.add(Component.empty());
 
-        // Display team
-        Component teamString = Component.empty().append(Component.text("Team: ", NamedTextColor.WHITE));
-        if (playerData.getTeam() > 0) {
-            teamString = teamString.append(Component.text(playerData.getTeam(), NamedTextColor.GOLD));
-        } else {
-            teamString = teamString.append(Component.text("---", NamedTextColor.RED));
-        }
-        sidebar.add(teamString);
+        PlayerData playerData = this.getPlayerData(player);
+        if (playerData != null) {
 
-        sidebar.add(Component.empty());
+            // Time
+            sidebar.add(Component.empty()
+                    .append(Component.text("Time: "))
+                    .append(Component.text(MiscUtils.getDurationFormat(this.time), NamedTextColor.AQUA))
+            );
 
-        if (playerData.getTeam() > 0) {
-            sidebar.add(Component.text("You:", NamedTextColor.YELLOW, TextDecoration.BOLD));
-        }
+            // Display team
+            Component teamString = Component.empty().append(Component.text("Team: ", NamedTextColor.WHITE));
+            if (playerData.getTeam() > 0) {
+                teamString = teamString.append(Component.text(playerData.getTeam(), NamedTextColor.GOLD));
+            } else {
+                teamString = teamString.append(Component.text("---", NamedTextColor.RED));
+            }
+            sidebar.add(teamString);
 
-        // Stats
-        sidebar.add(Component.empty()
-                .append(Component.text("Kills: "))
-                .append(Component.text(playerData.getKills(), NamedTextColor.GREEN))
-        );
-        sidebar.add(Component.empty()
-                .append(Component.text("Assists: "))
-                .append(Component.text(playerData.getAssists(), NamedTextColor.GREEN))
-        );
-        sidebar.add(Component.empty()
-                .append(Component.text("Deaths: "))
-                .append(Component.text(playerData.getDeaths(), NamedTextColor.RED))
-        );
-        double kd = PlayerData.getKD(playerData.getKills(), playerData.getDeaths());
-        sidebar.add(Component.empty()
-                .append(Component.text("K/D: "))
-                .append(Component.text(kd, kd >= 1 ? NamedTextColor.GREEN : NamedTextColor.RED))
-        );
+            sidebar.add(Component.empty());
 
-        sidebar.add(Component.empty());
+            if (playerData.getTeam() > 0) {
+                sidebar.add(Component.text("You:", NamedTextColor.YELLOW, TextDecoration.BOLD));
+            }
 
-        if (playerData.getTeam() > 0) {
-
-            sidebar.add(Component.text("Your Team:", NamedTextColor.YELLOW, TextDecoration.BOLD));
-
-            int teamKills = this.getTeamKills(playerData.getTeam());
-            int teamAssists = this.getTeamAssists(playerData.getTeam());
-            int teamDeaths = this.getTeamDeaths(playerData.getDeaths());
-            double teamKd = PlayerData.getKD(teamKills, teamDeaths);
-
+            // Stats
             sidebar.add(Component.empty()
                     .append(Component.text("Kills: "))
-                    .append(Component.text(teamKills, NamedTextColor.GREEN))
+                    .append(Component.text(playerData.getKills(), NamedTextColor.GREEN))
             );
             sidebar.add(Component.empty()
                     .append(Component.text("Assists: "))
-                    .append(Component.text(teamAssists, NamedTextColor.GREEN))
+                    .append(Component.text(playerData.getAssists(), NamedTextColor.GREEN))
             );
             sidebar.add(Component.empty()
                     .append(Component.text("Deaths: "))
-                    .append(Component.text(teamDeaths, NamedTextColor.RED))
+                    .append(Component.text(playerData.getDeaths(), NamedTextColor.RED))
             );
+            double kd = PlayerData.getKD(playerData.getKills(), playerData.getDeaths());
             sidebar.add(Component.empty()
                     .append(Component.text("K/D: "))
-                    .append(Component.text(teamKd, teamKd >= 1 ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(kd, kd >= 1 ? NamedTextColor.GREEN : NamedTextColor.RED))
             );
 
             sidebar.add(Component.empty());
 
+            if (playerData.getTeam() > 0) {
+
+                sidebar.add(Component.text("Your Team:", NamedTextColor.YELLOW, TextDecoration.BOLD));
+
+                int teamKills = this.getTeamKills(playerData.getTeam());
+                int teamAssists = this.getTeamAssists(playerData.getTeam());
+                int teamDeaths = this.getTeamDeaths(playerData.getDeaths());
+                double teamKd = PlayerData.getKD(teamKills, teamDeaths);
+
+                sidebar.add(Component.empty()
+                        .append(Component.text("Kills: "))
+                        .append(Component.text(teamKills, NamedTextColor.GREEN))
+                );
+                sidebar.add(Component.empty()
+                        .append(Component.text("Assists: "))
+                        .append(Component.text(teamAssists, NamedTextColor.GREEN))
+                );
+                sidebar.add(Component.empty()
+                        .append(Component.text("Deaths: "))
+                        .append(Component.text(teamDeaths, NamedTextColor.RED))
+                );
+                sidebar.add(Component.empty()
+                        .append(Component.text("K/D: "))
+                        .append(Component.text(teamKd, teamKd >= 1 ? NamedTextColor.GREEN : NamedTextColor.RED))
+                );
+
+                sidebar.add(Component.empty());
+
+            }
+
+        } else {
+
+            sidebar.add(Component.text("You are", NamedTextColor.GRAY));
+            sidebar.add(Component.text("spectator!", NamedTextColor.GRAY));
+
+            sidebar.add(Component.empty());
+
+            sidebar.add(Component.empty()
+                    .append(Component.text("Time: "))
+                    .append(Component.text(MiscUtils.getDurationFormat(this.time), NamedTextColor.AQUA))
+            );
+
         }
 
+        sidebar.add(Component.empty());
         return sidebar;
     }
 

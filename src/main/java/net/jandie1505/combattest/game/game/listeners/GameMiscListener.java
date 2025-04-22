@@ -1,20 +1,17 @@
 package net.jandie1505.combattest.game.game.listeners;
 
-import net.chaossquad.mclib.MiscUtils;
 import net.chaossquad.mclib.PlayerUtils;
 import net.chaossquad.mclib.WorldUtils;
 import net.chaossquad.mclib.combattracking.CombatTracker;
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.damage.DamageType;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;

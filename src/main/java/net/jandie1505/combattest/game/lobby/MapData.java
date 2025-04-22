@@ -1,6 +1,6 @@
 package net.jandie1505.combattest.game.lobby;
 
-import net.jandie1505.combattest.game.game.Spawnpoint;
+import net.jandie1505.combattest.game.game.data.Spawnpoint;
 
 import java.util.List;
 

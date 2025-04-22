@@ -3,7 +3,7 @@ package net.jandie1505.combattest.commands;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.jandie1505.combattest.game.lobby.MapData;

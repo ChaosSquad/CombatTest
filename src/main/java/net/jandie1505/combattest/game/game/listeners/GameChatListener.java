@@ -5,7 +5,7 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.constants.Permissions;
 import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;

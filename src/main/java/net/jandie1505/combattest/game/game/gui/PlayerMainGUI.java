@@ -4,7 +4,7 @@ import net.chaossquad.mclib.executable.ManagedListener;
 import net.chaossquad.mclib.misc.Removable;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

@@ -11,7 +11,7 @@ import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.Spawnpoint;
+import net.jandie1505.combattest.game.game.data.Spawnpoint;
 import net.jandie1505.combattest.game.lobby.commands.LobbyStartCommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyPlayersValueSubcommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyValueSubcommand;

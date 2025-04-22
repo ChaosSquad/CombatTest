@@ -1,10 +1,7 @@
 package net.jandie1505.combattest.game.lobby.commands;
 
-import net.chaossquad.mclib.PlayerUtils;
 import net.chaossquad.mclib.command.TabCompletingCommandExecutor;
 import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.PlayerData;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.jandie1505.combattest.game.lobby.MapData;
@@ -19,13 +16,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class LobbyVoteCommand implements TabCompletingCommandExecutor {
     @NotNull private final CombatTest plugin;

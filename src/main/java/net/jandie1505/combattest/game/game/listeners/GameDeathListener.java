@@ -4,7 +4,7 @@ import net.chaossquad.mclib.MiscUtils;
 import net.chaossquad.mclib.combattracking.PlayerFight;
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.jandie1505.combattest.game.game.equipment.EquipmentData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;

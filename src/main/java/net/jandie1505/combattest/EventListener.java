@@ -1,35 +1,6 @@
 package net.jandie1505.combattest;
 
-import net.chaossquad.mclib.WorldUtils;
-import net.jandie1505.combattest.game.endlobby.Endlobby;
-import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.PlayerData;
-import net.jandie1505.combattest.game.lobby.Lobby;
-import net.jandie1505.combattest.game.lobby.LobbyMenu;
-import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
-import net.jandie1505.combattest.game.lobby.MapData;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Trident;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
-import org.json.JSONObject;
-
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 @Deprecated(forRemoval = true)
 public class EventListener implements Listener {

@@ -4,7 +4,7 @@ import net.chaossquad.mclib.PlayerUtils;
 import net.chaossquad.mclib.command.TabCompletingCommandExecutor;
 import net.jandie1505.combattest.constants.Permissions;
 import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.PlayerData;
+import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.jandie1505.combattest.game.game.equipment.EquipmentItem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

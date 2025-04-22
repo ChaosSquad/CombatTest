@@ -2,10 +2,9 @@ package net.jandie1505.combattest.game.endlobby;
 
 import net.chaossquad.mclib.executable.ManagedListener;
 import net.jandie1505.combattest.CombatTest;
-import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.base.GamePart;
-import net.jandie1505.combattest.game.game.PlayerData;
-import net.jandie1505.combattest.game.game.TeamData;
+import net.jandie1505.combattest.game.game.data.PlayerData;
+import net.jandie1505.combattest.game.game.data.TeamData;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -16,9 +15,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.json.JSONObject;
 
 import java.util.*;

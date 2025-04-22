@@ -1,4 +1,4 @@
-package net.jandie1505.combattest.game.game;
+package net.jandie1505.combattest.game.game.data;
 
 import org.bukkit.Location;
 import org.bukkit.World;

@@ -682,6 +682,13 @@ public class Lobby extends GamePart implements ManagedListener {
 
         if (meta.getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_VOTING_MENU, PersistentDataType.BOOLEAN, false)) {
             event.setCancelled(true); // Cancel this interaction again in case a bypassing player wants to use the item
+
+            if (this.selectedMap != null) {
+                event.getPlayer().sendRichMessage("<red>Map voting is already over");
+                event.getPlayer().playSound(event.getPlayer().getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 0.0F);
+                return;
+            }
+
             event.getPlayer().openInventory(this.getVoteMenu().getInventory(event.getPlayer()));
             event.getPlayer().playSound(event.getPlayer().getLocation().clone(), Sound.UI_BUTTON_CLICK, 1.0F, 1.0F);
         } else if (meta.getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_TEAM_SELECTION_MENU, PersistentDataType.BOOLEAN, false)) {

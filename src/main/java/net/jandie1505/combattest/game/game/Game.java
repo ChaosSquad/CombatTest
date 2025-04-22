@@ -24,9 +24,11 @@ import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
 import net.jandie1505.combattest.game.game.gui.ShopGUI;
 import net.jandie1505.combattest.game.game.listeners.*;
+import net.jandie1505.combattest.game.game.scoreboard.GameScoreboardManager;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -56,6 +58,7 @@ public class Game extends GamePart {
     @NotNull private final EquipmentUpgradeGUI equipmentUpgradeGUI;
     @NotNull private final ShopGUI shopGUI;
     @NotNull private final CombatTracker combatTracker;
+    @NotNull private final GameScoreboardManager scoreboardManager;
     private final List<Spawnpoint> spawnpoints;
     private int time;
     private boolean killswitch;
@@ -76,6 +79,7 @@ public class Game extends GamePart {
         this.shopGUI = new ShopGUI(this, null);
         this.shopGUI.getItems().addAll(DefaultShopItems.getShopItems());
         this.combatTracker = new CombatTracker();
+        this.scoreboardManager = new GameScoreboardManager(this, Component.text("COMBAT TEST", NamedTextColor.GOLD, TextDecoration.BOLD));
 
         // WORLD
 
@@ -204,9 +208,9 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::offlineIngamePlayersTask, 1, 20, "offline_player");
         this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 10, "old_task");
         this.getTaskScheduler().scheduleRepeatingTask(this::weatherTask, 1, 20, "weather");
-        this.getTaskScheduler().scheduleRepeatingTask(this::playerScoreboardTask, 1, 20, "player_scoreboard");
         this.getTaskScheduler().scheduleRepeatingTask(this::playerMiscValuesTask, 1, 10, "player_misc_values");
         this.getTaskScheduler().scheduleRepeatingTask(this::notIngamePlayersTask, 1, 20, "not_ingame_players");
+        this.getTaskScheduler().scheduleRepeatingTask(this::playerScoreboardsTask, 1, 20, "player_scoreboards");
     }
 
     @Override
@@ -438,113 +442,6 @@ public class Game extends GamePart {
 
     }
 
-    /**
-     * Handles the player scoreboards.
-     */
-    private void playerScoreboardTask() {
-        if (!this.plugin.isSingleServer()) return;
-
-        for (Player player : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
-            PlayerData playerData = this.players.get(player.getUniqueId());
-            if (playerData == null) continue;
-
-            Scoreboard scoreboard = playerData.getScoreboard();
-
-            // Reset all scores
-            for (String playerString : scoreboard.getEntries()) {
-                scoreboard.resetScores(playerString);
-            }
-
-            // Sidebar
-            if (scoreboard.getObjective("sidebar") == null) {
-                Objective sidebarObjective = scoreboard.registerNewObjective("sidebar", Criteria.DUMMY, "§6§lCOMBAT TEST");
-                sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
-            }
-            Objective sidebarObjective = scoreboard.getObjective("sidebar");
-
-            sidebarObjective.getScore("§§§§").setScore(12);
-            sidebarObjective.getScore("Kills: §a" + playerData.getKills()).setScore(11);
-            sidebarObjective.getScore("Deaths: §a" + playerData.getDeaths()).setScore(10);
-            sidebarObjective.getScore("K/D: §a" + PlayerData.getKD(playerData.getKills(), playerData.getDeaths())).setScore(9);
-            sidebarObjective.getScore("Points: §a" + playerData.getPoints()).setScore(8);
-
-            if (playerData.getTeam() > 0) {
-
-                sidebarObjective.getScore("§§§").setScore(7);
-                sidebarObjective.getScore("Team: §a" + playerData.getTeam()).setScore(6);
-                sidebarObjective.getScore("Team Kills: §a" + this.getTeamKills(playerData.getTeam())).setScore(5);
-                sidebarObjective.getScore("Team Deaths: §a" + this.getTeamDeaths(playerData.getTeam())).setScore(4);
-                sidebarObjective.getScore("Team K/D: §a" + PlayerData.getKD(this.getTeamKills(playerData.getTeam()), this.getTeamDeaths(playerData.getTeam()))).setScore(3);
-
-            }
-
-            sidebarObjective.getScore("§§").setScore(2);
-            sidebarObjective.getScore("Time: §a" + this.time + "s").setScore(1);
-            sidebarObjective.getScore("§").setScore(0);
-
-            // Teams
-            if (scoreboard.getTeam("spectator") == null) {
-                scoreboard.registerNewTeam("spectator");
-            }
-            Team spectatorTeam = scoreboard.getTeam("spectator");
-
-            if (scoreboard.getTeam("own") == null) {
-                Team ownTeam = scoreboard.registerNewTeam("own");
-                ownTeam.setAllowFriendlyFire(false);
-                ownTeam.setColor(ChatColor.GREEN);
-                ownTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
-            }
-            Team ownTeam = scoreboard.getTeam("own");
-
-            if (scoreboard.getTeam("enemy") == null) {
-                Team enemyTeam = scoreboard.registerNewTeam("enemy");
-                enemyTeam.setAllowFriendlyFire(true);
-                enemyTeam.setColor(ChatColor.RED);
-                enemyTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
-            }
-            Team enemyTeam = scoreboard.getTeam("enemy");
-
-            if (scoreboard.getObjective("tablist") == null) {
-                Objective tablistObjective = scoreboard.registerNewObjective("tablist", Criteria.DUMMY, "");
-                tablistObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-            }
-            Objective tablistObjective = scoreboard.getObjective("tablist");
-
-            ownTeam.addEntry(player.getName());
-            tablistObjective.getScore(player.getName()).setScore(playerData.getTeam());
-
-            for (Player p : List.copyOf(this.plugin.getServer().getOnlinePlayers())) {
-
-                if (p == player) {
-                    continue;
-                }
-
-                if (this.getPlayerMap().containsKey(p.getUniqueId())) {
-                    PlayerData pdata = this.getPlayerMap().get(p.getUniqueId());
-
-                    if (playerData.getTeam() > 0 && pdata.getTeam() == playerData.getTeam()) {
-                        ownTeam.addEntry(p.getName());
-                    } else {
-                        enemyTeam.addEntry(p.getName());
-                    }
-
-                    tablistObjective.getScore(p.getName()).setScore(pdata.getTeam());
-
-                } else {
-                    spectatorTeam.addEntry(p.getName());
-                }
-
-            }
-
-            // Set scoreboard
-            if (player.getScoreboard() != scoreboard) {
-                player.setScoreboard(scoreboard);
-            }
-
-        }
-
-    }
-
     private void notIngamePlayersTask() {
         if (!this.plugin.isSingleServer()) return;
 
@@ -572,6 +469,100 @@ public class Game extends GamePart {
 
         }
 
+    }
+
+    /**
+     * This task manages the player scoreboards.
+     */
+    private void playerScoreboardsTask() {
+
+        this.scoreboardManager.cleanupPlayerScoreboards();
+
+        for (Player player : List.copyOf(this.getPlugin().getServer().getOnlinePlayers())) {
+
+            this.scoreboardManager.setupScoreboard(player);
+            this.scoreboardManager.handleScoreboardTeams(player);
+            this.scoreboardManager.handleDisplaySlots(player, this.buildSidebar(player));
+
+        }
+
+    }
+
+    private @NotNull List<Component> buildSidebar(@NotNull Player player) {
+        PlayerData playerData = this.getPlayerData(player);
+        if (playerData == null) return List.of();
+
+        List<Component> sidebar = new ArrayList<>();
+
+        sidebar.add(Component.empty());
+
+        // Display team
+        Component teamString = Component.empty().append(Component.text("Team: ", NamedTextColor.WHITE));
+        if (playerData.getTeam() > 0) {
+            teamString = teamString.append(Component.text(playerData.getTeam(), NamedTextColor.GOLD));
+        } else {
+            teamString = teamString.append(Component.text("---", NamedTextColor.RED));
+        }
+        sidebar.add(teamString);
+
+        sidebar.add(Component.empty());
+
+        if (playerData.getTeam() > 0) {
+            sidebar.add(Component.text("You:", NamedTextColor.YELLOW, TextDecoration.BOLD));
+        }
+
+        // Stats
+        sidebar.add(Component.empty()
+                .append(Component.text("Kills: "))
+                .append(Component.text(playerData.getKills(), NamedTextColor.GREEN))
+        );
+        sidebar.add(Component.empty()
+                .append(Component.text("Assists: "))
+                .append(Component.text(playerData.getAssists(), NamedTextColor.GREEN))
+        );
+        sidebar.add(Component.empty()
+                .append(Component.text("Deaths: "))
+                .append(Component.text(playerData.getDeaths(), NamedTextColor.RED))
+        );
+        double kd = PlayerData.getKD(playerData.getKills(), playerData.getDeaths());
+        sidebar.add(Component.empty()
+                .append(Component.text("K/D: "))
+                .append(Component.text(kd, kd >= 1 ? NamedTextColor.GREEN : NamedTextColor.RED))
+        );
+
+        sidebar.add(Component.empty());
+
+        if (playerData.getTeam() > 0) {
+
+            sidebar.add(Component.text("Your Team:", NamedTextColor.YELLOW, TextDecoration.BOLD));
+
+            int teamKills = this.getTeamKills(playerData.getTeam());
+            int teamAssists = this.getTeamAssists(playerData.getTeam());
+            int teamDeaths = this.getTeamDeaths(playerData.getDeaths());
+            double teamKd = PlayerData.getKD(teamKills, teamDeaths);
+
+            sidebar.add(Component.empty()
+                    .append(Component.text("Kills: "))
+                    .append(Component.text(teamKills, NamedTextColor.GREEN))
+            );
+            sidebar.add(Component.empty()
+                    .append(Component.text("Assists: "))
+                    .append(Component.text(teamAssists, NamedTextColor.GREEN))
+            );
+            sidebar.add(Component.empty()
+                    .append(Component.text("Deaths: "))
+                    .append(Component.text(teamDeaths, NamedTextColor.RED))
+            );
+            sidebar.add(Component.empty()
+                    .append(Component.text("K/D: "))
+                    .append(Component.text(teamKd, teamKd >= 1 ? NamedTextColor.GREEN : NamedTextColor.RED))
+            );
+
+            sidebar.add(Component.empty());
+
+        }
+
+        return sidebar;
     }
 
     @Deprecated(forRemoval = true)
@@ -911,6 +902,19 @@ public class Game extends GamePart {
         }
 
         return teamKills;
+    }
+
+    public int getTeamAssists(int teamId) {
+        int teamAssists = 0;
+
+        for (UUID p : this.getPlayerMap().keySet()) {
+            PlayerData playerData = this.getPlayerMap().get(p);
+            if (playerData.getTeam() == teamId) {
+                teamAssists = teamAssists + this.getPlayerMap().get(p).getAssists();
+            }
+        }
+
+        return teamAssists;
     }
 
     public int getTeamDeaths(int teamId) {

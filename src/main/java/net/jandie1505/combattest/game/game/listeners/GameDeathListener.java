@@ -102,8 +102,9 @@ public class GameDeathListener implements ManagedListener {
 
     // ----- DEATH ACTIONS -----
 
+    private final int PAYOUT_KILL = 2000; // TODO: Add config option
+
     private void rewardKiller(@NotNull Killer killer, int playerEquipmentLevel) {
-        final int PAYOUT_KILL = 2000; // TODO: Add config option
         final int LOW_EQUIPMENT_BONUS_KILL = 1000;
 
         int killerEquipmentLevel = (int) Math.round(this.getEquipmentLevelAverage(killer.playerData()));
@@ -148,7 +149,7 @@ public class GameDeathListener implements ManagedListener {
     }
 
     private void rewardAssistants(@NotNull PlayerFight fight, @Nullable UUID lastHitKillerId) {
-        final int PAYOUT_ASSIST = 2000; // TODO: Add config option
+        final int PAYOUT_ASSIST = 50; // TODO: Add config option
 
         for (UUID playerId : PlayerFight.getAssistants(fight, lastHitKillerId)) {
             PlayerData assistantData = this.game.getPlayerData(playerId);
@@ -160,7 +161,7 @@ public class GameDeathListener implements ManagedListener {
             Double damage = fight.getStats().get(playerId);
             if (damage == null || damage < 0) continue;
 
-            int assistPointsReward = (int) Math.round(damage * (double) PAYOUT_ASSIST);
+            int assistPointsReward = (int) Math.round(Math.min(damage * (double) PAYOUT_ASSIST, PAYOUT_KILL));
             if (assistPointsReward > 0) assistantData.addPoints(assistPointsReward);
 
             assistantData.addRewardPoints(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("indirectPlayerKill", 0));

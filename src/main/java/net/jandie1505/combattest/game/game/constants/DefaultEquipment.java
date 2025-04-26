@@ -170,21 +170,21 @@ public final class DefaultEquipment {
                 new EquipmentItem(decorativeDiamondBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3111), 0, 4)); // Heavy Armor
         equipmentMap.put(3111, new EquipmentData("Heavy Armor +", List.of(
-                new EquipmentItem(armorBuilder("Heavy Armor +", Material.DIAMOND_HELMET, 17, 7, 2), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(armorBuilder("Heavy Armor +", Material.DIAMOND_HELMET, 17, 7, 1), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Heavy Armor + Shield", 28), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeDiamondChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeDiamondLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeDiamondBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3112), 3110, 5)); // Heavy Armor +
         equipmentMap.put(3112, new EquipmentData("Heavy Armor ++", List.of(
-                new EquipmentItem(armorBuilder("Heavy Armor ++", Material.DIAMOND_HELMET, 18, 8, 3), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(armorBuilder("Heavy Armor ++", Material.DIAMOND_HELMET, 18, 8, 2), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Heavy Armor ++ Shield", 33), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeDiamondChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeDiamondLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeDiamondBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3113), 3111, 6)); // Heavy Armor ++
         equipmentMap.put(3113, new EquipmentData("Heavy Armor +++", List.of(
-                new EquipmentItem(armorBuilder("Heavy Armor +++", Material.NETHERITE_HELMET, 20, 10, 5), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(armorBuilder("Heavy Armor +++", Material.NETHERITE_HELMET, 20, 10, 2), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Heavy Armor +++ Shield", 38), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeNetheriteChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeNetheriteLeggings, EquipmentSlot.LEGS, 0, 0),

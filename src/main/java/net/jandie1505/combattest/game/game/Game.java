@@ -39,6 +39,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -212,6 +215,7 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::playerMiscValuesTask, 1, 10, "player_misc_values");
         this.getTaskScheduler().scheduleRepeatingTask(this::notIngamePlayersTask, 1, 20, "not_ingame_players");
         this.getTaskScheduler().scheduleRepeatingTask(this::playerScoreboardsTask, 1, 20, "player_scoreboards");
+        this.getTaskScheduler().scheduleRepeatingTask(this::shieldReloadTask, 1, 5*20, "shield_reload");
     }
 
     @Override
@@ -585,6 +589,31 @@ public class Game extends GamePart {
 
         sidebar.add(Component.empty());
         return sidebar;
+    }
+
+    /**
+     * Reloads the durability of shields when in offhand.
+     */
+    private void shieldReloadTask() {
+
+        for (Player player : this.getOnlinePlayers()) {
+
+            ItemStack item = player.getInventory().getItemInOffHand();
+            if (item.getType() != Material.SHIELD) continue;
+
+            ItemMeta meta = item.getItemMeta();
+            if (!(meta instanceof Damageable damageable)) continue;
+
+            if (player.isBlocking()) continue;
+            if (this.combatTracker.isInCombat(player.getUniqueId())) return;
+
+            if (damageable.getDamage() > 0) {
+                damageable.setDamage(Math.max(damageable.getDamage() - 5, 0));
+            }
+
+            item.setItemMeta(meta);
+        }
+
     }
 
     @Deprecated(forRemoval = true)

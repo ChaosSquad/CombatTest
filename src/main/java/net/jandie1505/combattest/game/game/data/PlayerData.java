@@ -35,6 +35,10 @@ public class PlayerData {
         this.equipments = new HashMap<>();
         this.equipmentCountdowns = new HashMap<>();
 
+        this.equipments.put("melee", 1000);
+        this.equipments.put("ranged", 2000);
+        this.equipments.put("armor", 3000);
+
         this.alive = false;
         this.respawntimer = 0;
 

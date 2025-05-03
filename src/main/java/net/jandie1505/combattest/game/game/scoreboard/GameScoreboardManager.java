@@ -55,6 +55,10 @@ public class GameScoreboardManager {
 
         Scoreboard scoreboard = this.playerScoreboards.get(player.getUniqueId());
 
+        if (scoreboard != null && player.getScoreboard() != scoreboard) {
+            player.setScoreboard(scoreboard);
+        }
+
         if (scoreboard == null) {
             scoreboard = this.game.getPlugin().getServer().getScoreboardManager().getNewScoreboard();
             this.playerScoreboards.put(player.getUniqueId(), scoreboard);

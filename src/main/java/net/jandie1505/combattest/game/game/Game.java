@@ -509,6 +509,11 @@ public class Game extends GamePart {
                     .append(Component.text(MiscUtils.getDurationFormat(this.time), NamedTextColor.AQUA))
             );
 
+            sidebar.add(Component.empty()
+                    .append(Component.text("Points: "))
+                    .append(Component.text(playerData.getPoints(), NamedTextColor.GOLD))
+            );
+
             // Display team
             Component teamString = Component.empty().append(Component.text("Team: ", NamedTextColor.WHITE));
             if (playerData.getTeam() > 0) {
@@ -587,9 +592,10 @@ public class Game extends GamePart {
                     .append(Component.text(MiscUtils.getDurationFormat(this.time), NamedTextColor.AQUA))
             );
 
+            sidebar.add(Component.empty());
+
         }
 
-        sidebar.add(Component.empty());
         return sidebar;
     }
 

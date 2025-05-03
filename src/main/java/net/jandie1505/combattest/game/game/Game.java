@@ -91,6 +91,8 @@ public class Game extends GamePart {
             throw new IllegalArgumentException("World cannot be null");
         }
 
+        this.world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+
         // COMMANDS
         // if this throws an exception, the game is aborted. this is ok.
 

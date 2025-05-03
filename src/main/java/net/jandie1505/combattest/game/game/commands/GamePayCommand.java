@@ -64,6 +64,11 @@ public class GamePayCommand implements TabCompletingCommandExecutor {
             return true;
         }
 
+        if (amount <= 0) {
+            sender.sendRichMessage("<red>You can't steal money from other players");
+            return true;
+        }
+
         if (senderData.getPoints() < amount) {
             sender.sendRichMessage("<red>You don't have enough points");
             return true;

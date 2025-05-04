@@ -218,6 +218,7 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::notIngamePlayersTask, 1, 20, "not_ingame_players");
         this.getTaskScheduler().scheduleRepeatingTask(this::playerScoreboardsTask, 1, 20, "player_scoreboards");
         this.getTaskScheduler().scheduleRepeatingTask(this::shieldReloadTask, 1, 5*20, "shield_reload");
+        this.getTaskScheduler().scheduleRepeatingTask(this.combatTracker::task, 1, 20, "combat_tracker");
     }
 
     @Override

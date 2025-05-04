@@ -4,6 +4,7 @@ import eu.cloudnetservice.driver.inject.InjectionLayer;
 import eu.cloudnetservice.modules.bridge.BridgeServiceHelper;
 import net.chaossquad.mclib.MiscUtils;
 import net.chaossquad.mclib.WorldUtils;
+import net.chaossquad.mclib.actionbar.playerinfo.PlayerInfoActionbar;
 import net.chaossquad.mclib.combattracking.CombatTracker;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
@@ -24,6 +25,7 @@ import net.jandie1505.combattest.game.game.equipment.EquipmentSystem;
 import net.jandie1505.combattest.game.game.gui.EquipmentUpgradeGUI;
 import net.jandie1505.combattest.game.game.gui.PlayerMainGUI;
 import net.jandie1505.combattest.game.game.gui.ShopGUI;
+import net.jandie1505.combattest.game.game.information.DamageInfoActionbarSystem;
 import net.jandie1505.combattest.game.game.listeners.*;
 import net.jandie1505.combattest.game.game.scoreboard.GameScoreboardManager;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
@@ -63,6 +65,8 @@ public class Game extends GamePart {
     @NotNull private final ShopGUI shopGUI;
     @NotNull private final CombatTracker combatTracker;
     @NotNull private final GameScoreboardManager scoreboardManager;
+    @NotNull private final PlayerInfoActionbar playerInfoActionbar;
+    @NotNull private final DamageInfoActionbarSystem damageInfoActionbar;
     private final List<Spawnpoint> spawnpoints;
     private int time;
     private boolean killswitch;
@@ -84,6 +88,13 @@ public class Game extends GamePart {
         this.shopGUI.getItems().addAll(DefaultShopItems.getShopItems());
         this.combatTracker = new CombatTracker();
         this.scoreboardManager = new GameScoreboardManager(this, Component.text("COMBAT TEST", NamedTextColor.GOLD, TextDecoration.BOLD));
+        this.playerInfoActionbar = new PlayerInfoActionbar(
+                () -> this.getOnlinePlayers().stream().toList(),
+                PlayerInfoActionbar.ActionBarProvider.mclib(this.plugin.getActionBarManager(), "player_info_actionbar", 4),
+                10,
+                new PlayerInfoActionbar.ScoreboardConfig(false, false, true)
+        );
+        this.damageInfoActionbar = new DamageInfoActionbarSystem(this, () -> false);
 
         // WORLD
 
@@ -219,6 +230,7 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::playerScoreboardsTask, 1, 20, "player_scoreboards");
         this.getTaskScheduler().scheduleRepeatingTask(this::shieldReloadTask, 1, 5*20, "shield_reload");
         this.getTaskScheduler().scheduleRepeatingTask(this.combatTracker::task, 1, 20, "combat_tracker");
+        this.getTaskScheduler().scheduleRepeatingTask(this.playerInfoActionbar, 1, 2, "player_info_actionbar");
     }
 
     @Override
@@ -705,11 +717,6 @@ public class Game extends GamePart {
 
             // See comment above
             playerData.setPoints(playerData.getPoints() + 2);
-
-            // Actionbar
-
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a" + playerData.getKills() + " kills §8§l|§r§c " + playerData.getDeaths() + " deaths §8§l|§r§6 Points: " + playerData.getPoints() + " §8§l|§r§6 " + this.time + "s"));
-
         }
 
     }

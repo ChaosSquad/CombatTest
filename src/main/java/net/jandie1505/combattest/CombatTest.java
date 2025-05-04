@@ -1,6 +1,8 @@
 package net.jandie1505.combattest;
 
 import de.myzelyam.api.vanish.VanishAPI;
+import net.chaossquad.mclib.actionbar.manager.ActionBarManager;
+import net.chaossquad.mclib.actionbar.manager.SelfSchedulingActionBarManager;
 import net.chaossquad.mclib.dynamicevents.EventListenerManager;
 import net.jandie1505.combattest.commands.CombatTestCommand;
 import net.jandie1505.combattest.commands.CombatTestCommandOld;
@@ -32,12 +34,12 @@ import org.json.JSONObject;
 
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class CombatTest extends JavaPlugin {
     private ConfigManager configManager;
     private ConfigManager mapConfig;
     private EventListenerManager listenerManager;
+    private ActionBarManager actionBarManager;
     private GamePart game;
     private List<UUID> bypassingPlayers;
     private String permissionPrefix;
@@ -63,6 +65,8 @@ public class CombatTest extends JavaPlugin {
                 CombatTest.this.listenerManager.manageListeners();
             }
         }.runTaskTimer(CombatTest.this, 0L, 10*20L);
+
+        this.actionBarManager = new SelfSchedulingActionBarManager(this, Component.text(" | ", NamedTextColor.DARK_GRAY));
 
         this.game = null;
         this.bypassingPlayers = Collections.synchronizedList(new ArrayList<>());
@@ -381,6 +385,10 @@ public class CombatTest extends JavaPlugin {
 
     public EventListenerManager getListenerManager() {
         return this.listenerManager;
+    }
+
+    public ActionBarManager getActionBarManager() {
+        return this.actionBarManager;
     }
 
     public String getPermissionPrefix() {

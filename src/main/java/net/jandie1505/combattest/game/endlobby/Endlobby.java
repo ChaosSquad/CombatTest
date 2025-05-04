@@ -5,6 +5,8 @@ import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.jandie1505.combattest.game.game.data.TeamData;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -247,7 +249,9 @@ public class Endlobby extends GamePart implements ManagedListener {
                         0);
             }
 
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§6--- Game end in " + this.time + " seconds ---"));
+            this.plugin.getActionBarManager().sendActionBarMessage(player, "endlobby_status", 21, Component.empty()
+                    .append(Component.text("--- Game end in " + this.time + " seconds ---", NamedTextColor.GOLD))
+            );
 
             player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 

@@ -21,6 +21,8 @@ import net.jandie1505.combattest.game.lobby.gui.LobbyVoteGUI;
 import net.jandie1505.combattest.game.lobby.gui.LobbyTeamSelectionGUI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -138,6 +140,7 @@ public class Lobby extends GamePart implements ManagedListener {
 
         this.getTaskScheduler().scheduleRepeatingTask(this::timeTask, 1, 20, "time");
         this.getTaskScheduler().scheduleRepeatingTask(this::autoSelectMapTask, 1, 20, "auto_select_map");
+        this.getTaskScheduler().scheduleRepeatingTask(this::actionBarTask, 1, 20, "action_bar");
         this.getTaskScheduler().scheduleRepeatingTask(this::task, 1, 20); // TODO: Split into multiple tasks
     }
 
@@ -172,6 +175,33 @@ public class Lobby extends GamePart implements ManagedListener {
         if (this.selectedMap == null && this.time <= 10) {
             this.autoSelectMap();
             this.displayMap();
+        }
+
+    }
+
+    /**
+     * Shows the actionbar.
+     */
+    private void actionBarTask() {
+
+        for (Player player : this.getOnlinePlayers()) {
+
+            if (this.players.size() >= 2) {
+                this.plugin.getActionBarManager().sendActionBarMessage(player, "lobby_status", 21, Component.empty()
+                        .append(Component.text("Starting in ", NamedTextColor.GREEN))
+                        .append(Component.text(this.time, NamedTextColor.GREEN))
+                        .append(Component.text(" | ", NamedTextColor.DARK_GRAY, TextDecoration.BOLD))
+                        .append(Component.text("Players: ", NamedTextColor.GREEN))
+                        .append(Component.text(this.players.size(), NamedTextColor.GREEN))
+                        .append(Component.text(" / 2", NamedTextColor.GREEN)));
+            } else {
+                this.plugin.getActionBarManager().sendActionBarMessage(player, "lobby_status", 21, Component.empty()
+                        .append(Component.text("Not enough players (", NamedTextColor.RED))
+                        .append(Component.text(this.players.size(), NamedTextColor.RED))
+                        .append(Component.text(" / 2)", NamedTextColor.RED))
+                );
+            }
+
         }
 
     }
@@ -216,18 +246,6 @@ public class Lobby extends GamePart implements ManagedListener {
 
             if (player.getFoodLevel() < 20) {
                 player.setFoodLevel(20);
-            }
-
-            // Actionbar
-
-            if (this.players.size() >= 2) {
-
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§aStarting in " + this.time + "s §8§l|§r§a Players: " + this.players.size() + " / 2"));
-
-            } else {
-
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cNot enough players (" + this.players.size() + " / 2)"));
-
             }
 
             // Messages

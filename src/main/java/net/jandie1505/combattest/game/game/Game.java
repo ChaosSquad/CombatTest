@@ -33,8 +33,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -47,7 +45,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -231,6 +228,8 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::shieldReloadTask, 1, 5*20, "shield_reload");
         this.getTaskScheduler().scheduleRepeatingTask(this.combatTracker::task, 1, 20, "combat_tracker");
         this.getTaskScheduler().scheduleRepeatingTask(this.playerInfoActionbar, 1, 2, "player_info_actionbar");
+        this.getTaskScheduler().scheduleRepeatingTask(this::playerRiptideDetectionTask, 1, 5, "player_riptide_detection");
+        this.getTaskScheduler().scheduleRepeatingTask(this::playerRiptideCooldownTask, 1, 20, "player_riptide_cooldown");
     }
 
     @Override
@@ -633,6 +632,43 @@ public class Game extends GamePart {
             }
 
             item.setItemMeta(meta);
+        }
+
+    }
+
+    /**
+     * Detects player ritpide and sets the cooldown.
+     */
+    private void playerRiptideDetectionTask() {
+
+        for (Player player : List.copyOf(this.getWorld().getPlayers())) {
+            PlayerData playerData = this.getPlayerData(player);
+            if (playerData == null) continue;
+
+            if (playerData.hasUsedRiptideTrident() && !player.isRiptiding()) {
+                playerData.setRiptideTridentTimer(6);
+                playerData.setHasUsedRiptideTrident(false);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 5*20, 0, true, true, true));
+            }
+
+        }
+
+    }
+
+    /**
+     * Counts down the player riptide cooldown
+     */
+    private void playerRiptideCooldownTask() {
+
+        for (Player player : List.copyOf(this.getWorld().getPlayers())) {
+            PlayerData playerData = this.getPlayerData(player);
+            if (playerData == null) continue;
+
+            if (playerData.getRiptideTridentTimer() > 0) {
+                playerData.decrementRiptideTridentTimer();
+                this.plugin.getActionBarManager().sendActionBarMessage(player, "trident_cooldown", 21, Component.text("\uD83D\uDD31⏳" + playerData.getRiptideTridentTimer() + "s", NamedTextColor.AQUA));
+            }
+
         }
 
     }

@@ -10,16 +10,20 @@ import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRiptideEvent;
 import org.bukkit.inventory.ItemStack;
@@ -147,7 +151,24 @@ public class GameMiscListener implements ManagedListener {
         PlayerData data = this.game.getPlayerData(event.getPlayer());
         if (data == null) return;
 
-        data.setHasUsedTrident(true);
+        data.setHasUsedRiptideTrident(true);
+    }
+
+    /**
+     * Prevents using the riptide ability of a trident.
+     */
+    @EventHandler
+    public void onPlayerInteractForCancelRiptideTrident(PlayerInteractEvent event) {
+        if (event.useItemInHand() == Event.Result.DENY) return;
+        if (!event.getAction().isRightClick()) return;
+        if (event.getPlayer().getInventory().getItemInMainHand().getType() != Material.TRIDENT) return;
+
+        PlayerData data = this.game.getPlayerData(event.getPlayer());
+        if (data == null) return;
+
+        if (data.getRiptideTridentTimer() > 0) {
+            event.setUseItemInHand(Event.Result.DENY);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

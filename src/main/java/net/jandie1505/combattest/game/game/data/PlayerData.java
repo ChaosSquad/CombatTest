@@ -18,8 +18,8 @@ public class PlayerData {
     private int assists;
     private int deaths;
     private double potionTimer;
-    private int tridentTimer;
-    private boolean hasUsedTrident;
+    private int riptideTridentTimer;
+    private boolean hasUsedRiptideTrident;
     private int shieldTimer;
     private int team;
     private Scoreboard scoreboard;
@@ -47,8 +47,8 @@ public class PlayerData {
         this.regenerationCooldown = 0;
 
         this.potionTimer = 0;
-        this.tridentTimer = 0;
-        this.hasUsedTrident = false;
+        this.riptideTridentTimer = 0;
+        this.hasUsedRiptideTrident = false;
         this.shieldTimer = 0;
 
         this.team = 0;
@@ -191,20 +191,24 @@ public class PlayerData {
         this.weatherDisabled = weatherDisabled;
     }
 
-    public int getTridentTimer() {
-        return tridentTimer;
+    public int getRiptideTridentTimer() {
+        return riptideTridentTimer;
     }
 
-    public void setTridentTimer(int tridentTimer) {
-        this.tridentTimer = tridentTimer;
+    public void decrementRiptideTridentTimer() {
+        this.riptideTridentTimer--;
     }
 
-    public boolean hasUsedTrident() {
-        return hasUsedTrident;
+    public void setRiptideTridentTimer(int tridentTimer) {
+        this.riptideTridentTimer = tridentTimer;
     }
 
-    public void setHasUsedTrident(boolean hasUsedTrident) {
-        this.hasUsedTrident = hasUsedTrident;
+    public boolean hasUsedRiptideTrident() {
+        return hasUsedRiptideTrident;
+    }
+
+    public void setHasUsedRiptideTrident(boolean hasUsedRiptideTrident) {
+        this.hasUsedRiptideTrident = hasUsedRiptideTrident;
     }
 
     public int getShieldTimer() {

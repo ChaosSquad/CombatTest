@@ -6,12 +6,14 @@ import net.chaossquad.mclib.MiscUtils;
 import net.chaossquad.mclib.WorldUtils;
 import net.chaossquad.mclib.actionbar.playerinfo.PlayerInfoActionbar;
 import net.chaossquad.mclib.combattracking.CombatTracker;
+import net.chaossquad.mclib.combattracking.NoDamageTracker;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.endlobby.Endlobby;
+import net.jandie1505.combattest.game.game.combat.AdaptiveArmorSystem;
 import net.jandie1505.combattest.game.game.commands.GameMenuCommand;
 import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
@@ -60,10 +62,12 @@ public class Game extends GamePart {
     @NotNull private final PlayerMainGUI playerMainGUI;
     @NotNull private final EquipmentUpgradeGUI equipmentUpgradeGUI;
     @NotNull private final ShopGUI shopGUI;
+    @NotNull private final NoDamageTracker noDamageTracker;
     @NotNull private final CombatTracker combatTracker;
     @NotNull private final GameScoreboardManager scoreboardManager;
     @NotNull private final PlayerInfoActionbar playerInfoActionbar;
     @NotNull private final DamageInfoActionbarSystem damageInfoActionbar;
+    @NotNull private final AdaptiveArmorSystem adaptiveArmorSystem;
     private final List<Spawnpoint> spawnpoints;
     private int time;
     private boolean killswitch;
@@ -83,6 +87,7 @@ public class Game extends GamePart {
         this.equipmentUpgradeGUI = new EquipmentUpgradeGUI(this, null);
         this.shopGUI = new ShopGUI(this, null);
         this.shopGUI.getItems().addAll(DefaultShopItems.getShopItems());
+        this.noDamageTracker = new NoDamageTracker();
         this.combatTracker = new CombatTracker();
         this.scoreboardManager = new GameScoreboardManager(this, Component.text("COMBAT TEST", NamedTextColor.GOLD, TextDecoration.BOLD));
         this.playerInfoActionbar = new PlayerInfoActionbar(
@@ -92,6 +97,7 @@ public class Game extends GamePart {
                 new PlayerInfoActionbar.ScoreboardConfig(false, false, true)
         );
         this.damageInfoActionbar = new DamageInfoActionbarSystem(this, () -> false);
+        this.adaptiveArmorSystem = new AdaptiveArmorSystem(this, null);
 
         // WORLD
 
@@ -226,6 +232,7 @@ public class Game extends GamePart {
         this.getTaskScheduler().scheduleRepeatingTask(this::notIngamePlayersTask, 1, 20, "not_ingame_players");
         this.getTaskScheduler().scheduleRepeatingTask(this::playerScoreboardsTask, 1, 20, "player_scoreboards");
         this.getTaskScheduler().scheduleRepeatingTask(this::shieldReloadTask, 1, 5*20, "shield_reload");
+        this.getTaskScheduler().scheduleRepeatingTask(this.noDamageTracker, 1, 20, "no_damage_tracker");
         this.getTaskScheduler().scheduleRepeatingTask(this.combatTracker::task, 1, 20, "combat_tracker");
         this.getTaskScheduler().scheduleRepeatingTask(this.playerInfoActionbar, 1, 2, "player_info_actionbar");
         this.getTaskScheduler().scheduleRepeatingTask(this::playerRiptideDetectionTask, 1, 5, "player_riptide_detection");
@@ -960,6 +967,10 @@ public class Game extends GamePart {
 
     public @NotNull ShopGUI getShopGUI() {
         return this.shopGUI;
+    }
+
+    public @NotNull NoDamageTracker getNoDamageTracker() {
+        return this.noDamageTracker;
     }
 
     public @NotNull CombatTracker getCombatTracker() {

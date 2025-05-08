@@ -1,6 +1,7 @@
 package net.jandie1505.combattest.game.game.constants;
 
 import net.jandie1505.combattest.constants.NamespacedKeys;
+import net.jandie1505.combattest.game.game.combat.AdaptiveArmorSystem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -20,6 +21,7 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -300,9 +302,13 @@ public final class EquipmentBuilders {
      * @param armor armor points
      * @param toughness armor toughness points
      * @param protection protection enchantment level
+     * @param knockbackResistance The knockback resistance attribute value
+     * @param adaptiveArmorAmount the amount of damage the adaptive armor can absorb
+     * @param adaptiveArmorIntensity the percentage of the player damage the adaptive armor will absorb
+     * @param adaptiveArmorRegeneration the regeneration rate the armor will regenerate when the player has not taken damage for a while
      * @return item
      */
-    public static ItemStack armorBuilder(@NotNull Component name, @NotNull Material material, int armor, int toughness, int protection, int knockbackResistance) {
+    public static ItemStack armorBuilder(@NotNull Component name, @NotNull Material material, int armor, int toughness, int protection, int knockbackResistance, double adaptiveArmorAmount, double adaptiveArmorIntensity, double adaptiveArmorRegeneration) {
 
         ItemStack item = new ItemStack(material);
 
@@ -315,6 +321,10 @@ public final class EquipmentBuilders {
         lore.add(CLEARED_COMPONENT.append(Component.text("Toughness: " + toughness, NamedTextColor.GRAY)));
         lore.add(CLEARED_COMPONENT.append(Component.text("Protection: " + protection, NamedTextColor.GRAY)));
         if (knockbackResistance > 0) lore.add(CLEARED_COMPONENT.append(Component.text("Knockback Resistance: " + knockbackResistance + "%", NamedTextColor.GRAY)));
+        if (adaptiveArmorAmount > 0 && adaptiveArmorIntensity > 0 && adaptiveArmorRegeneration > 0) {
+            DecimalFormat df = new DecimalFormat("0.##");
+            lore.add(CLEARED_COMPONENT.append(Component.text("Adaptive Armor: \uD83D\uDEE1" + df.format(adaptiveArmorAmount) + " ⬇" + Math.round(adaptiveArmorIntensity * 100) + "% ⚡" + df.format(adaptiveArmorRegeneration) + "/s", NamedTextColor.GRAY)));
+        }
         meta.lore(lore);
 
         meta.addItemFlags(ItemFlag.values());
@@ -334,8 +344,17 @@ public final class EquipmentBuilders {
 
         item.setItemMeta(meta);
 
+        if (adaptiveArmorAmount > 0.0 && adaptiveArmorIntensity > 0.0 && adaptiveArmorRegeneration > 0.0) {
+            AdaptiveArmorSystem.ArmorData adaptiveArmorData = new AdaptiveArmorSystem.ArmorData(adaptiveArmorAmount, adaptiveArmorAmount, adaptiveArmorIntensity, adaptiveArmorRegeneration);
+            AdaptiveArmorSystem.ArmorData.put(item, adaptiveArmorData);
+        }
+
         return item;
 
+    }
+
+    public static ItemStack armorBuilder(@NotNull Component name, @NotNull Material material, int armor, int toughness, int protection, int knockbackResistance) {
+        return armorBuilder(name, material, armor, toughness, protection, knockbackResistance, 0.0, 0.0, 0.0);
     }
 
     public static ItemStack armorBuilder(@NotNull Component name, @NotNull Material material, int armor, int toughness, int protection) {

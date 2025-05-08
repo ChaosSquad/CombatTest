@@ -200,6 +200,12 @@ public class GameMiscListener implements ManagedListener {
         player.playSound(player.getLocation().clone(), Sound.BLOCK_AMETHYST_BLOCK_PLACE, SoundCategory.RECORDS, 1.0F, 1.0F);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onEntityDamageForNoDamageTracker(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        this.game.getNoDamageTracker().onPlayerDamage(player);
+    }
+
     // ----- OTHER -----
 
     @Override

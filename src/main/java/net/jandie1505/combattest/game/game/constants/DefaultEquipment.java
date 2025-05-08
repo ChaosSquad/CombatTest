@@ -192,28 +192,28 @@ public final class DefaultEquipment {
         ), 2500, List.of(), 3112, 7)); // Heavy Armor +++
 
         equipmentMap.put(3120, new EquipmentData("Multi-Defence Armor", List.of(
-                new EquipmentItem(armorBuilder("Multi-Defense Armor", Material.IRON_HELMET, 5, 0, 10, 10), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(EquipmentBuilders.armorBuilder(Component.text("Multi-Defense Armor"), Material.IRON_HELMET, 5, 0, 10, 10, 20, 0.5, 1), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Multi-Defense Armor Shield", 48), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeIronChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeIronLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeIronBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3121), 0, 4)); // Multi-Defence Armor
         equipmentMap.put(3121, new EquipmentData("Multi-Defence Armor +", List.of(
-                new EquipmentItem(armorBuilder("Multi-Defense Armor +", Material.IRON_HELMET, 7, 0, 12, 20), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(EquipmentBuilders.armorBuilder(Component.text("Multi-Defense Armor +"), Material.IRON_HELMET, 7, 0, 12, 20, 20, 0.5, 2), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Multi-Defense Armor + Shield", 52), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeIronChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeIronLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeIronBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3122), 3120, 5)); // Multi-Defence Armor +
         equipmentMap.put(3122, new EquipmentData("Multi-Defence Armor ++", List.of(
-                new EquipmentItem(armorBuilder("Multi-Defense Armor ++", Material.IRON_HELMET, 8, 0, 13, 30), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(EquipmentBuilders.armorBuilder(Component.text("Multi-Defense Armor ++"), Material.IRON_HELMET, 8, 0, 13, 30, 20, 0.75, 2), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Multi-Defense Armor ++ Shield", 56), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeIronChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeIronLeggings, EquipmentSlot.LEGS, 0, 0),
                 new EquipmentItem(decorativeIronBoots, EquipmentSlot.FEET, 0, 0)
         ), 2500, List.of(3123), 3121, 6)); // Multi-Defence Armor ++
         equipmentMap.put(3123, new EquipmentData("Multi-Defence Armor +++", List.of(
-                new EquipmentItem(armorBuilder("Multi-Defense Armor +++", Material.GOLDEN_HELMET, 10, 0, 15, 40), EquipmentSlot.HEAD, 0, 0),
+                new EquipmentItem(EquipmentBuilders.armorBuilder(Component.text("Multi-Defense Armor +++"), Material.GOLDEN_HELMET, 10, 0, 15, 40, 25, 0.75, 2), EquipmentSlot.HEAD, 0, 0),
                 new EquipmentItem(shieldBuilder("Multi-Defense Armor +++ Shield", 60), EquipmentSlot.OFF_HAND, 0, 10*20),
                 new EquipmentItem(decorativeGoldChestplate, EquipmentSlot.CHEST, 0, 0),
                 new EquipmentItem(decorativeGoldLeggings, EquipmentSlot.LEGS, 0, 0),

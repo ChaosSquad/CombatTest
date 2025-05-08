@@ -19,4 +19,9 @@ public interface NamespacedKeys {
     NamespacedKey ITEM_POTION_INTENSITY_MODIFIER = new NamespacedKey(NAMESPACE, "item.modifier.splash_potion.intensity");
     NamespacedKey ITEM_POTION_INSTANT_DAMAGE_CUSTOM_VALUE = new NamespacedKey(NAMESPACE, "item.modifier.splash_potion.instant_damage");
 
+    NamespacedKey ITEM_ADAPTIVE_ARMOR_SHIELD_CURRENT = new NamespacedKey(NAMESPACE, "item.modifier.adaptive_armor.current");
+    NamespacedKey ITEM_ADAPTIVE_ARMOR_SHIELD_MAXIMUM = new NamespacedKey(NAMESPACE, "item.modifier.adaptive_armor.maximum");
+    NamespacedKey ITEM_ADAPTIVE_ARMOR_INTENSITY = new NamespacedKey(NAMESPACE, "item.modifier.adaptive_armor.intensity");
+    NamespacedKey ITEM_ADAPTIVE_ARMOR_REGENERATION_RATE = new NamespacedKey(NAMESPACE, "item.modifier.adaptive_armor.regeneration_rate");
+
 }

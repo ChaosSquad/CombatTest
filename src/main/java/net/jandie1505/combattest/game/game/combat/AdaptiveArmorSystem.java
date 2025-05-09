@@ -20,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 
+/**
+ * Manages adaptive armors.
+ */
 public class AdaptiveArmorSystem implements ManagedListener {
     @NotNull private final Game game;
     @NotNull private final Removable removeCondition;
@@ -81,6 +84,9 @@ public class AdaptiveArmorSystem implements ManagedListener {
 
     // ----- TASKS -----
 
+    /**
+     * Manages adaptive shield regeneration and action bar.
+     */
     private void task() {
 
         for (Player player : this.game.getOnlinePlayers()) {
@@ -88,7 +94,7 @@ public class AdaptiveArmorSystem implements ManagedListener {
             if (data == null) continue;
             if (!data.isValid()) continue;
 
-            if (data.regenerationRate() > 0.0 && data.current() < data.maximum() && this.game.getNoDamageTracker().getNoDamageTicks(player) > 15) {
+            if (data.regenerationRate() > 0.0 && data.current() < data.maximum() && this.game.getNoDamageTracker().getNoDamageTicks(player) > data.regenerationCooldown()) {
                 ArmorData updated = data.updatedCurrent(Math.min(data.current() + data.regenerationRate(), data.maximum()));
                 ArmorData.put(player.getInventory().getHelmet(), updated);
             }
@@ -129,10 +135,18 @@ public class AdaptiveArmorSystem implements ManagedListener {
 
     // ----- DATA -----
 
-    public record ArmorData(double current, double maximum, double intensity, double regenerationRate) {
+    /**
+     * Stores information about adaptive armor.
+     * @param current current shield strength
+     * @param maximum maximum shield strength
+     * @param intensity shield damage reduction factor (0 = no damage absorbed, 0.25 means 25 % damage absorbed, ..., 1 means 100 % damage absorbed)
+     * @param regenerationRate the rate the shield regenerates every second)
+     * @param regenerationCooldown the amount of seconds the player needs to not have taken damage to start the shield regeneration
+     */
+    public record ArmorData(double current, double maximum, double intensity, double regenerationRate, int regenerationCooldown) {
 
         public boolean isValid() {
-            return maximum >= 0.0 && intensity >= 0.0 && this.regenerationRate >= 0.0;
+            return maximum >= 0.0 && intensity >= 0.0 && this.regenerationRate >= 0.0 && this.regenerationCooldown >= 0;
         }
 
         public static @Nullable ArmorData get(@Nullable ItemStack item) {
@@ -147,8 +161,9 @@ public class AdaptiveArmorSystem implements ManagedListener {
             final double maximum = meta.getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_SHIELD_MAXIMUM, PersistentDataType.DOUBLE, -1.0);
             final double intensity = meta.getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_INTENSITY, PersistentDataType.DOUBLE, -1.0);
             final double regenerationRate = meta.getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_REGENERATION_RATE, PersistentDataType.DOUBLE, -1.0);
+            final int regenerationCooldown = meta.getPersistentDataContainer().getOrDefault(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_REGENERATION_COOLDOWN, PersistentDataType.INTEGER, -1);
 
-            ArmorData data = new ArmorData(current, maximum, intensity, regenerationRate);
+            ArmorData data = new ArmorData(current, maximum, intensity, regenerationRate, regenerationCooldown);
             if (!data.isValid()) return null;
             return data;
         }
@@ -166,11 +181,13 @@ public class AdaptiveArmorSystem implements ManagedListener {
                 meta.getPersistentDataContainer().set(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_SHIELD_MAXIMUM, PersistentDataType.DOUBLE, data.maximum());
                 meta.getPersistentDataContainer().set(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_INTENSITY, PersistentDataType.DOUBLE, data.intensity());
                 meta.getPersistentDataContainer().set(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_REGENERATION_RATE, PersistentDataType.DOUBLE, data.regenerationRate());
+                meta.getPersistentDataContainer().set(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_REGENERATION_COOLDOWN, PersistentDataType.INTEGER, data.regenerationCooldown());
             } else {
                 meta.getPersistentDataContainer().remove(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_SHIELD_CURRENT);
                 meta.getPersistentDataContainer().remove(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_SHIELD_MAXIMUM);
                 meta.getPersistentDataContainer().remove(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_INTENSITY);
                 meta.getPersistentDataContainer().remove(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_REGENERATION_RATE);
+                meta.getPersistentDataContainer().remove(NamespacedKeys.ITEM_ADAPTIVE_ARMOR_REGENERATION_COOLDOWN);
             }
 
             // Set meta
@@ -178,7 +195,7 @@ public class AdaptiveArmorSystem implements ManagedListener {
         }
 
         public @NotNull ArmorData updatedCurrent(double current) {
-            return new ArmorData(current, this.maximum(), this.intensity(), this.regenerationRate());
+            return new ArmorData(current, this.maximum(), this.intensity(), this.regenerationRate(), this.regenerationCooldown());
         }
 
     }

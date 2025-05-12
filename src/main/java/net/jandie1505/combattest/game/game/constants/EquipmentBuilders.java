@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -22,8 +23,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public final class EquipmentBuilders {
@@ -237,7 +240,7 @@ public final class EquipmentBuilders {
     /**
      * Build a trident.
      * @param name item name
-     * @param meleeDamage enable melee damage
+     * @param meleeDamage set melee damage
      * @param loyalty loyalty enchantment
      * @param channeling channeling enchantment
      * @param riptide riptide enchantment
@@ -245,7 +248,7 @@ public final class EquipmentBuilders {
      * @param weatherManipulationText show weather manipulation ability text
      * @return item
      */
-    public static ItemStack tridentBuilder(@NotNull Component name, boolean meleeDamage, int loyalty, int channeling, int riptide, double rangedDamage, boolean weatherManipulationText) {
+    public static ItemStack tridentBuilder(@NotNull Component name, double meleeDamage, int loyalty, int channeling, int riptide, double rangedDamage, boolean weatherManipulationText) {
 
         ItemStack item = new ItemStack(Material.TRIDENT);
 
@@ -277,7 +280,10 @@ public final class EquipmentBuilders {
             lore.add(CLEARED_COMPONENT.append(Component.text(" when hitting a player", NamedTextColor.GRAY)));
         }
 
-        if (!meleeDamage) {
+        if (meleeDamage > 0.0) {
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), meleeDamage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
+            lore.add(CLEARED_COMPONENT.append(Component.text("Melee Damage: " + formatDamage(meleeDamage), NamedTextColor.GRAY)));
+        } else {
             meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
             lore.add(CLEARED_COMPONENT.append(Component.text("Melee damage disabled", NamedTextColor.GRAY)));
         }
@@ -390,6 +396,10 @@ public final class EquipmentBuilders {
         item.setItemMeta(meta);
 
         return item;
+    }
+
+    private static String formatDamage(double damage) {
+        return new DecimalFormat("0.0#", new DecimalFormatSymbols(Locale.ENGLISH)).format(damage);
     }
 
 }

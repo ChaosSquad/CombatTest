@@ -247,7 +247,7 @@ public final class DefaultEquipment {
 
     @Deprecated
     private static ItemStack tridentBuilder(String name, boolean meleeDamage, int loyalty, int channeling, int riptide, double rangedDamage, boolean weatherManipulationText) {
-        return EquipmentBuilders.tridentBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), meleeDamage, loyalty, channeling, riptide, rangedDamage, weatherManipulationText);
+        return EquipmentBuilders.tridentBuilder(LegacyComponentSerializer.legacy('§').deserialize(name), meleeDamage ? 9.0 : 0.0, loyalty, channeling, riptide, rangedDamage, weatherManipulationText);
     }
 
     @Deprecated

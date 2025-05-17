@@ -7,11 +7,13 @@ import net.jandie1505.combattest.game.game.Game;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -77,8 +79,41 @@ public class AdaptiveArmorSystem implements ManagedListener {
         ArmorData.put(item, data.updatedCurrent(current));
 
         // Play sound
-        player.getWorld().playSound(player.getLocation().clone(), Sound.BLOCK_CHAIN_BREAK, 1.25f, 1.25f);
+        if (current <= 0) {
+            player.getWorld().playSound(player.getLocation().clone(), Sound.ENTITY_ITEM_BREAK, 1.0f, 0.5f);
+        } else {
+            player.getWorld().playSound(player.getLocation().clone(), Sound.BLOCK_CHAIN_BREAK, 1.25f, 1.25f);
+        }
+
+        // Update actionbar immediately
         this.showActionBar(player);
+
+    }
+
+    @EventHandler
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        if (event.isCancelled()) return;
+
+        // Get item
+
+        ItemStack item = event.getPlayer().getInventory().getHelmet();
+        if (item == null) return;
+
+        // Get values
+
+        ArmorData data = ArmorData.get(item);
+        if (data == null) return;
+
+        ArmorData updatedData;
+        switch (event.getItem().getType()) {
+            case GOLDEN_APPLE -> updatedData = data.updatedCurrent(data.current() + 8);
+            case ENCHANTED_GOLDEN_APPLE -> updatedData = data.updatedCurrent(data.current() + data.maximum());
+            default -> updatedData = null;
+        }
+
+        if (updatedData != null) {
+            ArmorData.put(item, updatedData);
+        }
 
     }
 

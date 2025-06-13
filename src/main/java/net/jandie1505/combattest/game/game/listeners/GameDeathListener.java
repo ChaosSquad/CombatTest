@@ -19,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
@@ -72,6 +74,10 @@ public class GameDeathListener implements ManagedListener {
         final double playerEquipmentLevel = this.getEquipmentLevelAverage(playerData);
         @Nullable final Killer mostDamageKiller = Killer.create(this.game, PlayerFight.getKiller(fight));
         @Nullable final Killer lastHitKiller = this.getLastHitKiller(player);
+
+        // Give short regeneration to killers
+        if (mostDamageKiller != null) this.giveShortRegenerationToKiller(mostDamageKiller.player());
+        if (lastHitKiller != null) this.giveShortRegenerationToKiller(lastHitKiller.player());
 
         // Reward killer
         if (mostDamageKiller != null) this.rewardKiller(mostDamageKiller, (int) playerEquipmentLevel);
@@ -129,6 +135,20 @@ public class GameDeathListener implements ManagedListener {
 
         killer.playerData().addRewardPoints(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("playerKill", 0));
         killer.playerData().addRewardXP(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("playerKill", 0));
+    }
+
+    private void giveShortRegenerationToKiller(@NotNull Player killer) {
+
+        PotionEffect regeneration = new PotionEffect(
+                PotionEffectType.REGENERATION,
+                3*20,
+                1,
+                true,
+                true,
+                true
+        );
+
+        killer.addPotionEffect(regeneration);
     }
 
     private void rewardTeam(@Nullable UUID playerId) {

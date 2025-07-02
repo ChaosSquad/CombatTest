@@ -43,11 +43,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
     implementation("net.chaossquad:mclib:main-9549d74546311c5b81e8b35b60c1e78618450dc7")
     implementation("org.json:json:20250107")
-    compileOnly("eu.cloudnetservice.cloudnet:bridge:4.0.0-RC10")
-    compileOnly("eu.cloudnetservice.cloudnet:platform-inject-api:4.0.0-RC10")
+    compileOnly("eu.cloudnetservice.cloudnet:wrapper-jvm-api:4.0.0-RC13")
+    compileOnly("eu.cloudnetservice.cloudnet:bridge-api:4.0.0-RC13")
+    compileOnly("eu.cloudnetservice.cloudnet:platform-inject-api:4.0.0-RC13")
     compileOnly("com.github.LeonMangler:SuperVanish:6.2.17")
     compileOnly("de.simonsator:Party-and-Friends-MySQL-Edition-Spigot-API:1.5.4-RELEASE")
     compileOnly("de.simonsator:spigot-party-api-for-party-and-friends:1.0.5-RELEASE")

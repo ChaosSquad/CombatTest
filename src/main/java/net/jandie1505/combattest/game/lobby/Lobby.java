@@ -569,7 +569,7 @@ public class Lobby extends GamePart implements ManagedListener {
 
                     for (int i = 1; i <= 100; i++) {
 
-                        if (!this.getTeamMembers(teamId).isEmpty()) {
+                        if (!this.getTeamMembers(i).isEmpty()) {
                             continue;
                         }
 

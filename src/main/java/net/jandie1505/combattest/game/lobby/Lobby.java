@@ -46,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public class Lobby extends GamePart implements ManagedListener {
     private final CombatTest plugin;
@@ -636,7 +637,11 @@ public class Lobby extends GamePart implements ManagedListener {
 
         world.setAutoSave(false);
 
-        this.setPartyTeams();
+        try {
+            this.setPartyTeams();
+        } catch (Exception e) {
+            this.getPlugin().getLogger().log(Level.WARNING, "Failed to set party teams", e);
+        }
 
         this.plugin.stopGame();
         return this.plugin.startGame(new Game(

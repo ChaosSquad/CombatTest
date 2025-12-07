@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Attr;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -57,12 +58,22 @@ public final class EquipmentBuilders {
             lore.add(CLEARED_COMPONENT.append(Component.text("Damage: " + attackDamage, NamedTextColor.GRAY)));
             attackDamage = attackDamage - 1;
             meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(Attribute.ATTACK_DAMAGE.getKey(), attackDamage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
+        } else {
+            material.getDefaultAttributeModifiers().get(Attribute.ATTACK_DAMAGE).forEach(modifier -> {
+                if (modifier == null) return;
+                meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, modifier);
+            });
         }
 
         if (attackSpeed >= 0) {
             lore.add(Component.text("§7Speed: " + attackSpeed, NamedTextColor.GRAY));
-            attackSpeed = attackSpeed - 3.5;
+            attackSpeed = attackSpeed - 4.0;
             meta.addAttributeModifier(Attribute.ATTACK_SPEED, new AttributeModifier(Attribute.ATTACK_SPEED.getKey(), attackSpeed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND));
+        } else {
+            material.getDefaultAttributeModifiers().get(Attribute.ATTACK_SPEED).forEach(modifier -> {
+                if (modifier == null) return;
+                meta.addAttributeModifier(Attribute.ATTACK_SPEED, modifier);
+            });
         }
 
         for (Enchantment enchantment : enchantments.keySet()) {

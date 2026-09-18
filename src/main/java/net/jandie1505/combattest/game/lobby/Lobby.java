@@ -13,10 +13,7 @@ import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.data.Spawnpoint;
-import net.jandie1505.combattest.game.lobby.commands.LobbyStartCommand;
-import net.jandie1505.combattest.game.lobby.commands.LobbyPlayersValueSubcommand;
-import net.jandie1505.combattest.game.lobby.commands.LobbyValueSubcommand;
-import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
+import net.jandie1505.combattest.game.lobby.commands.*;
 import net.jandie1505.combattest.game.lobby.constants.LobbyItems;
 import net.jandie1505.combattest.game.lobby.gui.LobbyVoteGUI;
 import net.jandie1505.combattest.game.lobby.gui.LobbyTeamSelectionGUI;
@@ -80,6 +77,7 @@ public class Lobby extends GamePart implements ManagedListener {
         this.getDynamicSubcommands().put("value", SubcommandEntry.of(new LobbyValueSubcommand(this)));
         ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new LobbyPlayersValueSubcommand(this)));
         this.getDynamicSubcommands().put("votemap", SubcommandEntry.of(new LobbyVoteCommand(this.getPlugin())));
+        this.getDynamicSubcommands().put("random-teams", SubcommandEntry.of(new LobbyRandomTeamsSubcommand(this)));
         this.lobbyBorderEnabled = this.plugin.config().optBoolean(ConfigKeys.LOBBY_BORDER_ENABLE, false);
         this.lobbyBorder = new int[]{
                 this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_X1, -10),

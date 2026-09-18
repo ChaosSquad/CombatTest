@@ -98,6 +98,13 @@ public class LobbyVoteGUI implements InventoryHolder, ManagedListener {
         if (event.getClickedInventory() != event.getInventory()) return; // Click was not in the voting gui
         if (!(event.getWhoClicked() instanceof Player player)) return; // Get player
 
+        // Check if map voting is enabled
+        if (!this.lobby.isMapVoting()) {
+            player.sendRichMessage("<red>Map voting is currently disabled.");
+            player.closeInventory();
+            return;
+        }
+
         ItemStack item = event.getCurrentItem();
         if (item == null) return;
 

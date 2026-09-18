@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.entity.BreezeWindCharge;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -121,6 +122,13 @@ public class LobbyTeamSelectionGUI implements InventoryHolder, ManagedListener {
         if (event.getClickedInventory() != event.getInventory()) return; // Click was not in the voting gui
         if (!(event.getWhoClicked() instanceof Player player)) return; // Get player
 
+        // Check if team selection is enabled
+        if (!this.lobby.isTeamSelection()) {
+            player.sendRichMessage("<red>Team selection is currently disabled.");
+            player.closeInventory();
+            return;
+        }
+
         ItemStack item = event.getCurrentItem();
         if (item == null) return;
 
@@ -166,7 +174,7 @@ public class LobbyTeamSelectionGUI implements InventoryHolder, ManagedListener {
     }
 
     @EventHandler
-    public void onInventoryClose(InventoryDragEvent event) {
+    public void onInventoryDrag(InventoryDragEvent event) {
         if (event.getInventory().getHolder() != this) return;
         event.setCancelled(true);
     }

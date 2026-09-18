@@ -1,10 +1,12 @@
 package net.jandie1505.combattest;
 
 import de.myzelyam.api.vanish.VanishAPI;
+import net.chaossquad.mclib.WorldUtils;
 import net.chaossquad.mclib.actionbar.manager.ActionBarManager;
 import net.chaossquad.mclib.actionbar.manager.SelfSchedulingActionBarManager;
 import net.chaossquad.mclib.dynamicevents.EventListenerManager;
 import net.chaossquad.mclib.storage.DSSerializer;
+import net.chaossquad.mclib.world.DynamicWorldLoadingSystem;
 import net.jandie1505.combattest.commands.CombatTestCommand;
 import net.jandie1505.combattest.commands.CombatTestCommandOld;
 import net.jandie1505.combattest.config.ConfigKeys;
@@ -47,7 +49,7 @@ public class CombatTest extends JavaPlugin {
     private GamePart game;
     private List<UUID> bypassingPlayers;
     private int autostartNewGameTimer;
-    private List<World> managedWorlds;
+    private DynamicWorldLoadingSystem worldManager;
     private boolean svLoaded;
 
     @Override
@@ -73,7 +75,7 @@ public class CombatTest extends JavaPlugin {
         this.game = null;
         this.bypassingPlayers = Collections.synchronizedList(new ArrayList<>());
         this.autostartNewGameTimer = 30;
-        this.managedWorlds = Collections.synchronizedList(new ArrayList<>());
+        this.worldManager = new DynamicWorldLoadingSystem(this);
 
         try {
             Class.forName("de.myzelyam.api.vanish.VanishAPI");
@@ -214,30 +216,23 @@ public class CombatTest extends JavaPlugin {
             }
         }.runTaskTimer(this, 0, 10*20);
 
-        /*
-        Manage worlds task
-         */
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            try {
+        new BukkitRunnable() {
 
-                for (World world : List.copyOf(this.managedWorlds)) {
+            @Override
+            public void run() {
 
-                    if (world == null || !this.getServer().getWorlds().contains(world) || this.getServer().getWorlds().get(0) == world) {
-                        this.managedWorlds.remove(world);
-                        continue;
-                    }
+                for (World world : CombatTest.this.worldManager.getDynamicWorlds()) {
+                    if (world == null || !getServer().getWorlds().contains(world) || getServer().getWorlds().getFirst() == world) continue;
 
-                    if (!(this.game instanceof Lobby || this.game instanceof Game) || (this.game instanceof Game g && (g).getWorld() != world)) {
-                        this.unloadWorld(world);
-                    }
+                    if (CombatTest.this.getGame() instanceof Lobby) continue;
+                    if (CombatTest.this.getGame() instanceof Game g && g.getWorld() == world) continue;
 
+                    CombatTest.this.unloadWorld(world);
                 }
 
-            } catch (Exception e) {
-                this.getLogger().warning("Exception in game: " + e + "\nMessage: " + e.getMessage() + "\nStacktrace: " + Arrays.toString(e.getStackTrace()) + "--- END ---");
-                this.stopGame();
             }
-        }, 0, 20L);
+
+        }.runTaskTimer(this, 1, 20);
 
         this.getLogger().info("CombatTest Plugin was successfully enabled");
 
@@ -278,13 +273,8 @@ public class CombatTest extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
         this.game = null;
-
-        for (World world : List.copyOf(this.managedWorlds)) {
-            this.unloadWorld(world);
-        }
-
+        this.worldManager.remove();
     }
 
     public boolean startLobby() {
@@ -400,59 +390,16 @@ public class CombatTest extends JavaPlugin {
     }
 
     public World loadWorld(String name) {
-
-        World world = this.getServer().getWorld(name);
-
-        if (world != null) {
-            this.managedWorlds.add(world);
-            world.setAutoSave(false);
-            this.getLogger().info("World [" + this.getServer().getWorlds().indexOf(world) + "] " + world.getUID() + " (" + world.getName() + ") is already loaded and was added to managed worlds");
-            return world;
-        }
-
-        world = this.getServer().createWorld(new WorldCreator(name));
-
-        if (world != null) {
-            this.managedWorlds.add(world);
-            world.setAutoSave(false);
-            this.getLogger().info("Loaded world [" + this.getServer().getWorlds().indexOf(world) + "] " + world.getUID() + " (" + world.getName() + ")");
-        } else {
-            this.getLogger().warning("Error while loading world " + name);
-        }
-
-        return world;
-
+        return this.worldManager.createWorldFromTemplate(name);
     }
 
     public boolean unloadWorld(World world) {
-
-        if (world == null || this.getServer().getWorlds().get(0) == world || !this.managedWorlds.contains(world) || !this.getServer().getWorlds().contains(world)) {
-            return false;
-        }
-
-        UUID uid = world.getUID();
-        int index = this.getServer().getWorlds().indexOf(world);
-        String name = world.getName();
-
-        for (Player player : world.getPlayers()) {
-            player.teleport(new Location(this.getServer().getWorlds().get(0), 0, 0, 0));
-        }
-
-        boolean success = this.getServer().unloadWorld(world, false);
-
-        if (success) {
-            this.managedWorlds.remove(world);
-            this.getLogger().info("Unloaded world [" + index + "] " + uid + " (" + name + ")");
-        } else {
-            this.getLogger().warning("Error white unloading world [" + index + "] " + uid + " (" + name + ")");
-        }
-
-        return success;
-
+        if (!this.worldManager.isDynamicWorld(world)) return false;
+        return WorldUtils.unloadWorld(world, false);
     }
 
     public List<World> getManagedWorlds() {
-        return List.copyOf(this.managedWorlds);
+        return this.worldManager.getDynamicWorlds();
     }
 
     public boolean isCloudSystemMode() {

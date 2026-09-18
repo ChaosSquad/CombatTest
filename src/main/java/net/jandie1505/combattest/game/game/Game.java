@@ -9,6 +9,7 @@ import net.chaossquad.mclib.combattracking.CombatTracker;
 import net.chaossquad.mclib.combattracking.NoDamageTracker;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.constants.NamespacedKeys;
@@ -177,7 +178,7 @@ public class Game extends GamePart {
 
             // Custom command
 
-            String customCommand = this.plugin.getConfigManager().getConfig().optJSONObject("cloudSystemMode", new JSONObject()).optString("switchToIngameCommand", "");
+            String customCommand = this.plugin.config().optString(ConfigKeys.CLOUD_SYSTEM_MODE_SWITCH_TO_INGAME_COMMAND, "");
 
             if (!customCommand.equalsIgnoreCase("")) {
                 this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), customCommand);
@@ -185,7 +186,7 @@ public class Game extends GamePart {
 
             // CloudNet ingame state
 
-            if (this.plugin.getConfigManager().getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("cloudnet", false)) {
+            if (this.plugin.config().optBoolean(ConfigKeys.INTEGRATIONS_CLOUDNET, false)) {
 
                 try {
 
@@ -893,7 +894,7 @@ public class Game extends GamePart {
 
                 if (attempt < 10) {
                     if (teamMode == spawnpoint.getTeamMode() || spawnpoint.getTeamMode() == -1) {
-                        int radius = this.plugin.getConfigManager().getConfig().optInt("spawnpointBlockedRadius", 10);
+                        int radius = this.plugin.config().optInt(ConfigKeys.GAME_SPAWNPOINT_BLOCKED_RADIUS, 10);
 
                         Collection<Entity> nearbyEntities = world.getNearbyEntities(spawnpoint.buildLocation(world), radius, radius, radius);
 

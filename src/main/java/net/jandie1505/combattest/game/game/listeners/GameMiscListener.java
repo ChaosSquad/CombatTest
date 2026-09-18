@@ -3,7 +3,7 @@ package net.jandie1505.combattest.game.game.listeners;
 import net.chaossquad.mclib.PlayerUtils;
 import net.chaossquad.mclib.WorldUtils;
 import net.chaossquad.mclib.combattracking.CombatTracker;
-import net.chaossquad.mclib.executable.ManagedListener;
+import net.chaossquad.mclib.gamemode.executable.ManagedListener;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.data.PlayerData;

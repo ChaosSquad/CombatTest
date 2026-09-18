@@ -24,7 +24,7 @@ public class CombatTestCommand extends SubcommandCommand {
         this.addSubcommand("status", SubcommandEntry.of(new CombatTestStatusSubcommand(this.plugin)));
         this.addSubcommand("start", SubcommandEntry.of(new CombatTestStartSubcommand(this.plugin)));
         this.addSubcommand("bypass", SubcommandEntry.of(new CombatTestBypassSubcommand(this.plugin)));
-        this.addSubcommand("settings", SubcommandEntry.of(new SettingsSubcommand(this.plugin)));
+        this.addSubcommand("config", SubcommandEntry.of(new CombatTestConfigEditorSubcommand(this.plugin)));
         this.addSubcommand("worlds", SubcommandEntry.of(new WorldsSubcommand()));
     }
 

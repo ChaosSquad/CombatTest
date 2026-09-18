@@ -1,14 +1,13 @@
 package net.jandie1505.combattest.game.endlobby;
 
-import net.chaossquad.mclib.executable.ManagedListener;
+import net.chaossquad.mclib.gamemode.executable.ManagedListener;
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.jandie1505.combattest.game.game.data.TeamData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,22 +44,22 @@ public class Endlobby extends GamePart implements ManagedListener {
         this.time = 60;
 
         this.world = this.plugin.getServer().getWorlds().get(0);
-        this.lobbyBorderEnabled = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optBoolean("enable", false);
+        this.lobbyBorderEnabled = this.plugin.config().optBoolean(ConfigKeys.LOBBY_BORDER_ENABLE, false);
         this.lobbyBorder = new int[]{
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x1", -10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("y1", -10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("z1", -10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x2", 10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("y2", 10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("z2", 10)
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_X1, -10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_Y1, -10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_Z1, -10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_X2, 10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_Y2, 10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_Z2, 10)
         };
         this.lobbySpawn = new Location(
                 this.world,
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("x", 0),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("y", 0),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("z", 0),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("yaw", 0.0F),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("pitch", 0.0F)
+                this.plugin.config().optDouble(ConfigKeys.LOBBY_SPAWNPOINT_X, 0),
+                this.plugin.config().optDouble(ConfigKeys.LOBBY_SPAWNPOINT_Y, 0),
+                this.plugin.config().optDouble(ConfigKeys.LOBBY_SPAWNPOINT_Z, 0),
+                this.plugin.config().optFloat(ConfigKeys.LOBBY_SPAWNPOINT_YAW, 0.0F),
+                this.plugin.config().optFloat(ConfigKeys.LOBBY_SPAWNPOINT_PITCH, 0.0F)
         );
 
         this.playerMap = playerMap;

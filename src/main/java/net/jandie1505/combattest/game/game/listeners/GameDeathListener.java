@@ -2,7 +2,8 @@ package net.jandie1505.combattest.game.game.listeners;
 
 import net.chaossquad.mclib.MiscUtils;
 import net.chaossquad.mclib.combattracking.PlayerFight;
-import net.chaossquad.mclib.executable.ManagedListener;
+import net.chaossquad.mclib.gamemode.executable.ManagedListener;
+import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.data.PlayerData;
 import net.jandie1505.combattest.game.game.equipment.EquipmentData;
@@ -133,8 +134,8 @@ public class GameDeathListener implements ManagedListener {
             );
         }
 
-        killer.playerData().addRewardPoints(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("playerKill", 0));
-        killer.playerData().addRewardXP(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("playerKill", 0));
+        killer.playerData().addRewardPoints(this.game.getPlugin().config().optInt(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_KILL, 0));
+        killer.playerData().addRewardXP(this.game.getPlugin().config().optDouble(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_KILL, 0));
     }
 
     private void giveShortRegenerationToKiller(@NotNull Player killer) {
@@ -184,8 +185,8 @@ public class GameDeathListener implements ManagedListener {
             int assistPointsReward = (int) Math.round(Math.min(damage * (double) PAYOUT_ASSIST, PAYOUT_KILL));
             if (assistPointsReward > 0) assistantData.addPoints(assistPointsReward);
 
-            assistantData.addRewardPoints(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("indirectPlayerKill", 0));
-            assistantData.addRewardXP(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("indirectPlayerKill", 0));
+            assistantData.addRewardPoints(this.game.getPlugin().config().optInt(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_INDIRECT_KILL, 0));
+            assistantData.addRewardXP(this.game.getPlugin().config().optDouble(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_INDIRECT_KILL, 0));
 
             assistantData.incrementAssists();
 

@@ -44,7 +44,12 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
-    implementation("net.chaossquad:mclib:main-9549d74546311c5b81e8b35b60c1e78618450dc7")
+    implementation("net.chaossquad:mclib-core:main-1e63b841679ab8468b0474d509553e09b82a2682")
+    implementation("net.chaossquad:mclib-datastorage:main-1e63b841679ab8468b0474d509553e09b82a2682")
+    implementation("net.chaossquad:mclib-gamemode:main-1e63b841679ab8468b0474d509553e09b82a2682")
+    implementation("net.jandie1505:DataStorage") {
+        version { strictly("1.2-RELEASE") }
+    }
     implementation("org.json:json:20250107")
     compileOnly("eu.cloudnetservice.cloudnet:wrapper-jvm-api:4.0.0-RC13")
     compileOnly("eu.cloudnetservice.cloudnet:bridge-api:4.0.0-RC13")

@@ -1,78 +1,58 @@
 package net.jandie1505.combattest.config;
 
+import net.jandie1505.datastorage.DataStorage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public final class DefaultConfigValues {
     private DefaultConfigValues() {}
 
-    public static JSONObject getGeneralConfig() {
-        JSONObject config = new JSONObject();
+    public static DataStorage getConfig() {
+        var config = new DataStorage();
 
-        config.put("permissionsPrefix", "combattest");
-        config.put("singleServerMode", true);
-        config.put("autostartNewGame", false);
+        config.set(ConfigKeys.PERMISSION_PREFIX, "combattest");
+        config.set(ConfigKeys.SINGLE_SERVER_MODE, true);
+        config.set(ConfigKeys.AUTOSTART_NEW_GAME, false);
 
-        JSONObject lobbyConfig = new JSONObject();
+        config.set(ConfigKeys.LOBBY_SPAWNPOINT_X, 0);
+        config.set(ConfigKeys.LOBBY_SPAWNPOINT_Y, 0);
+        config.set(ConfigKeys.LOBBY_SPAWNPOINT_Z, 0);
+        config.set(ConfigKeys.LOBBY_SPAWNPOINT_YAW, 0.0);
+        config.set(ConfigKeys.LOBBY_SPAWNPOINT_PITCH, 0.0);
 
-        JSONObject spawnpointLobbyConfig = new JSONObject();
-        spawnpointLobbyConfig.put("x", 0);
-        spawnpointLobbyConfig.put("y", 0);
-        spawnpointLobbyConfig.put("z", 0);
-        spawnpointLobbyConfig.put("yaw", 0.0);
-        spawnpointLobbyConfig.put("pitch", 0.0);
-        lobbyConfig.put("spawnpoint", spawnpointLobbyConfig);
+        config.set(ConfigKeys.LOBBY_BORDER_ENABLE, true);
+        config.set(ConfigKeys.LOBBY_BORDER_X1, -10);
+        config.set(ConfigKeys.LOBBY_BORDER_Y1, -10);
+        config.set(ConfigKeys.LOBBY_BORDER_Z1, -10);
+        config.set(ConfigKeys.LOBBY_BORDER_X2, 10);
+        config.set(ConfigKeys.LOBBY_BORDER_Y2, 10);
+        config.set(ConfigKeys.LOBBY_BORDER_Z2, 10);
 
-        JSONObject borderGameConfig = new JSONObject();
-        borderGameConfig.put("enable", true);
-        borderGameConfig.put("x1", -10);
-        borderGameConfig.put("y1", -10);
-        borderGameConfig.put("z1", -10);
-        borderGameConfig.put("x2", 10);
-        borderGameConfig.put("y2", 10);
-        borderGameConfig.put("z2", 10);
-        lobbyConfig.put("border", borderGameConfig);
+        config.set(ConfigKeys.LOBBY_TIME, 60);
+        config.set(ConfigKeys.LOBBY_REQUIRED_PLAYERS, 2);
+        config.set(ConfigKeys.LOBBY_MAP_VOTING, true);
+        config.set(ConfigKeys.LOBBY_TEAM_SELECTION, true);
 
-        lobbyConfig.put("time", 90);
-        lobbyConfig.put("requiredPlayers", 2);
-        lobbyConfig.put("mapVoting", true);
-        lobbyConfig.put("teamSelection", true);
+        config.set(ConfigKeys.CLOUD_SYSTEM_MODE_ENABLE, false);
+        config.set(ConfigKeys.CLOUD_SYSTEM_MODE_SWITCH_TO_INGAME_COMMAND, "");
 
-        config.put("lobby", lobbyConfig);
+        config.set(ConfigKeys.INTEGRATIONS_CLOUDNET, true);
+        config.set(ConfigKeys.INTEGRATIONS_PARTY_AND_FRIENDS, true);
+        config.set(ConfigKeys.INTEGRATIONS_SUPERVANISH_PREMIUMVANISH, true);
 
-        JSONObject cloudSystemConfig = new JSONObject();
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_ENABLE, false);
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_KILL, 20);
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_INDIRECT_KILL, 5);
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_UPGRADE_PURCHASED, 5);
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_MAX_REWARDS_AMOUNT, 5000);
 
-        cloudSystemConfig.put("enable", false);
-        cloudSystemConfig.put("switchToIngameCommand", "");
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_ENABLE, false);
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_KILL, 10.0);
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_INDIRECT_KILL, 5.0);
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_UPGRADE_PURCHASED, 1.0);
+        config.set(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_MAX_REWARDS_AMOUNT, 1000.0);
 
-        config.put("cloudSystemMode", cloudSystemConfig);
-
-        JSONObject integrationsConfig = new JSONObject();
-
-        integrationsConfig.put("cloudnet", true);
-        integrationsConfig.put("partyandfriends", true);
-        integrationsConfig.put("supervanish-premiumvanish", true);
-        integrationsConfig.put("playerpoints", true);
-
-        config.put("integrations", integrationsConfig);
-
-        JSONObject rewardsConfig = new JSONObject();
-
-        rewardsConfig.put("playerKill", 20);
-        rewardsConfig.put("indirectPlayerKill", 5);
-        rewardsConfig.put("upgradePurchased", 5);
-        rewardsConfig.put("maxRewardsAmount", 5000);
-
-        config.put("playerPointsRewards", rewardsConfig);
-
-        JSONObject xpRewardsConfig = new JSONObject();
-
-        xpRewardsConfig.put("playerKill", 10.0);
-        xpRewardsConfig.put("indirectPlayerKill", 5.0);
-        xpRewardsConfig.put("upgradePurchased", 1.0);
-        xpRewardsConfig.put("maxRewardsAmount", 1000.0);
-
-        config.put("playerLevelsRewards", xpRewardsConfig);
+        config.set(ConfigKeys.GAME_SPAWNPOINT_BLOCKED_RADIUS, 10);
 
         return config;
     }

@@ -1,8 +1,9 @@
 package net.jandie1505.combattest.game.game.gui;
 
 import net.chaossquad.mclib.ItemUtils;
-import net.chaossquad.mclib.executable.ManagedListener;
+import net.chaossquad.mclib.gamemode.executable.ManagedListener;
 import net.chaossquad.mclib.misc.Removable;
+import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.data.PlayerData;
@@ -189,8 +190,8 @@ public class ShopGUI implements InventoryHolder, ManagedListener {
                 );
                 player.playSound(player.getLocation().clone(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
 
-                playerData.addRewardPoints(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("upgradePurchased", 0));
-                playerData.addRewardXP(this.game.getPlugin().getConfigManager().getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("upgradePurchased", 0));
+                playerData.addRewardPoints(this.game.getPlugin().config().optInt(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_UPGRADE_PURCHASED, 0));
+                playerData.addRewardXP(this.game.getPlugin().config().optDouble(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_UPGRADE_PURCHASED, 0));
             } else {
                 player.sendRichMessage("<red>You don't have enough points to buy this item!");
                 player.playSound(player.getLocation().clone(), Sound.UI_BUTTON_CLICK, 0.5F, 0F);

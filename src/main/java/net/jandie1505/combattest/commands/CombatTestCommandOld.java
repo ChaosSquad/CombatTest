@@ -1,6 +1,7 @@
 package net.jandie1505.combattest.commands;
 
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.constants.Permissions;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.data.PlayerData;
@@ -67,9 +68,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
                 break;
             case "isautostart":
                 this.isAutostartSubcommand(sender);
-                break;
-            case "setautostart":
-                this.setAutostartSubcommand(sender, args);
                 break;
             case "givepoints":
                 this.givePointsSubcommand(sender, args);
@@ -520,23 +518,6 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
 
     }
 
-    public void setAutostartSubcommand(CommandSender sender, String[] args) {
-
-        if (!this.hasPermissionAdmin(sender)) {
-            sender.sendMessage("§cNo permission");
-            return;
-        }
-
-        if (args.length != 2) {
-            sender.sendMessage("§cUsage: /combattest setmaxtime <time>");
-            return;
-        }
-
-        this.plugin.setAutostartNewGame(Boolean.parseBoolean(args[1]));
-        sender.sendMessage("§aAutostart of new games set to: " + this.plugin.isAutostartNewGame());
-
-    }
-
     public void getServerStatusCommand(CommandSender sender) {
 
         if (!this.hasPermissionAdmin(sender)) {
@@ -587,7 +568,7 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
             return;
         }
 
-        this.plugin.getConfigManager().reloadConfig();
+        this.plugin.configReload();
         this.plugin.getMapConfig().reloadConfig();
         sender.sendMessage("§aReloading config...");
 
@@ -1167,7 +1148,7 @@ public class CombatTestCommandOld implements CommandExecutor, TabCompleter {
     }
 
     public boolean hasPermissionAdmin(CommandSender sender) {
-        return (sender instanceof ConsoleCommandSender) || (sender instanceof Player && sender.hasPermission(this.plugin.getPermissionPrefix() + "." + "admin"));
+        return Permissions.hasPermission(sender, Permissions.ADMIN);
     }
 
     @Override

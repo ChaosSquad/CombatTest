@@ -1,6 +1,6 @@
 package net.jandie1505.combattest.game.game.listeners;
 
-import net.chaossquad.mclib.executable.ManagedListener;
+import net.chaossquad.mclib.gamemode.executable.ManagedListener;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;
 import org.bukkit.Material;

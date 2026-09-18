@@ -1,6 +1,6 @@
 package net.jandie1505.combattest.game.game.combat;
 
-import net.chaossquad.mclib.executable.ManagedListener;
+import net.chaossquad.mclib.gamemode.executable.ManagedListener;
 import net.chaossquad.mclib.misc.Removable;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.game.Game;

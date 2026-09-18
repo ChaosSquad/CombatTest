@@ -2,7 +2,7 @@ package net.jandie1505.combattest.game.base;
 
 import net.chaossquad.mclib.command.DynamicSubcommandProvider;
 import net.chaossquad.mclib.command.SubcommandEntry;
-import net.chaossquad.mclib.executable.CoreExecutable;
+import net.chaossquad.mclib.gamemode.executable.CoreExecutable;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import org.bukkit.Bukkit;

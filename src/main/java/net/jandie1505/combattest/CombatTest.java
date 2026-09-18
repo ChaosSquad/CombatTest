@@ -4,8 +4,10 @@ import de.myzelyam.api.vanish.VanishAPI;
 import net.chaossquad.mclib.actionbar.manager.ActionBarManager;
 import net.chaossquad.mclib.actionbar.manager.SelfSchedulingActionBarManager;
 import net.chaossquad.mclib.dynamicevents.EventListenerManager;
+import net.chaossquad.mclib.storage.DSSerializer;
 import net.jandie1505.combattest.commands.CombatTestCommand;
 import net.jandie1505.combattest.commands.CombatTestCommandOld;
+import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
 import net.jandie1505.combattest.game.base.GamePart;
@@ -15,6 +17,7 @@ import net.jandie1505.combattest.game.game.commands.GamePayCommand;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.jandie1505.combattest.game.lobby.commands.LobbyStartCommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
+import net.jandie1505.datastorage.DataStorage;
 import net.jandie1505.playerlevels.api.core.level.Leveler;
 import net.jandie1505.playerlevels.core.PlayerLevelsAPIProvider;
 import net.kyori.adventure.text.Component;
@@ -25,37 +28,36 @@ import org.black_ixx.playerpoints.PlayerPoints;
 import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONObject;
 
+import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 
 public class CombatTest extends JavaPlugin {
-    private ConfigManager configManager;
+    private DataStorage config;
     private ConfigManager mapConfig;
     private EventListenerManager listenerManager;
     private ActionBarManager actionBarManager;
     private GamePart game;
     private List<UUID> bypassingPlayers;
-    private String permissionPrefix;
-    private boolean singleServer;
-    private boolean autostartNewGame;
     private int autostartNewGameTimer;
     private List<World> managedWorlds;
-    private boolean cloudSystemMode;
     private boolean svLoaded;
 
     @Override
     public void onEnable() {
 
-        this.configManager = new ConfigManager(this, DefaultConfigValues.getGeneralConfig(), false, "config.json");
+        this.config = new DataStorage();
+        this.config.merge(DefaultConfigValues.getConfig(), true);
+        this.configReload();
+
         this.mapConfig = new ConfigManager(this, DefaultConfigValues.getWorldConfig(), true, "maps.json");
-        this.configManager.reloadConfig();
         this.mapConfig.reloadConfig();
 
         this.listenerManager = new EventListenerManager(this);
@@ -70,12 +72,8 @@ public class CombatTest extends JavaPlugin {
 
         this.game = null;
         this.bypassingPlayers = Collections.synchronizedList(new ArrayList<>());
-        this.permissionPrefix = this.configManager.getConfig().optString("permissionsPrefix", "combattest");
-        this.singleServer = this.configManager.getConfig().optBoolean("singleServerMode", false);
-        this.autostartNewGame = this.configManager.getConfig().optBoolean("autostartNewGame", false);
         this.autostartNewGameTimer = 30;
         this.managedWorlds = Collections.synchronizedList(new ArrayList<>());
-        this.cloudSystemMode = this.singleServer && this.configManager.getConfig().optJSONObject("cloudSystemMode", new JSONObject()).optBoolean("enable", false);
 
         try {
             Class.forName("de.myzelyam.api.vanish.VanishAPI");
@@ -166,7 +164,7 @@ public class CombatTest extends JavaPlugin {
 
                 for (Player player : List.copyOf(CombatTest.this.getServer().getOnlinePlayers())) {
 
-                    if (CombatTest.this.autostartNewGame && CombatTest.this.singleServer) {
+                    if (CombatTest.this.isAutostartNewGame()) {
                         player.sendActionBar(Component.text("--- Starting new game in " + CombatTest.this.autostartNewGameTimer + " seconds ---", NamedTextColor.AQUA));
                     }
 
@@ -174,7 +172,7 @@ public class CombatTest extends JavaPlugin {
 
                 // Autostart new game
 
-                if (CombatTest.this.autostartNewGame) {
+                if (CombatTest.this.isAutostartNewGame()) {
 
                     if (CombatTest.this.autostartNewGameTimer <= 0) {
                         CombatTest.this.autostartNewGameTimer = 30;
@@ -355,7 +353,7 @@ public class CombatTest extends JavaPlugin {
             return true;
         }
 
-        if (this.configManager.getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("supervanish-premiumvanish", false) && this.svLoaded) {
+        if (this.config.optBoolean(ConfigKeys.INTEGRATIONS_SUPERVANISH_PREMIUMVANISH, false) && this.svLoaded) {
 
             Player player = this.getServer().getPlayer(playerId);
 
@@ -375,8 +373,8 @@ public class CombatTest extends JavaPlugin {
         return this.isPlayerBypassing(player.getUniqueId());
     }
 
-    public ConfigManager getConfigManager() {
-        return this.configManager;
+    public DataStorage config() {
+        return this.config;
     }
 
     public ConfigManager getMapConfig() {
@@ -391,20 +389,14 @@ public class CombatTest extends JavaPlugin {
         return this.actionBarManager;
     }
 
-    public String getPermissionPrefix() {
-        return permissionPrefix;
-    }
-
     public boolean isSingleServer() {
-        return this.singleServer;
+        return this.config.optBoolean(ConfigKeys.SINGLE_SERVER_MODE, false);
     }
 
     public boolean isAutostartNewGame() {
-        return this.autostartNewGame;
-    }
-
-    public void setAutostartNewGame(boolean autostartNewGame) {
-        this.autostartNewGame = autostartNewGame;
+        var autostart = CombatTest.this.config().optBoolean(ConfigKeys.AUTOSTART_NEW_GAME, false);
+        var singleServer = CombatTest.this.config().optBoolean(ConfigKeys.SINGLE_SERVER_MODE, false);
+        return autostart && singleServer;
     }
 
     public World loadWorld(String name) {
@@ -464,37 +456,33 @@ public class CombatTest extends JavaPlugin {
     }
 
     public boolean isCloudSystemMode() {
-        return this.singleServer && this.cloudSystemMode;
+        return this.isSingleServer() && this.config.optBoolean(ConfigKeys.CLOUD_SYSTEM_MODE_ENABLE, false);
     }
 
     public void givePointsToPlayer(Player player, int amount, String message) {
+        if (!this.config.optBoolean(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_ENABLE, false)) return;
+        if (amount <= 0) return;
 
-        if (this.configManager.getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("playerpoints", false)) {
+        try {
+            Class.forName("org.black_ixx.playerpoints.PlayerPoints");
+            Class.forName("org.black_ixx.playerpoints.PlayerPointsAPI");
 
-            try {
-                Class.forName("org.black_ixx.playerpoints.PlayerPoints");
-                Class.forName("org.black_ixx.playerpoints.PlayerPointsAPI");
+            PlayerPointsAPI pointsAPI = PlayerPoints.getInstance().getAPI();
+            if (pointsAPI == null) return;
 
-                PlayerPointsAPI pointsAPI = PlayerPoints.getInstance().getAPI();
+            var maxRewardsAmount = this.config.optInt(ConfigKeys.INTEGRATIONS_PLAYERPOINTS_MAX_REWARDS_AMOUNT, 5000);
+            if (amount > maxRewardsAmount) amount = maxRewardsAmount;
 
-                if (amount <= 0) {
-                    return;
-                }
+            pointsAPI.give(player.getUniqueId(), amount);
 
-                if (amount > this.configManager.getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("maxRewardsAmount", 5000)) {
-                    amount = this.configManager.getConfig().optJSONObject("playerPointsRewards", new JSONObject()).optInt("maxRewardsAmount", 5000);
-                }
-
-                pointsAPI.give(player.getUniqueId(), amount);
-
-                if (message != null) {
-                    player.sendMessage(message.replace("{points}", String.valueOf(amount)));
-                }
-
-            } catch (ClassNotFoundException e) {
-
+            if (message != null) {
+                player.sendMessage(message.replace("{points}", String.valueOf(amount)));
             }
 
+        } catch (ClassNotFoundException e) {
+            this.getLogger().warning("PlayerPoints integration failed: PlayerPoints has not been found.");
+        } catch (Exception e) {
+            this.getLogger().log(Level.WARNING, "PlayerPoints integration: Failed to add XP to player", e);
         }
 
     }
@@ -505,7 +493,7 @@ public class CombatTest extends JavaPlugin {
      * @param xp xp amount
      */
     public void giveXPToPlayer(@NotNull Player player, double xp, @Nullable String message) {
-        if (!this.configManager.getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("playerlevels", false)) return;
+        if (!this.config.optBoolean(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_ENABLE, false)) return;
         if (xp <= 0) return;
 
         try {
@@ -514,10 +502,8 @@ public class CombatTest extends JavaPlugin {
             Leveler leveler = PlayerLevelsAPIProvider.getApi().getLevelManager().getLeveler(player.getUniqueId());
             if (leveler == null) return;
 
-            double maxAmount = this.configManager.getConfig().optJSONObject("playerLevelsRewards", new JSONObject()).optDouble("maxRewardsAmount", 1000.0);
-            if (xp > maxAmount) {
-                xp = maxAmount;
-            }
+            double maxAmount = this.config.optDouble(ConfigKeys.INTEGRATIONS_PLAYERLEVELS_MAX_REWARDS_AMOUNT, 1000.0);
+            if (xp > maxAmount) xp = maxAmount;
 
             leveler.getData().xp(leveler.getData().xp() + xp);
 
@@ -530,6 +516,29 @@ public class CombatTest extends JavaPlugin {
         } catch (Exception e) {
             this.getLogger().log(Level.WARNING, "PlayerLevels integration: Failed to add XP to player", e);
         }
+    }
+
+    /**
+     * Reloads the config from the config file.
+     */
+    public void configReload() {
+
+        try {
+
+            DataStorage loadedStorage = DSSerializer.loadConfig(new File(this.getDataFolder(), "config.yml"));
+            if (loadedStorage != null) {
+                this.config.merge(loadedStorage);
+                this.getLogger().info("Config loaded successfully");
+            } else {
+                YamlConfiguration ymlConfig = DSSerializer.serialize(this.config);
+                ymlConfig.save(new File(this.getDataFolder(), "config.yml"));
+                this.getLogger().info("Config created successfully");
+            }
+
+        } catch (Exception e) {
+            this.getLogger().log(Level.WARNING, "Failed to load config", e);
+        }
+
     }
 
 }

@@ -2,7 +2,7 @@ package net.jandie1505.combattest.game.game.listeners;
 
 import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import net.chaossquad.mclib.executable.ManagedListener;
+import net.chaossquad.mclib.gamemode.executable.ManagedListener;
 import net.jandie1505.combattest.constants.Permissions;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.data.PlayerData;

@@ -5,8 +5,9 @@ import de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.spigot.api.party.PartyManager;
 import de.simonsator.partyandfriends.spigot.api.party.PlayerParty;
 import net.chaossquad.mclib.command.SubcommandEntry;
-import net.chaossquad.mclib.executable.ManagedListener;
+import net.chaossquad.mclib.gamemode.executable.ManagedListener;
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
@@ -62,13 +63,11 @@ public class Lobby extends GamePart implements ManagedListener {
     private boolean forcestart;
     private MapData selectedMap;
     private World world;
-    private boolean mapVoting;
-    private boolean teamSelection;
 
     public Lobby(CombatTest plugin) {
         super(plugin);
         this.plugin = plugin;
-        this.time = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optInt("time", 90);
+        this.time = this.plugin.config().optInt(ConfigKeys.LOBBY_TIME, 90);
         this.players = Collections.synchronizedMap(new HashMap<>());
         this.voteMenu = new LobbyVoteGUI(this);
         this.teamSelectionGUI = new LobbyTeamSelectionGUI(this);
@@ -81,25 +80,24 @@ public class Lobby extends GamePart implements ManagedListener {
         this.getDynamicSubcommands().put("value", SubcommandEntry.of(new LobbyValueSubcommand(this)));
         ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new LobbyPlayersValueSubcommand(this)));
         this.getDynamicSubcommands().put("votemap", SubcommandEntry.of(new LobbyVoteCommand(this.getPlugin())));
-        this.lobbyBorderEnabled = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optBoolean("enable", false);
+        this.lobbyBorderEnabled = this.plugin.config().optBoolean(ConfigKeys.LOBBY_BORDER_ENABLE, false);
         this.lobbyBorder = new int[]{
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x1", -10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("y1", -10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("z1", -10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("x2", 10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("y2", 10),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("border", new JSONObject()).optInt("z2", 10)
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_X1, -10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_Y1, -10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_Z1, -10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_X2, 10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_Y2, 10),
+                this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_Z2, 10)
         };
         this.lobbySpawn = new Location(
                 this.world,
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("x", 0),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("y", 0),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optInt("z", 0),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("yaw", 0.0F),
-                this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optJSONObject("spawnpoint", new JSONObject()).optFloat("pitch", 0.0F)
+                this.plugin.config().optDouble(ConfigKeys.LOBBY_SPAWNPOINT_X, 0),
+                this.plugin.config().optDouble(ConfigKeys.LOBBY_SPAWNPOINT_Y, 0),
+                this.plugin.config().optDouble(ConfigKeys.LOBBY_SPAWNPOINT_Z, 0),
+                this.plugin.config().optFloat(ConfigKeys.LOBBY_SPAWNPOINT_YAW, 0.0F),
+                this.plugin.config().optFloat(ConfigKeys.LOBBY_SPAWNPOINT_PITCH, 0.0F)
         );
-        this.mapVoting = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("mapVoting", false);
-        this.teamSelection = this.plugin.getConfigManager().getConfig().optJSONObject("lobby", new JSONObject()).optBoolean("teamSelection", false);
+        System.out.println(this.lobbySpawn);
 
         for (String world : List.copyOf(this.plugin.getMapConfig().getConfig().keySet())) {
             try {
@@ -420,7 +418,7 @@ public class Lobby extends GamePart implements ManagedListener {
 
         MapData selectedMap = null;
 
-        if (this.mapVoting) {
+        if (this.isMapVoting()) {
 
             List<MapData> highestVotedMaps = this.getHighestVotedMaps();
 
@@ -529,7 +527,7 @@ public class Lobby extends GamePart implements ManagedListener {
 
     private void setPartyTeams() {
 
-        if (this.plugin.getConfigManager().getConfig().optJSONObject("integrations", new JSONObject()).optBoolean("partyandfriends", false)) {
+        if (this.plugin.config().optBoolean(ConfigKeys.INTEGRATIONS_PARTY_AND_FRIENDS, false)) {
 
             try {
                 Class.forName("de.simonsator.partyandfriends.spigot.api.pafplayers.PAFPlayerManager");
@@ -789,11 +787,7 @@ public class Lobby extends GamePart implements ManagedListener {
     }
 
     public boolean isMapVoting() {
-        return this.mapVoting;
-    }
-
-    public void setMapVoting(boolean mapVoting) {
-        this.mapVoting = mapVoting;
+        return this.plugin.config().optBoolean(ConfigKeys.LOBBY_MAP_VOTING, false);
     }
 
     public int getTime() {
@@ -805,11 +799,7 @@ public class Lobby extends GamePart implements ManagedListener {
     }
 
     public boolean isTeamSelection() {
-        return this.teamSelection;
-    }
-
-    public void setTeamSelection(boolean teamSelection) {
-        this.teamSelection = teamSelection;
+        return this.plugin.config().optBoolean(ConfigKeys.LOBBY_TEAM_SELECTION, false);
     }
 
     public Location getLobbySpawn() {

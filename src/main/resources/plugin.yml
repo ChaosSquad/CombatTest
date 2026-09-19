@@ -36,6 +36,9 @@ permissions:
   combattest.start:
     default: op
     description: Force-start the game using /start
+  combattest.forcemap:
+    default: op
+    description: Allow setting a map using /forcemap
   combattest.*:
     default: op
     children:

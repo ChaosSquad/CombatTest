@@ -8,6 +8,7 @@ public interface Permissions {
     String ADMIN = "combattest.admin";
     String CHAT_FORMATTING = "combattest.chat_formatting";
     String START = "combattest.start";
+    String FORCE_MAP = "combattest.force_map";
 
     /**
      * Returns if the specified sender has at least one of the specified permissions.<br/>

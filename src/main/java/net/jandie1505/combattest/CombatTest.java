@@ -15,6 +15,7 @@ import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.Game;
 import net.jandie1505.combattest.game.game.commands.*;
 import net.jandie1505.combattest.game.lobby.Lobby;
+import net.jandie1505.combattest.game.lobby.commands.LobbyForcemapCommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyStartCommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
 import net.jandie1505.datastorage.DataStorage;
@@ -120,6 +121,13 @@ public class CombatTest extends JavaPlugin {
             var cmd = new GameDisableWeatherCommand(this);
             disableWeatherCommand.setExecutor(cmd);
             disableWeatherCommand.setTabCompleter(this);
+        }
+
+        var forcemapCommand = this.getCommand("forcemap");
+        if (forcemapCommand != null) {
+            var cmd = new LobbyForcemapCommand(this);
+            forcemapCommand.setExecutor(cmd);
+            forcemapCommand.setTabCompleter(cmd);
         }
 
         PluginCommand votemapCommand = this.getCommand("votemap");

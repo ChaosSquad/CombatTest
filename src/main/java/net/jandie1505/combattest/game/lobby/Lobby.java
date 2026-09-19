@@ -78,6 +78,7 @@ public class Lobby extends GamePart implements ManagedListener {
         this.getDynamicSubcommands().put("votemap", SubcommandEntry.of(new LobbyVoteCommand(this.getPlugin())));
         this.getDynamicSubcommands().put("random-teams", SubcommandEntry.of(new LobbyRandomTeamsSubcommand(this), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
         this.getDynamicSubcommands().put("maps", SubcommandEntry.of(new LobbyMapsSubommand(this), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
+        this.getDynamicSubcommands().put("forcemap", SubcommandEntry.of(new LobbyForcemapCommand(this.getPlugin()), sender -> Permissions.hasPermission(sender, Permissions.FORCE_MAP)));
 
         this.lobbyBorderEnabled = this.plugin.config().optBoolean(ConfigKeys.LOBBY_BORDER_ENABLE, false);
         this.lobbyBorder = new int[]{

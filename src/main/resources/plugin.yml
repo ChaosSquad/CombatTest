@@ -20,6 +20,9 @@ commands:
   disable-weather:
     description: Disables your own local weather or re-enables it
     usage: /disable-weather
+  forcemap:
+    description: Force-select a map
+    usage: /forcemap
   votemap:
     description: Vote for a map
     usage: /votemap <map>

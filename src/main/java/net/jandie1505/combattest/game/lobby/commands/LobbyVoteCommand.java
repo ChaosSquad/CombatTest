@@ -2,6 +2,7 @@ package net.jandie1505.combattest.game.lobby.commands;
 
 import net.chaossquad.mclib.command.TabCompletingCommandExecutor;
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.jandie1505.combattest.game.lobby.LobbyPlayerData;
 import net.jandie1505.combattest.game.lobby.MapData;
@@ -52,6 +53,12 @@ public class LobbyVoteCommand implements TabCompletingCommandExecutor {
                 if (i.hasNext()) component = component.append(Component.text(", ", NamedTextColor.GOLD));
             }
 
+            sender.sendMessage(component);
+            return true;
+        }
+
+        if (!this.plugin.config().optBoolean(ConfigKeys.LOBBY_MAP_VOTING, false)) {
+            sender.sendRichMessage("<red>Map voting is currently disabled.");
             return true;
         }
 

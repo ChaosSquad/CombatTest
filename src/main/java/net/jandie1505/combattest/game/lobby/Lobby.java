@@ -9,6 +9,7 @@ import net.chaossquad.mclib.gamemode.executable.ManagedListener;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.constants.NamespacedKeys;
+import net.jandie1505.combattest.constants.Permissions;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.game.game.Game;
@@ -73,11 +74,11 @@ public class Lobby extends GamePart implements ManagedListener {
         this.maps = new ArrayList<>();
         this.selectedMap = null;
         this.world = this.plugin.getServer().getWorlds().getFirst();
-        this.getDynamicSubcommands().put("force-start", SubcommandEntry.of(new LobbyStartCommand(this.plugin)));
-        this.getDynamicSubcommands().put("value", SubcommandEntry.of(new LobbyValueSubcommand(this)));
+        this.getDynamicSubcommands().put("force-start", SubcommandEntry.of(new LobbyStartCommand(this.plugin), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
+        this.getDynamicSubcommands().put("value", SubcommandEntry.of(new LobbyValueSubcommand(this), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
         ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new LobbyPlayersValueSubcommand(this)));
         this.getDynamicSubcommands().put("votemap", SubcommandEntry.of(new LobbyVoteCommand(this.getPlugin())));
-        this.getDynamicSubcommands().put("random-teams", SubcommandEntry.of(new LobbyRandomTeamsSubcommand(this)));
+        this.getDynamicSubcommands().put("random-teams", SubcommandEntry.of(new LobbyRandomTeamsSubcommand(this), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
         this.lobbyBorderEnabled = this.plugin.config().optBoolean(ConfigKeys.LOBBY_BORDER_ENABLE, false);
         this.lobbyBorder = new int[]{
                 this.plugin.config().optInt(ConfigKeys.LOBBY_BORDER_X1, -10),

@@ -67,7 +67,7 @@ public class GameStatsCommand implements TabCompletingCommandExecutor {
 
         var team = targetData.getTeam();
         if (team > 0) {
-            sender.sendRichMessage("<gold>Stats of Team <aqua>" + team + "<gold>:");
+            sender.sendRichMessage("<gold>Stats of <aqua>Team " + team + "<gold>:");
             sender.sendRichMessage("<gold> - Kills: <green>" + game.getTeamKills(team));
             sender.sendRichMessage("<gold> - Deaths: <red>" + game.getTeamDeaths(team));
             sender.sendRichMessage("<gold> - K/D: <red>" + PlayerData.getKD(game.getTeamKills(team), game.getTeamDeaths(team)));

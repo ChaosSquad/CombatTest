@@ -10,6 +10,7 @@ import net.chaossquad.mclib.combattracking.NoDamageTracker;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.config.ConfigKeys;
+import net.jandie1505.combattest.constants.Permissions;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.constants.NamespacedKeys;
@@ -108,7 +109,7 @@ public class Game extends GamePart {
         // COMMANDS
         // if this throws an exception, the game is aborted. this is ok.
 
-        this.getDynamicSubcommands().put("value", SubcommandEntry.of(new GameValueSubcommand(this)));
+        this.getDynamicSubcommands().put("value", SubcommandEntry.of(new GameValueSubcommand(this), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
         ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new GamePlayersValueSubcommand(this)));
         this.getDynamicSubcommands().put("pay", SubcommandEntry.of(new GamePayCommand(this.getPlugin())));
         this.getDynamicSubcommands().put("menu", SubcommandEntry.of(new GameMenuCommand(this.getPlugin())));

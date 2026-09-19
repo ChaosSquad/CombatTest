@@ -21,13 +21,13 @@ public class CombatTestCommand extends SubcommandCommand {
         });
         this.plugin = plugin;
 
-        this.addSubcommand("stop", SubcommandEntry.of(new CombatTestStopSubcommand(this.plugin)));
-        this.addSubcommand("status", SubcommandEntry.of(new CombatTestStatusSubcommand(this.plugin)));
-        this.addSubcommand("start", SubcommandEntry.of(new CombatTestStartSubcommand(this.plugin)));
+        this.addSubcommand("stop", SubcommandEntry.of(new CombatTestStopSubcommand(this.plugin), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
+        this.addSubcommand("status", SubcommandEntry.of(new CombatTestStatusSubcommand(this.plugin), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
+        this.addSubcommand("start", SubcommandEntry.of(new CombatTestStartSubcommand(this.plugin), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
         this.addSubcommand("bypass", SubcommandEntry.of(new CombatTestBypassSubcommand(this.plugin)));
-        this.addSubcommand("config", SubcommandEntry.of(new CombatTestConfigEditorSubcommand(this.plugin)));
+        this.addSubcommand("config", SubcommandEntry.of(new CombatTestConfigEditorSubcommand(this.plugin), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
         this.addSubcommand("reload-config", SubcommandEntry.of(new CombatTestReloadSubcommand(this.plugin), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
-        this.addSubcommand("worlds", SubcommandEntry.of(new WorldsSubcommand()));
+        this.addSubcommand("worlds", SubcommandEntry.of(new WorldsSubcommand(), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
     }
 
 }

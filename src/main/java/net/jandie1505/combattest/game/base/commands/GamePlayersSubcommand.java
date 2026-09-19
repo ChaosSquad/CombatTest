@@ -2,6 +2,7 @@ package net.jandie1505.combattest.game.base.commands;
 
 import net.chaossquad.mclib.command.SubcommandCommand;
 import net.chaossquad.mclib.command.SubcommandEntry;
+import net.jandie1505.combattest.constants.Permissions;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.base.commands.players.GamePlayersAddSubcommand;
 import net.jandie1505.combattest.game.base.commands.players.GamePlayersListSubcommand;
@@ -12,7 +13,7 @@ public class GamePlayersSubcommand extends SubcommandCommand {
     @NotNull private final GamePart game;
 
     public GamePlayersSubcommand(@NotNull GamePart game) {
-        super(game.getPlugin());
+        super(game.getPlugin(), sender -> Permissions.hasPermission(sender, Permissions.ADMIN));
         this.game = game;
 
         this.addSubcommand("add", SubcommandEntry.of(new GamePlayersAddSubcommand(this.game)));

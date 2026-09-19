@@ -4,6 +4,7 @@ import net.chaossquad.mclib.command.DynamicSubcommandProvider;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.chaossquad.mclib.gamemode.executable.CoreExecutable;
 import net.jandie1505.combattest.CombatTest;
+import net.jandie1505.combattest.game.base.commands.GameLeaveSubcommand;
 import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ public abstract class GamePart extends CoreExecutable implements DynamicSubcomma
         this.subcommands = new HashMap<>();
 
         this.subcommands.put("players", SubcommandEntry.of(new GamePlayersSubcommand(this)));
+        this.subcommands.put("leave", SubcommandEntry.of(new GameLeaveSubcommand(this)));
     }
 
     public abstract boolean addPlayer(Player player);

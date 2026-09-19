@@ -11,6 +11,15 @@ commands:
   menu:
     description: Opens the player menu
     usage: /menu
+  points:
+    description: Show your current points
+    usage: /points
+  stats:
+    description: Shows the stats of you or another player
+    usage: /stats or /stats playername
+  disable-weather:
+    description: Disables your own local weather or re-enables it
+    usage: /disable-weather
   votemap:
     description: Vote for a map
     usage: /votemap <map>

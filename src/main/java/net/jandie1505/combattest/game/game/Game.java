@@ -15,10 +15,7 @@ import net.jandie1505.combattest.game.base.commands.GamePlayersSubcommand;
 import net.jandie1505.combattest.constants.NamespacedKeys;
 import net.jandie1505.combattest.game.endlobby.Endlobby;
 import net.jandie1505.combattest.game.game.combat.AdaptiveArmorSystem;
-import net.jandie1505.combattest.game.game.commands.GameMenuCommand;
-import net.jandie1505.combattest.game.game.commands.GamePayCommand;
-import net.jandie1505.combattest.game.game.commands.GamePlayersValueSubcommand;
-import net.jandie1505.combattest.game.game.commands.GameValueSubcommand;
+import net.jandie1505.combattest.game.game.commands.*;
 import net.jandie1505.combattest.game.game.constants.DefaultShopItems;
 import net.jandie1505.combattest.game.game.constants.DefaultEquipment;
 import net.jandie1505.combattest.game.game.constants.OtherItems;
@@ -115,6 +112,9 @@ public class Game extends GamePart {
         ((GamePlayersSubcommand) this.getDynamicSubcommands().get("players").executor()).addSubcommand("value", SubcommandEntry.of(new GamePlayersValueSubcommand(this)));
         this.getDynamicSubcommands().put("pay", SubcommandEntry.of(new GamePayCommand(this.getPlugin())));
         this.getDynamicSubcommands().put("menu", SubcommandEntry.of(new GameMenuCommand(this.getPlugin())));
+        this.getDynamicSubcommands().put("points", SubcommandEntry.of(new GamePointsCommand(this.getPlugin())));
+        this.getDynamicSubcommands().put("stats", SubcommandEntry.of(new GameStatsCommand(this.getPlugin())));
+        this.getDynamicSubcommands().put("disable-weather", SubcommandEntry.of(new GameDisableWeatherCommand(this.getPlugin())));
 
         // PLAYERS
 

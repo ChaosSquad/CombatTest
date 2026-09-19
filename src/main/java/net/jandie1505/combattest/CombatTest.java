@@ -14,8 +14,7 @@ import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
 import net.jandie1505.combattest.game.base.GamePart;
 import net.jandie1505.combattest.game.game.Game;
-import net.jandie1505.combattest.game.game.commands.GameMenuCommand;
-import net.jandie1505.combattest.game.game.commands.GamePayCommand;
+import net.jandie1505.combattest.game.game.commands.*;
 import net.jandie1505.combattest.game.lobby.Lobby;
 import net.jandie1505.combattest.game.lobby.commands.LobbyStartCommand;
 import net.jandie1505.combattest.game.lobby.commands.LobbyVoteCommand;
@@ -103,6 +102,27 @@ public class CombatTest extends JavaPlugin {
             menuCommand.setTabCompleter(cmd);
         }
 
+        var pointsCommand = this.getCommand("points");
+        if (pointsCommand != null) {
+            var cmd = new GamePointsCommand(this);
+            pointsCommand.setExecutor(cmd);
+            pointsCommand.setTabCompleter(cmd);
+        }
+
+        var statsCommand = this.getCommand("stats");
+        if (statsCommand != null) {
+            var cmd = new GameStatsCommand(this);
+            statsCommand.setExecutor(cmd);
+            statsCommand.setTabCompleter(cmd);
+        }
+
+        var disableWeatherCommand = this.getCommand("disable-weather");
+        if (disableWeatherCommand != null) {
+            var cmd = new GameDisableWeatherCommand(this);
+            disableWeatherCommand.setExecutor(cmd);
+            disableWeatherCommand.setTabCompleter(this);
+        }
+
         PluginCommand votemapCommand = this.getCommand("votemap");
         if (votemapCommand != null) {
             LobbyVoteCommand cmd = new LobbyVoteCommand(this);
@@ -116,9 +136,6 @@ public class CombatTest extends JavaPlugin {
             startCommand.setExecutor(cmd);
             startCommand.setTabCompleter(cmd);
         }
-
-        this.getCommand("combattest-old").setExecutor(new CombatTestCommandOld(this));
-        this.getCommand("combattest-old").setTabCompleter(new CombatTestCommandOld(this));
 
         this.listenerManager.addSource(() -> {
             if (this.game != null) {

@@ -4,6 +4,7 @@ import net.chaossquad.mclib.command.SubcommandCommand;
 import net.chaossquad.mclib.command.SubcommandEntry;
 import net.jandie1505.combattest.CombatTest;
 import net.jandie1505.combattest.commands.subcommands.*;
+import net.jandie1505.combattest.constants.Permissions;
 import net.jandie1505.combattest.game.base.GamePart;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +26,7 @@ public class CombatTestCommand extends SubcommandCommand {
         this.addSubcommand("start", SubcommandEntry.of(new CombatTestStartSubcommand(this.plugin)));
         this.addSubcommand("bypass", SubcommandEntry.of(new CombatTestBypassSubcommand(this.plugin)));
         this.addSubcommand("config", SubcommandEntry.of(new CombatTestConfigEditorSubcommand(this.plugin)));
+        this.addSubcommand("reload-config", SubcommandEntry.of(new CombatTestReloadSubcommand(this.plugin), sender -> Permissions.hasPermission(sender, Permissions.ADMIN)));
         this.addSubcommand("worlds", SubcommandEntry.of(new WorldsSubcommand()));
     }
 

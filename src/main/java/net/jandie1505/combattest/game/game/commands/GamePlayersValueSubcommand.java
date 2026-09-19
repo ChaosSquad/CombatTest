@@ -174,6 +174,16 @@ public class GamePlayersValueSubcommand implements TabCompletingCommandExecutor 
                         }
 
                     }
+                    case "disableweather" -> {
+
+                        if (args.length > 2) {
+                            playerData.setWeatherDisabled(Boolean.parseBoolean(args[2]));
+                            sender.sendMessage("§aUpdated disableweather to " + playerData.isWeatherDisabled());
+                        } else {
+                            sender.sendMessage("§7disableweather: " + playerData.isWeatherDisabled());
+                        }
+
+                    }
                     default -> {
                         sender.sendMessage("§Invalid value");
                     }
@@ -217,7 +227,7 @@ public class GamePlayersValueSubcommand implements TabCompletingCommandExecutor 
                 yield players;
 
             }
-            case 2 -> List.of("team", "alive", "points", "kills", "deaths", "equipments", "equipmentcountdowns");
+            case 2 -> List.of("team", "alive", "points", "kills", "deaths", "equipments", "equipmentcountdowns", "disableweather");
             default -> List.of();
         };
 

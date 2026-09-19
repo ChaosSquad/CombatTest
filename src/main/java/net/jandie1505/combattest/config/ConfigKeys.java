@@ -3,7 +3,6 @@ package net.jandie1505.combattest.config;
 import org.jetbrains.annotations.NotNull;
 
 public interface ConfigKeys {
-    @NotNull String PERMISSION_PREFIX = "permission_prefix";
     @NotNull String SINGLE_SERVER_MODE = "single_server_mode";
     @NotNull String AUTOSTART_NEW_GAME = "autostart_new_game";
 

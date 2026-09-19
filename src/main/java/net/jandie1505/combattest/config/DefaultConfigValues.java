@@ -10,7 +10,6 @@ public final class DefaultConfigValues {
     public static DataStorage getConfig() {
         var config = new DataStorage();
 
-        config.set(ConfigKeys.PERMISSION_PREFIX, "combattest");
         config.set(ConfigKeys.SINGLE_SERVER_MODE, true);
         config.set(ConfigKeys.AUTOSTART_NEW_GAME, false);
 

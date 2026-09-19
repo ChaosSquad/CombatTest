@@ -102,7 +102,6 @@ plugin overwrite the file with the defaults on the next start.
 
 | Option                                   | Description                                                                                                                                           |
 |------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `permissionsPrefix`                      | Legacy option, only used by `/combattest-old`                                                                                                         |
 | `singleServerMode`                       | All players are added to the game during lobby, players joining ingame become spectators, enables scoreboard and tablist management                   |
 | `autostartNewGame`                       | Start a new lobby 30 seconds after no game is running                                                                                                 |
 | `lobby.spawnpoint`                       | Lobby spawn (`x`, `y`, `z`, `yaw`, `pitch`) in the server's main world                                                                                |
@@ -168,8 +167,8 @@ Teams are completely player-driven, there is no fixed team setup and no automati
   (requires the `partyandfriends` integration).
 - Admins can assign teams manually with `/combattest players value <player> team <team>`, both in the lobby
   and ingame.
-- `/combattest-old randomteams` distributes all teamless players over the teams `1` and `2`. This is the only
-  way to get random teams and has to be triggered manually while the lobby is running (This command will be replaced soon).
+- `/combattest randomteams` distributes all teamless players over the teams `1` and `2`. This is the only
+  way to get random teams and has to be triggered manually while the lobby is running.
 
 This means the gamemode is team deathmatch and FFA at the same time, depending on what the players do:
 

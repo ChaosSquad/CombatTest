@@ -29,9 +29,6 @@ commands:
   start:
     description: Force-start a game
     usage: /start
-  combattest-old:
-    description: equipment old
-    usage: /combattest-old
 permissions:
   combattest.admin:
     default: op

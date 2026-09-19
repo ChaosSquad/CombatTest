@@ -8,7 +8,6 @@ import net.chaossquad.mclib.dynamicevents.EventListenerManager;
 import net.chaossquad.mclib.storage.DSSerializer;
 import net.chaossquad.mclib.world.DynamicWorldLoadingSystem;
 import net.jandie1505.combattest.commands.CombatTestCommand;
-import net.jandie1505.combattest.commands.CombatTestCommandOld;
 import net.jandie1505.combattest.config.ConfigKeys;
 import net.jandie1505.combattest.config.ConfigManager;
 import net.jandie1505.combattest.config.DefaultConfigValues;
@@ -132,7 +131,7 @@ public class CombatTest extends JavaPlugin {
 
         PluginCommand startCommand = this.getCommand("start");
         if (startCommand != null) {
-            LobbyStartCommand cmd = new LobbyStartCommand(this);
+            var cmd = new LobbyStartCommand(this);
             startCommand.setExecutor(cmd);
             startCommand.setTabCompleter(cmd);
         }
